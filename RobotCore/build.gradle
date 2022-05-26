@@ -11,8 +11,6 @@ android {
     defaultConfig {
         minSdkVersion 23
         targetSdkVersion 28
-        versionCode 88
-        versionName "17.3"
 
         renderscriptTargetApi 28
         renderscriptSupportModeEnabled true
@@ -37,7 +35,6 @@ android {
 
     buildTypes {
         debug {
-            debuggable true
             jniDebuggable true
             renderscriptDebuggable true
             ndk {

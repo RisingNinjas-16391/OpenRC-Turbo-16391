@@ -10,7 +10,6 @@ android {
 
     buildTypes {
         debug {
-            debuggable true
             jniDebuggable true
             renderscriptDebuggable true
             ndk {
