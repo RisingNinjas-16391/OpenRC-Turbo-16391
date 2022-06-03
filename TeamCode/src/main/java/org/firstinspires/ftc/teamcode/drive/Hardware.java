@@ -16,8 +16,8 @@ public class Hardware {
     /* Public OpMode members. */
     public DrivetrainSubsystem drivetrainSubsystem;
 
-    public LiftSubsystem lift;
-    public IntakeSubsystem intake;
+    public AgitatorSubsystem agitator;
+    public ShooterSubsystem shooter;
     public ClimberSubsystem climber;
     /* local OpMode members. */
     HardwareMap hwMap = null;
@@ -31,8 +31,8 @@ public class Hardware {
     public void init(HardwareMap ahwMap) {
         // Save reference to Hardware map
         drivetrainSubsystem = new DrivetrainSubsystem(ahwMap);
-        lift = new LiftSubsystem(ahwMap);
-        intake = new IntakeSubsystem(ahwMap);
+        agitator = new AgitatorSubsystem(ahwMap);
+        shooter = new ShooterSubsystem(ahwMap);
         climber = new ClimberSubsystem(ahwMap);
 
     }
@@ -42,8 +42,7 @@ public class Hardware {
                 .addData("Front Left", drivetrainSubsystem.getWheelPositions().get(0))
                 .addData("Front Right", drivetrainSubsystem.getWheelPositions().get(3))
                 .addData("Back Left", drivetrainSubsystem.getWheelPositions().get(1))
-                .addData("Back Right", drivetrainSubsystem.getWheelPositions().get(2))
-                .addData("Lift", lift.getCurrentPosition());
+                .addData("Back Right", drivetrainSubsystem.getWheelPositions().get(2));
         telemetry.update();
     }
 }

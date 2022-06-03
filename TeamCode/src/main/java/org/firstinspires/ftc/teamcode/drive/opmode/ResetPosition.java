@@ -22,7 +22,6 @@ public class ResetPosition extends LinearOpMode {
         telemetry.addData("Say", "Press Start to Begin");    //
         telemetry.update();
         waitForStart();
-        robot.lift.reset();
         while (opModeIsActive()) {
             robot.displayTelemetry(telemetry);
             // Pace this loop so jaw action is reasonable speed.

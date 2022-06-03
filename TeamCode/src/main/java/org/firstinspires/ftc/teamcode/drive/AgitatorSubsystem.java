@@ -5,11 +5,11 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-public class IntakeSubsystem {
+public class AgitatorSubsystem {
 
     public DcMotor motor;
-    public IntakeSubsystem(HardwareMap hwMap) {
-        motor = hwMap.get(DcMotorEx.class, "intake");
+    public AgitatorSubsystem(HardwareMap hwMap) {
+        motor = hwMap.get(DcMotorEx.class, "agitator");
         motor.setDirection(DcMotorSimple.Direction.FORWARD);
         motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
