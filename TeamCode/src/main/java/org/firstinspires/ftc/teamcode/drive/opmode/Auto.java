@@ -45,10 +45,10 @@ public class Auto extends LinearOpMode {
                 .strafeLeft(40)
                 .strafeRight(30)
                 .turn(Math.toRadians(45))
-                .addDisplacementMarker(()-> robot.lift.setPower(1))
+                .addDisplacementMarker(()-> robot.flywheel.setPower(1))
                 .waitSeconds(1)
                 .forward(34)
-                .addDisplacementMarker(()-> robot.lift.setPower(0))
+                .addDisplacementMarker(()-> robot.flywheel.setPower(0))
                 .build());
     }
 }
