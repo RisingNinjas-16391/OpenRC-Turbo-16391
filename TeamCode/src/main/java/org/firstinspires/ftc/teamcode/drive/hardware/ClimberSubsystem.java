@@ -8,11 +8,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 public class ClimberSubsystem {
     public DcMotor climber;
 
-    public ClimberSubsystem() {
-
-    }
-
-    public void init(HardwareMap hwMap) {
+    public ClimberSubsystem(HardwareMap hwMap) {
         climber = hwMap.get(DcMotorEx.class, "climber");
         climber.setDirection(DcMotorSimple.Direction.FORWARD);
         climber.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -20,6 +16,7 @@ public class ClimberSubsystem {
         climber.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         climber.setPower(0);
     }
+
     public void setPower(double power) {
         climber.setPower(power);
     }

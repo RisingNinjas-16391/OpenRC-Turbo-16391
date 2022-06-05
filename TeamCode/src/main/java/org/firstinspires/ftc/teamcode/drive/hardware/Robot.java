@@ -19,11 +19,11 @@ import org.firstinspires.ftc.teamcode.drive.hardware.LiftSubsystem;
 public class Robot {
     private final ElapsedTime period = new ElapsedTime();
     /* Public OpMode members. */
-    public DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem();
+    public DrivetrainSubsystem drivetrainSubsystem;
 
-    public LiftSubsystem lift = new LiftSubsystem();
-    public IntakeSubsystem intake = new IntakeSubsystem();
-    public ClimberSubsystem climber = new ClimberSubsystem();
+    public LiftSubsystem lift;
+    public IntakeSubsystem intake;
+    public ClimberSubsystem climber;
     /* local OpMode members. */
     HardwareMap hwMap = null;
 
@@ -35,10 +35,10 @@ public class Robot {
     /* Initialize standard Hardware interfaces */
     public void init(HardwareMap ahwMap) {
         // Save reference to Hardware map
-        drivetrainSubsystem.init(ahwMap);
-        lift.init(ahwMap);
-        intake.init(ahwMap);
-        climber.init(ahwMap);
+        drivetrainSubsystem = new DrivetrainSubsystem(ahwMap);
+        lift = new LiftSubsystem(ahwMap);
+        intake = new IntakeSubsystem(ahwMap);
+        climber = new ClimberSubsystem(ahwMap);
 
     }
 

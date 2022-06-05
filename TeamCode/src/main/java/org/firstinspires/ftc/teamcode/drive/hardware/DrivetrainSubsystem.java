@@ -70,27 +70,22 @@ public class DrivetrainSubsystem extends SwerveDrive {
 
     private TrajectoryFollower follower;
 
-    private DcMotorEx leftFront, leftRear, rightRear, rightFront;
-    private TurnModuleSubsystem leftFrontTurn, leftRearTurn, rightRearTurn, rightFrontTurn;
+    private SwerveModuleSubsystem leftFront, leftRear, rightRear, rightFront;
 
-    private List<DcMotorEx> motors;
-    private List<TurnModuleSubsystem> turnModules;
+
+    private List<SwerveModuleSubsystem> swerveModules;
+
 
     private BNO055IMU imu;
     private VoltageSensor batteryVoltageSensor;
 
     HardwareMap hwMap;
 
-    public DrivetrainSubsystem() {
+    public DrivetrainSubsystem(HardwareMap ahwMap) {
         super(kV, kA, kStatic, TRACK_WIDTH, LATERAL_MULTIPLIER);
 
         follower = new HolonomicPIDVAFollower(TRANSLATIONAL_PID, TRANSLATIONAL_PID, HEADING_PID,
                 new Pose2d(0.5, 0.5, Math.toRadians(5.0)), 0.5);
-    }
-
-
-
-    public void init(HardwareMap ahwMap) {
         hwMap = ahwMap;
         LynxModuleUtil.ensureMinimumFirmwareVersion(hwMap);
 
@@ -128,32 +123,30 @@ public class DrivetrainSubsystem extends SwerveDrive {
         // For example, if +Y in this diagram faces downwards, you would use AxisDirection.NEG_Y.
         // BNO055IMUUtil.remapZAxis(imu, AxisDirection.NEG_Y);
 
-        leftFront = hwMap.get(DcMotorEx.class, "leftFront");
-        leftRear = hwMap.get(DcMotorEx.class, "leftRear");
-        rightRear = hwMap.get(DcMotorEx.class, "rightRear");
-        rightFront = hwMap.get(DcMotorEx.class, "rightFront");
-
-        leftFrontTurn.init(hwMap, "leftFrontTurn", "leftFrontTurnE");
-        leftRearTurn.init(hwMap, "leftRearTurn", "leftRearTurnE");
-        rightRearTurn.init(hwMap, "rightRearTurn", "rightRearTurnE");
-        rightFrontTurn.init(hwMap, "rightFrontTurn", "rightFrontTurnE");
-
-        motors = Arrays.asList(leftFront, leftRear, rightRear, rightFront);
-
-        turnModules = Arrays.asList(leftFrontTurn, leftRearTurn, rightRearTurn, rightFrontTurn);
+        leftFront = new SwerveModuleSubsystem(hwMap, "leftFront", "leftFrontTurn", "leftFrontTurnE");
+        leftRear = new SwerveModuleSubsystem(hwMap, "leftRear", "leftRearTurn", "leftRearTurnE");
+        rightRear = new SwerveModuleSubsystem(hwMap, "rightRear", "rightRearTurn", "rightRearTurnE");
+        rightFront = new SwerveModuleSubsystem(hwMap, "rightFront", "rightFrontTurn", "rightFrontTurnE");
 
 
-        for (DcMotorEx motor : motors) {
+        swerveModules = Arrays.asList(leftFront, leftRear, rightRear, rightFront);
+
+        for (SwerveModuleSubsystem motor : swerveModules) {
             MotorConfigurationType motorConfigurationType = motor.getMotorType().clone();
             motorConfigurationType.setAchieveableMaxRPMFraction(1.0);
             motor.setMotorType(motorConfigurationType);
         }
 
         if (RUN_USING_ENCODER) {
-            setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            for (SwerveModuleSubsystem motor : swerveModules) {
+                motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            }
         }
 
-        setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        for (SwerveModuleSubsystem motor : swerveModules) {
+            motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        }
+
 
         if (RUN_USING_ENCODER && MOTOR_VELO_PID != null) {
             setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, MOTOR_VELO_PID);
@@ -243,13 +236,13 @@ public class DrivetrainSubsystem extends SwerveDrive {
     }
 
     public void setMode(DcMotor.RunMode runMode) {
-        for (DcMotorEx motor : motors) {
+        for (SwerveModuleSubsystem motor : swerveModules) {
             motor.setMode(runMode);
         }
     }
 
     public void setZeroPowerBehavior(DcMotor.ZeroPowerBehavior zeroPowerBehavior) {
-        for (DcMotorEx motor : motors) {
+        for (SwerveModuleSubsystem motor : swerveModules) {
             motor.setZeroPowerBehavior(zeroPowerBehavior);
         }
     }
@@ -260,7 +253,7 @@ public class DrivetrainSubsystem extends SwerveDrive {
                 coefficients.f * 12 / batteryVoltageSensor.getVoltage()
         );
 
-        for (DcMotorEx motor : motors) {
+        for (SwerveModuleSubsystem motor : swerveModules) {
             motor.setPIDFCoefficients(runMode, compensatedCoefficients);
         }
 
@@ -295,7 +288,7 @@ public class DrivetrainSubsystem extends SwerveDrive {
     @Override
     public List<Double> getWheelPositions() {
         List<Double> wheelPositions = new ArrayList<>();
-        for (DcMotorEx motor : motors) {
+        for (SwerveModuleSubsystem motor : swerveModules) {
             wheelPositions.add(encoderTicksToInches(motor.getCurrentPosition()));
         }
         return wheelPositions;
@@ -304,7 +297,7 @@ public class DrivetrainSubsystem extends SwerveDrive {
     @Override
     public List<Double> getWheelVelocities() {
         List<Double> wheelVelocities = new ArrayList<>();
-        for (DcMotorEx motor : motors) {
+        for (SwerveModuleSubsystem motor : swerveModules) {
             wheelVelocities.add(encoderTicksToInches(motor.getVelocity()));
         }
         return wheelVelocities;
@@ -348,7 +341,7 @@ public class DrivetrainSubsystem extends SwerveDrive {
     @Override
     public List<Double> getModuleOrientations() {
         List<Double> moduleOrientations = new ArrayList<>();
-        for (TurnModuleSubsystem turnModules : turnModules) {
+        for (SwerveModuleSubsystem turnModules : swerveModules) {
             moduleOrientations.add(Math.toRadians(turnModules.getModuleOrientation()));
         }
         return moduleOrientations;
@@ -356,9 +349,9 @@ public class DrivetrainSubsystem extends SwerveDrive {
 
     @Override
     public void setModuleOrientations(double v, double v1, double v2, double v3) {
-        leftFrontTurn.setModuleOrientation(v);
-        leftRearTurn.setModuleOrientation(v1);
-        rightRearTurn.setModuleOrientation(v2);
-        rightFrontTurn.setModuleOrientation(v3);
+        leftFront.setModuleOrientation(v);
+        leftRear.setModuleOrientation(v1);
+        rightRear.setModuleOrientation(v2);
+        rightFront.setModuleOrientation(v3);
     }
 }

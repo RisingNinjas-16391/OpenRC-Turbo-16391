@@ -11,11 +11,7 @@ public class LiftSubsystem {
     public static final int BOTTOM_TICK = 0;
     public static final int DEADZONE = 20;
 
-    public LiftSubsystem() {
-
-    }
-
-    public void init(HardwareMap hwMap) {
+    public LiftSubsystem(HardwareMap hwMap) {
         motor = hwMap.get(DcMotor.class, "lift");
         motor.setDirection(DcMotorSimple.Direction.FORWARD);
         motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -23,6 +19,8 @@ public class LiftSubsystem {
         motor.setMode(RunMode.RUN_USING_ENCODER);
         motor.setPower(0);
     }
+
+
     public void setPower(double power) {
         if (getCurrentPosition() < TOP_TICK) {
             motor.setPower(0.005 * (TOP_TICK + DEADZONE - getCurrentPosition()));

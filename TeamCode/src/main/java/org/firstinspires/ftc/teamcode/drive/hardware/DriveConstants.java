@@ -36,7 +36,9 @@ public class DriveConstants {
     public static final boolean RUN_USING_ENCODER = true;
     public static PIDFCoefficients MOTOR_VELO_PID = new PIDFCoefficients(10, 0, 1,
             14);
-
+    public static double TURN_MODULE_P = 0;
+    public static double TURN_MODULE_I = 0;
+    public static double TURN_MODULE_D = 0;
     /*
      * These are physical constants that can be determined from your robot (including the track
      * width; it will be tune empirically later although a rough estimate is important). Users are
