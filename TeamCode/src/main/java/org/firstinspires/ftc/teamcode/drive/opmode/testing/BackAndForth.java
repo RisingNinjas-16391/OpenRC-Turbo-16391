@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.drive.DrivetrainSubsystem;
+import org.firstinspires.ftc.teamcode.drive.hardware.DrivetrainSubsystem;
 
 /*
  * Op mode for preliminary tuning of the follower PID coefficients (located in the drive base

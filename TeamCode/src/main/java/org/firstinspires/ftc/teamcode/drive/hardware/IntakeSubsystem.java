@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.drive;
+package org.firstinspires.ftc.teamcode.drive.hardware;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -8,7 +8,10 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 public class IntakeSubsystem {
 
     public DcMotor motor;
-    public IntakeSubsystem(HardwareMap hwMap) {
+    public IntakeSubsystem() {
+
+    }
+    public void init(HardwareMap hwMap) {
         motor = hwMap.get(DcMotorEx.class, "intake");
         motor.setDirection(DcMotorSimple.Direction.FORWARD);
         motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);

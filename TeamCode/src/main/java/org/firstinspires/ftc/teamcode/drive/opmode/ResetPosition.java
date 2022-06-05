@@ -3,12 +3,12 @@ package org.firstinspires.ftc.teamcode.drive.opmode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.drive.Hardware;
+import org.firstinspires.ftc.teamcode.drive.hardware.Robot;
 
 @TeleOp(name = "Reset Lift", group = "Teleop")
 public class ResetPosition extends LinearOpMode {
 
-    Hardware robot = new Hardware();   //Uses heavily modified untested hardware
+    Robot robot = new Robot();   //Uses heavily modified untested hardware
 
     @Override
     public void runOpMode() {

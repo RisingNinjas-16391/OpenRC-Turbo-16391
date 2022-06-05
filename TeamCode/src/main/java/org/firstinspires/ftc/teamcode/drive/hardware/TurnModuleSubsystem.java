@@ -6,7 +6,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.util.Encoder;
 
-public class TurnModules {
+/* Subsystem for the turn modules on a swerve module */
+public class TurnModuleSubsystem {
     private CRServo turnServo;
     private Encoder turnEncoder;
 

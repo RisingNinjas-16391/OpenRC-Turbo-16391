@@ -4,13 +4,13 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.drive.Hardware;
+import org.firstinspires.ftc.teamcode.drive.hardware.Robot;
 
 @com.qualcomm.robotcore.eventloop.opmode.Autonomous(name="Autonomous", group="Autonomous")
 //@Disabled
 public class Auto extends LinearOpMode {
     /* Declare OpMode members. */
-    static Hardware robot = new Hardware();
+    static Robot robot = new Robot();
     static ElapsedTime runtime = new ElapsedTime();
 
     @Override

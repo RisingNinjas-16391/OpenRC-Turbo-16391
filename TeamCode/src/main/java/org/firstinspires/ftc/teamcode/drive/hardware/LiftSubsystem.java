@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.drive;
+package org.firstinspires.ftc.teamcode.drive.hardware;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotor.RunMode;
@@ -11,7 +11,11 @@ public class LiftSubsystem {
     public static final int BOTTOM_TICK = 0;
     public static final int DEADZONE = 20;
 
-    public LiftSubsystem(HardwareMap hwMap) {
+    public LiftSubsystem() {
+
+    }
+
+    public void init(HardwareMap hwMap) {
         motor = hwMap.get(DcMotor.class, "lift");
         motor.setDirection(DcMotorSimple.Direction.FORWARD);
         motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);

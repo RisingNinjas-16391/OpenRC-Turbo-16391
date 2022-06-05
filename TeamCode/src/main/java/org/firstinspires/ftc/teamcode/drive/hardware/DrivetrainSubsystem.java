@@ -9,6 +9,7 @@ import com.acmerobotics.roadrunner.drive.SwerveDrive;
 import com.acmerobotics.roadrunner.followers.HolonomicPIDVAFollower;
 import com.acmerobotics.roadrunner.followers.TrajectoryFollower;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder;
 import com.acmerobotics.roadrunner.trajectory.constraints.AngularVelocityConstraint;
@@ -19,7 +20,6 @@ import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryAcceleration
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.lynx.LynxModule;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -31,30 +31,29 @@ import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigu
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequenceBuilder;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequenceRunner;
-import org.firstinspires.ftc.teamcode.util.Encoder;
 import org.firstinspires.ftc.teamcode.util.LynxModuleUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.MAX_ACCEL;
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.MAX_ANG_ACCEL;
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.MAX_ANG_VEL;
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.MAX_VEL;
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.MOTOR_VELO_PID;
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.RUN_USING_ENCODER;
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.TRACK_WIDTH;
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.encoderTicksToInches;
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.kA;
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.kStatic;
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.kV;
+import static org.firstinspires.ftc.teamcode.drive.hardware.DriveConstants.MAX_ACCEL;
+import static org.firstinspires.ftc.teamcode.drive.hardware.DriveConstants.MAX_ANG_ACCEL;
+import static org.firstinspires.ftc.teamcode.drive.hardware.DriveConstants.MAX_ANG_VEL;
+import static org.firstinspires.ftc.teamcode.drive.hardware.DriveConstants.MAX_VEL;
+import static org.firstinspires.ftc.teamcode.drive.hardware.DriveConstants.MOTOR_VELO_PID;
+import static org.firstinspires.ftc.teamcode.drive.hardware.DriveConstants.RUN_USING_ENCODER;
+import static org.firstinspires.ftc.teamcode.drive.hardware.DriveConstants.TRACK_WIDTH;
+import static org.firstinspires.ftc.teamcode.drive.hardware.DriveConstants.encoderTicksToInches;
+import static org.firstinspires.ftc.teamcode.drive.hardware.DriveConstants.kA;
+import static org.firstinspires.ftc.teamcode.drive.hardware.DriveConstants.kStatic;
+import static org.firstinspires.ftc.teamcode.drive.hardware.DriveConstants.kV;
 
 /*
  * Simple swerve drive hardware implementation for REV hardware.
  */
 @Config
-public class SampleSwerveDrive extends SwerveDrive {
+public class DrivetrainSubsystem extends SwerveDrive {
     public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(0, 0, 0);
     public static PIDCoefficients HEADING_PID = new PIDCoefficients(0, 0, 0);
 
@@ -72,17 +71,17 @@ public class SampleSwerveDrive extends SwerveDrive {
     private TrajectoryFollower follower;
 
     private DcMotorEx leftFront, leftRear, rightRear, rightFront;
-    private TurnModules leftFrontTurn, leftRearTurn, rightRearTurn, rightFrontTurn;
+    private TurnModuleSubsystem leftFrontTurn, leftRearTurn, rightRearTurn, rightFrontTurn;
 
     private List<DcMotorEx> motors;
-    private List<TurnModules> turnModules;
+    private List<TurnModuleSubsystem> turnModules;
 
     private BNO055IMU imu;
     private VoltageSensor batteryVoltageSensor;
 
     HardwareMap hwMap;
 
-    public SwerveDriveTrain() {
+    public DrivetrainSubsystem() {
         super(kV, kA, kStatic, TRACK_WIDTH, LATERAL_MULTIPLIER);
 
         follower = new HolonomicPIDVAFollower(TRANSLATIONAL_PID, TRANSLATIONAL_PID, HEADING_PID,
@@ -287,6 +286,11 @@ public class SampleSwerveDrive extends SwerveDrive {
         setDrivePower(vel);
     }
 
+    public void drive(double forward, double strafe, double turn) {
+        Vector2d input = new Vector2d(forward, strafe);
+        setWeightedDrivePower(new Pose2d(input.getX(), input.getY(), turn));
+    }
+
     @NonNull
     @Override
     public List<Double> getWheelPositions() {
@@ -344,7 +348,7 @@ public class SampleSwerveDrive extends SwerveDrive {
     @Override
     public List<Double> getModuleOrientations() {
         List<Double> moduleOrientations = new ArrayList<>();
-        for (TurnModules turnModules : turnModules) {
+        for (TurnModuleSubsystem turnModules : turnModules) {
             moduleOrientations.add(Math.toRadians(turnModules.getModuleOrientation()));
         }
         return moduleOrientations;

@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.drive.DrivetrainSubsystem;
+import org.firstinspires.ftc.teamcode.drive.hardware.DrivetrainSubsystem;
 
 /*
  * This is a simple routine to test translational drive capabilities.

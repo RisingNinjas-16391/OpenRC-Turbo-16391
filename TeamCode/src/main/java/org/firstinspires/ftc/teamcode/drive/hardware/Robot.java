@@ -1,41 +1,48 @@
-package org.firstinspires.ftc.teamcode.drive;
+package org.firstinspires.ftc.teamcode.drive.hardware;
 
-import com.qualcomm.robotcore.hardware.DcMotor;
+import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.drive.hardware.ClimberSubsystem;
+import org.firstinspires.ftc.teamcode.drive.hardware.DrivetrainSubsystem;
+import org.firstinspires.ftc.teamcode.drive.hardware.IntakeSubsystem;
+import org.firstinspires.ftc.teamcode.drive.hardware.LiftSubsystem;
 
 /**
  * This is NOT an opmode.
  * <p>
  * This class can be used to define all the specific hardware for a single robot.
  */
-public class Hardware {
+public class Robot {
     private final ElapsedTime period = new ElapsedTime();
     /* Public OpMode members. */
-    public DrivetrainSubsystem drivetrainSubsystem;
+    public DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem();
 
-    public LiftSubsystem lift;
-    public IntakeSubsystem intake;
-    public ClimberSubsystem climber;
+    public LiftSubsystem lift = new LiftSubsystem();
+    public IntakeSubsystem intake = new IntakeSubsystem();
+    public ClimberSubsystem climber = new ClimberSubsystem();
     /* local OpMode members. */
     HardwareMap hwMap = null;
 
     /* Constructor */
-    public Hardware() {
+    public Robot() {
 
     }
 
     /* Initialize standard Hardware interfaces */
     public void init(HardwareMap ahwMap) {
         // Save reference to Hardware map
-        drivetrainSubsystem = new DrivetrainSubsystem(ahwMap);
-        lift = new LiftSubsystem(ahwMap);
-        intake = new IntakeSubsystem(ahwMap);
-        climber = new ClimberSubsystem(ahwMap);
+        drivetrainSubsystem.init(ahwMap);
+        lift.init(ahwMap);
+        intake.init(ahwMap);
+        climber.init(ahwMap);
 
     }
+
+
 
     public void displayTelemetry(Telemetry telemetry) { 
         telemetry.addLine("Drive Encoder ticks")

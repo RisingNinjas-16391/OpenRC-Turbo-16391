@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.drive.DrivetrainSubsystem;
+import org.firstinspires.ftc.teamcode.drive.hardware.DrivetrainSubsystem;
 
 import java.util.Objects;
 
