@@ -48,7 +48,7 @@ public class TeleOP extends LinearOpMode {
         );
         // YOU CAN TOUCH THIS
         if (gamepad1.right_bumper) {
-            robot.shooter.setPower(0.8);      //  Upward power
+            robot.shooter.setPower(0.5);      //  Upward power
         } else {
             robot.shooter.setPower(0);
         }
