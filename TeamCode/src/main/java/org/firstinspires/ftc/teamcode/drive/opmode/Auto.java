@@ -37,18 +37,10 @@ public class Auto extends LinearOpMode {
 
 
     public void editHere() {
-        //TODO: Add auto
+        //TODO: FIND MR. TODO!
         robot.drivetrainSubsystem.followTrajectorySequence(robot.drivetrainSubsystem.trajectorySequenceBuilder(new Pose2d())
                 // TODO: ADD ROBOT CODE BELOW!
-                .forward(40)
-                .back(40)
-                .strafeLeft(40)
-                .strafeRight(30)
-                .turn(Math.toRadians(45))
-                .addDisplacementMarker(()-> robot.lift.setPower(1))
-                .waitSeconds(1)
-                .forward(34)
-                .addDisplacementMarker(()-> robot.lift.setPower(0))
+                .forward(10)
                 .build());
     }
 }

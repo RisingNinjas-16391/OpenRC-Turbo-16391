@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class LiftSubsystem {
     private DcMotor motor;
-    public static final int TOP_TICK = -1500;
+    public static final int TOP_TICK = -3500;
     public static final int BOTTOM_TICK = 0;
     public static final int DEADZONE = 20;
 
