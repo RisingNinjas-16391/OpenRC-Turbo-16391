@@ -6,9 +6,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.drive.Hardware;
 
-@com.qualcomm.robotcore.eventloop.opmode.Autonomous(name="Autonomous", group="Autonomous")
+@com.qualcomm.robotcore.eventloop.opmode.Autonomous(name="Blue Auto", group="Autonomous")
 //@Disabled
-public class Auto extends LinearOpMode {
+public class BlueAutonomous extends LinearOpMode {
     /* Declare OpMode members. */
     static Hardware robot = new Hardware();
     static ElapsedTime runtime = new ElapsedTime();
@@ -38,15 +38,32 @@ public class Auto extends LinearOpMode {
 
     public void editHere() {
         //TODO: Add auto
-        robot.drivetrainSubsystem.followTrajectorySequence(robot.drivetrainSubsystem.trajectorySequenceBuilder(new Pose2d())
-                // TODO: ADD ROBOT CODE BELOW!
-                .forward(40)
-                .back(40)
-                .strafeLeft(40)
-                .strafeRight(30)
-                .turn(Math.toRadians(45))
-                .waitSeconds(1)
-                .forward(34)
-                .build());
+        sleep(1000);    // wait for balls to be dropped
+
+        robot.drivetrainSubsystem.followTrajectorySequence(
+                robot.drivetrainSubsystem.trajectorySequenceBuilder(
+                                robot.drivetrainSubsystem.getPoseEstimate())
+                        // TODO: Drive to shooting position
+
+                        .build());
+
+        // TODO: Shooting balls
+
+        // TODO: Turn off shooter
+
+        // TODO: Climber On
+        robot.climber.setPower(1);
+
+        robot.drivetrainSubsystem.followTrajectorySequence(
+                robot.drivetrainSubsystem.trajectorySequenceBuilder(
+                                robot.drivetrainSubsystem.getPoseEstimate())
+                        //TODO: drive to climb
+
+                        .build());
+
+        // TODO: Time to climb
+
+        // TODO: Turn off climber
+
     }
 }

@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class AgitatorSubsystem {
 
-    public DcMotor motor;
+    private DcMotor motor;
     public AgitatorSubsystem(HardwareMap hwMap) {
         motor = hwMap.get(DcMotorEx.class, "agitator");
         motor.setDirection(DcMotorSimple.Direction.FORWARD);

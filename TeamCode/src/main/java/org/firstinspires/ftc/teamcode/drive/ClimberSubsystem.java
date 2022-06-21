@@ -12,12 +12,12 @@ public class ClimberSubsystem {
         climber = hwMap.get(DcMotorEx.class, "climber");
         climber.setDirection(DcMotorSimple.Direction.FORWARD);
         climber.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        climber.setDirection(DcMotorSimple.Direction.FORWARD);
+        climber.setDirection(DcMotorSimple.Direction.REVERSE);
         climber.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         climber.setPower(0);
     }
 
     public void setPower(double power) {
-        climber.setPower(power);
+        climber.setPower(power * 0.7);
     }
 }
