@@ -44,8 +44,7 @@ public class RedAutonomous extends LinearOpMode {
         robot.drivetrainSubsystem.followTrajectorySequence(
                 robot.drivetrainSubsystem.trajectorySequenceBuilder(
                         robot.drivetrainSubsystem.getPoseEstimate())
-                            // Drive to shooting position
-                            .forward(60)
+                            // TODO: Drive to shooting position
                             .build());
 
         // Shooting balls
@@ -63,9 +62,7 @@ public class RedAutonomous extends LinearOpMode {
         robot.drivetrainSubsystem.followTrajectorySequence(
                 robot.drivetrainSubsystem.trajectorySequenceBuilder(
                         robot.drivetrainSubsystem.getPoseEstimate())
-                            // drive to climb
-                            .strafeRight(40)
-                            .back(47)
+                            // TODO: drive to climb
                             .build());
 
         sleep(2000);    // Time to climb
