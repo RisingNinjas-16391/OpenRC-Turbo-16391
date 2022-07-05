@@ -6,9 +6,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.drive.Hardware;
 
-@com.qualcomm.robotcore.eventloop.opmode.Autonomous(name="Autonomous", group="Autonomous")
+@com.qualcomm.robotcore.eventloop.opmode.Autonomous(name="Blue Autonomous", group="Autonomous")
 //@Disabled
-public class Auto extends LinearOpMode {
+public class BlueAuto extends LinearOpMode {
     /* Declare OpMode members. */
     static Hardware robot = new Hardware();
     static ElapsedTime runtime = new ElapsedTime();
@@ -35,12 +35,25 @@ public class Auto extends LinearOpMode {
         editHere();
     }
 
-
+    //TODO: Finish auto!
     public void editHere() {
-        //TODO: FIND MR. TODO!
+
+        //TODO: Lift arm to scoring height
+
+        // Drive to score preload ring
         robot.drivetrainSubsystem.followTrajectorySequence(robot.drivetrainSubsystem.trajectorySequenceBuilder(new Pose2d())
-                // TODO: ADD ROBOT CODE BELOW!
-                .forward(10)
+                // TODO: Drive to score
                 .build());
+
+        //TODO: Eject ring
+
+        //TODO: Turn on climber
+
+        // Drive to climbing spot
+        robot.drivetrainSubsystem.followTrajectorySequence(robot.drivetrainSubsystem.trajectorySequenceBuilder(new Pose2d())
+                // TODO: Drive to climb
+                .build());
+        //TODO: wait to climb a bit
+
     }
 }
