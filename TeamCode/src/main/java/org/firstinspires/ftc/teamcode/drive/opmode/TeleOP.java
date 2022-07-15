@@ -46,28 +46,30 @@ public class TeleOP extends LinearOpMode {
                 driveValues[2],
                 driveValues[3]
         );
-        robot.intake.setPower(gamepad1.right_trigger - gamepad1.left_trigger);
+        // kicker trigger
+        // climb dpad
+        // intake bumper
+        // a b flywheel
+
+
+        robot.kicker.setPower(gamepad1.right_trigger - gamepad1.left_trigger);
         // YOU CAN TOUCH THIS
         if (gamepad1.left_bumper) {
-            robot.kicker.setPower(-0.5);      //  Spin up
+            robot.intake.setPower(-1);      //  Spin up
         } else if (gamepad1.right_bumper) {
-            robot.kicker.setPower(0.5);
+            robot.intake.setPower(1);
         } else {
-            robot.kicker.setPower(0);
+            robot.intake.setPower(0);
         }
-        if (gamepad1.dpad_down) {
+        if (gamepad1.b) {
             robot.flywheel.setPower(0);
-        } else if (gamepad1.dpad_left) {
+        } else if (gamepad1.a) {
             robot.flywheel.setPower(.5);
-        } else if (gamepad1.dpad_up) {
-            robot.flywheel.setPower(.7);
-        } else if (gamepad1.dpad_right) {
-            robot.flywheel.setPower(1);
         }
 
-        if (gamepad1.a) {
+        if (gamepad1.dpad_down) {
             robot.climber.setPower(-1);
-        } else if (gamepad1.x) {
+        } else if (gamepad1.dpad_up) {
             robot.climber.setPower(1);
         } else {
             robot.climber.setPower(0);

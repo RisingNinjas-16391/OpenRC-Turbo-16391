@@ -18,6 +18,6 @@ public class ClimberSubsystem {
     }
 
     public void setPower(double power) {
-        climber.setPower(power);
+        climber.setPower(power * 0.7);
     }
 }
