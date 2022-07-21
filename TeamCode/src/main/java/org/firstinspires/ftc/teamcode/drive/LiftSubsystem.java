@@ -15,22 +15,27 @@ public class LiftSubsystem {
         motor = hwMap.get(DcMotor.class, "lift");
         motor.setDirection(DcMotorSimple.Direction.FORWARD);
         motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        motor.setDirection(DcMotorSimple.Direction.FORWARD);
-        motor.setMode(RunMode.RUN_USING_ENCODER);
+        //motor.setDirection(DcMotorSimple.Direction.FORWARD);
+        motor.setMode(RunMode.RUN_WITHOUT_ENCODER);
         motor.setPower(0);
     }
-    public void setPower(double power) {
-        if (getCurrentPosition() < TOP_TICK) {
-            motor.setPower(0.005 * (TOP_TICK + DEADZONE - getCurrentPosition()));
-        }
-        else if (getCurrentPosition() > BOTTOM_TICK) {
-            motor.setPower(0.01 * (BOTTOM_TICK - DEADZONE - getCurrentPosition()));
-        } else if ((power > 0 && motor.getCurrentPosition() > BOTTOM_TICK - DEADZONE) || (power < 0 && motor.getCurrentPosition() < TOP_TICK + DEADZONE)) {
-            motor.setPower(0);
-        } else {
-            motor.setPower(power);
-        }
+//    public void setPower(double power) {
+//        if (getCurrentPosition() < TOP_TICK) {
+//            motor.setPower(0.005 * (TOP_TICK + DEADZONE - getCurrentPosition()));
+//        }
+//        else if (getCurrentPosition() > BOTTOM_TICK) {
+//            motor.setPower(0.01 * (BOTTOM_TICK - DEADZONE - getCurrentPosition()));
+//        } else if ((power > 0 && motor.getCurrentPosition() > BOTTOM_TICK - DEADZONE) || (power < 0 && motor.getCurrentPosition() < TOP_TICK + DEADZONE)) {
+//            motor.setPower(0);
+//        } else {
+//            motor.setPower(power);
+//        }
+//    }
+
+    public void setPower(double power){
+        motor.setPower(power);
     }
+
     public void reset() {
         motor.setMode(RunMode.STOP_AND_RESET_ENCODER);
     }
