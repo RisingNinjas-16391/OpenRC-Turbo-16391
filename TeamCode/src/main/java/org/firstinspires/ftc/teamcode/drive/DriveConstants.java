@@ -37,6 +37,11 @@ public class DriveConstants {
     public static PIDFCoefficients MOTOR_VELO_PID = new PIDFCoefficients(10, 0, 1,
             14);
 
+    public static double changeInP = 0.1;
+    public static double changeInI = 0.1;
+    public static double changeInD = 0.1;
+    public static double changeInF = 0.1;
+
     /*
      * These are physical constants that can be determined from your robot (including the track
      * width; it will be tune empirically later although a rough estimate is important). Users are
