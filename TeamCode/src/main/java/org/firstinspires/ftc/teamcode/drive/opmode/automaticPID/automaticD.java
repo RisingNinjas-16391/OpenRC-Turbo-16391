@@ -58,8 +58,8 @@ public class automaticD extends LinearOpMode {
     public static double DISTANCE = 72; // in
     public double currentError = 0;
     public double previousError = 0;
-    public double changeInD = 0.1;
-    public double previousD = DriveConstants.changeInD;
+    public double changeInD = DriveConstants.changeInD;
+    public double previousD = 0;
     public double previousTime = 0;
     public double actualVel;
     public double desiredVel;
@@ -188,8 +188,12 @@ public class automaticD extends LinearOpMode {
                     previousD = previousD - changeInD;
                 }
                 timer.reset();
-
+                previousError = currentError;
             }
+            if (changeInD != DriveConstants.changeInD) {
+                changeInD = DriveConstants.changeInD;
+            }
+
             telemetry.addData("D", previousD);
             telemetry.update();
         }

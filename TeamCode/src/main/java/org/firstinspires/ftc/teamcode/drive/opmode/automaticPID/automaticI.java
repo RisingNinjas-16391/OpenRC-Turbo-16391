@@ -187,10 +187,14 @@ public class automaticI extends LinearOpMode {
                     temp_MOTOR_VELO_PID = new PIDFCoefficients(MOTOR_VELO_PID.p, previousI - changeInI, MOTOR_VELO_PID.d, MOTOR_VELO_PID.f);
                     previousI = previousI - changeInI;
                 }
-                telemetry.addData("I", previousI);
                 timer.reset();
+                previousError = currentError;
+            }
+            if (changeInI != DriveConstants.changeInI) {
+                changeInI = DriveConstants.changeInI;
             }
 
+            telemetry.addData("I", previousI);
             telemetry.update();
         }
     }

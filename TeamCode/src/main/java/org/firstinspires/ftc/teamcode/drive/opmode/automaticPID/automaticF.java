@@ -188,10 +188,16 @@ public class automaticF extends LinearOpMode {
                     previousF = previousF - changeInF;
                 }
                 timer.reset();
+                previousError = currentError;
             }
+            if (changeInF != DriveConstants.changeInF) {
+                changeInF = DriveConstants.changeInF;
+            }
+
             telemetry.addData("F", previousF);
             telemetry.update();
         }
     }
 }
+
 
