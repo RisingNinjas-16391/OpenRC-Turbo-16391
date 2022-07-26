@@ -51,16 +51,18 @@ import static org.firstinspires.ftc.teamcode.drive.DriveConstants.kV;
  * user to reset the position of the bot in the event that it drifts off the path.
  * Pressing B/O (Xbox/PS4) will cede control back to the tuning process.
  */
-@Disabled
+//@Disabled
 @Config
 @Autonomous(group = "drive")
 public class automaticI extends LinearOpMode {
     public static double DISTANCE = 72; // in
     public double currentError = 0;
     public double previousError = 0;
-    public double changeInI = DriveConstants.changeInI;
+    public double changeInI = 5;
     public double previousI = 0;
     public double previousTime = 0;
+    private int cycleVal = 0;
+    private double cycleTime = DriveConstants.cycleTime;
     public double actualVel;
     public double desiredVel;
     public boolean add = true;
@@ -152,6 +154,38 @@ public class automaticI extends LinearOpMode {
                                 motionState.getV() - velocities.get(i)
                         );
                     }
+
+                    if (timer.seconds() < cycleTime) {
+                        currentError = currentError + errorIntegral(actualVel, desiredVel, timer.seconds()-previousTime);
+                        previousTime = timer.seconds();
+                    } else {
+                        if (previousError < currentError) {
+                            add = !add;
+                            cycleVal++;
+                        } else {
+                            cycleVal = 0;
+                        }
+                        if (add) {
+                            temp_MOTOR_VELO_PID = new PIDFCoefficients(MOTOR_VELO_PID.p, previousI + changeInI, MOTOR_VELO_PID.d, MOTOR_VELO_PID.f);
+                            previousI = previousI + changeInI;
+                        } else {
+                            temp_MOTOR_VELO_PID = new PIDFCoefficients(MOTOR_VELO_PID.p, previousI - changeInI, MOTOR_VELO_PID.d, MOTOR_VELO_PID.f);
+                            previousI = previousI - changeInI;
+                        }
+                        timer.reset();
+                        previousError = currentError;
+                        drive.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, temp_MOTOR_VELO_PID);
+                    }
+                    if (cycleVal == 3) {
+                        changeInI = changeInI/10;
+                        cycleVal = 0;
+                    }
+                    if (cycleTime != DriveConstants.cycleTime) {
+                        cycleTime = DriveConstants.cycleTime;
+                    }
+
+                    telemetry.addData("I", previousI);
+
                     break;
                 case DRIVER_MODE:
                     if (gamepad1.b) {
@@ -173,28 +207,7 @@ public class automaticI extends LinearOpMode {
                     break;
             }
 
-            if (timer.seconds() < 0.5) {
-                currentError = currentError + errorIntegral(actualVel, desiredVel, timer.seconds()-previousTime);
-                previousTime = timer.seconds();
-            } else {
-                if (previousError < currentError) {
-                    add = !add;
-                }
-                if (add) {
-                    temp_MOTOR_VELO_PID = new PIDFCoefficients(MOTOR_VELO_PID.p, previousI + changeInI, MOTOR_VELO_PID.d, MOTOR_VELO_PID.f);
-                    previousI = previousI + changeInI;
-                } else {
-                    temp_MOTOR_VELO_PID = new PIDFCoefficients(MOTOR_VELO_PID.p, previousI - changeInI, MOTOR_VELO_PID.d, MOTOR_VELO_PID.f);
-                    previousI = previousI - changeInI;
-                }
-                timer.reset();
-                previousError = currentError;
-            }
-            if (changeInI != DriveConstants.changeInI) {
-                changeInI = DriveConstants.changeInI;
-            }
 
-            telemetry.addData("I", previousI);
             telemetry.update();
         }
     }
