@@ -182,8 +182,16 @@ public class automaticPID extends LinearOpMode {
                                     temp_MOTOR_VELO_PID = new PIDFCoefficients(previousP + changeInP, 0, 0, MOTOR_VELO_PID.f);
                                     previousP = previousP + changeInP;
                                 } else {
-                                    temp_MOTOR_VELO_PID = new PIDFCoefficients(previousP - changeInP, 0, 0, MOTOR_VELO_PID.f);
-                                    previousP = previousP - changeInP;
+                                    if (previousP-changeInP > 0) {
+                                        temp_MOTOR_VELO_PID = new PIDFCoefficients(previousP - changeInP, 0, 0, MOTOR_VELO_PID.f);
+                                        previousP = previousP - changeInP;
+                                    } else {
+                                        temp_MOTOR_VELO_PID = new PIDFCoefficients(0, 0, 0, MOTOR_VELO_PID.f);
+                                        previousP = 0;
+
+                                    }
+
+
                                 }
                                 timer.reset();
                                 previousError = currentError;
@@ -217,8 +225,13 @@ public class automaticPID extends LinearOpMode {
                                     temp_MOTOR_VELO_PID = new PIDFCoefficients(previousP, previousI + changeInI, previousD, MOTOR_VELO_PID.f);
                                     previousI = previousI + changeInI;
                                 } else {
-                                    temp_MOTOR_VELO_PID = new PIDFCoefficients(previousP, previousI - changeInI, previousD, MOTOR_VELO_PID.f);
-                                    previousI = previousI - changeInI;
+                                    if (previousI-changeInI > 0) {
+                                        temp_MOTOR_VELO_PID = new PIDFCoefficients(previousP, previousI-changeInI, previousD, MOTOR_VELO_PID.f);
+                                        previousI = previousI - changeInI;
+                                    } else {
+                                        temp_MOTOR_VELO_PID = new PIDFCoefficients(previousP, 0, previousD, MOTOR_VELO_PID.f);
+                                        previousI = 0;
+                                    }
                                 }
                                 timer.reset();
                                 previousError = currentError;
@@ -252,8 +265,13 @@ public class automaticPID extends LinearOpMode {
                                     temp_MOTOR_VELO_PID = new PIDFCoefficients(previousP, 0, previousD + changeInD, MOTOR_VELO_PID.f);
                                     previousD = previousD + changeInD;
                                 } else {
-                                    temp_MOTOR_VELO_PID = new PIDFCoefficients(previousP, 0, previousD - changeInD, MOTOR_VELO_PID.f);
-                                    previousD = previousD - changeInD;
+                                    if (previousD-changeInD > 0) {
+                                        temp_MOTOR_VELO_PID = new PIDFCoefficients(previousP, 0, previousD-changeInD, MOTOR_VELO_PID.f);
+                                        previousD = previousD - changeInD;
+                                    } else {
+                                        temp_MOTOR_VELO_PID = new PIDFCoefficients(previousP, 0, 0, MOTOR_VELO_PID.f);
+                                        previousD = 0;
+                                    }
                                 }
                                 timer.reset();
                                 previousError = currentError;
