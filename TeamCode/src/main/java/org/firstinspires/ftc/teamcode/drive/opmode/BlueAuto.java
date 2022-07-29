@@ -1,14 +1,15 @@
 package org.firstinspires.ftc.teamcode.drive.opmode;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.drive.Hardware;
 
-@com.qualcomm.robotcore.eventloop.opmode.Autonomous(name="Autonomous", group="Autonomous")
+@com.qualcomm.robotcore.eventloop.opmode.Autonomous(name="Blue Auto", group="Autonomous")
 //@Disabled
-public class Auto extends LinearOpMode {
+public class BlueAuto extends LinearOpMode {
     /* Declare OpMode members. */
     static Hardware robot = new Hardware();
     static ElapsedTime runtime = new ElapsedTime();
@@ -40,15 +41,7 @@ public class Auto extends LinearOpMode {
         //TODO: Add auto
         robot.drivetrainSubsystem.followTrajectorySequence(robot.drivetrainSubsystem.trajectorySequenceBuilder(new Pose2d())
                 // TODO: ADD ROBOT CODE BELOW!
-                .forward(40)
-                .back(40)
-                .strafeLeft(40)
-                .strafeRight(30)
-                .turn(Math.toRadians(45))
-                .addDisplacementMarker(()-> robot.lift.setPower(1))
-                .waitSeconds(1)
-                .forward(34)
-                .addDisplacementMarker(()-> robot.lift.setPower(0))
+
                 .build());
     }
 }
