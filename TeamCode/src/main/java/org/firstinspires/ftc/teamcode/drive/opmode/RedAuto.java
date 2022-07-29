@@ -37,23 +37,34 @@ public class RedAuto extends LinearOpMode {
 
 
     public void editHere() {
-        //TODO: Drive to Block
+        //TODO: Drive to Block Depot
         robot.drivetrainSubsystem.followTrajectorySequence(robot.drivetrainSubsystem.trajectorySequenceBuilder(new Pose2d())
                 // TODO: ADD ROBOT CODE BELOW!
 
                 .build());
 
-        //TODO: Pick Up Block
-        robot.intake.setPower(1);
+        //TODO: Drop off Block
+        robot.intake.setPower(-1);
         sleep(500);
         robot.intake.setPower(0);
 
-        //TODO: Drive to deliver block
+        //TODO: Drive to pick up block
         robot.drivetrainSubsystem.followTrajectorySequence(robot.drivetrainSubsystem.trajectorySequenceBuilder(new Pose2d())
                 // TODO: ADD ROBOT CODE BELOW!
 
                 .build());
 
+        robot.intake.setPower(-1);
+        sleep(500);
+        robot.intake.setPower(0);
+
+        //TODO: Drive to drop off block
+        robot.drivetrainSubsystem.followTrajectorySequence(robot.drivetrainSubsystem.trajectorySequenceBuilder(new Pose2d())
+                // TODO: ADD ROBOT CODE BELOW!
+
+                .build());
+
+        //TODO: Drop off Block
         robot.intake.setPower(-1);
         sleep(500);
         robot.intake.setPower(0);
@@ -64,7 +75,7 @@ public class RedAuto extends LinearOpMode {
 
                 .build());
 
-        robot.climber.setPower(1);
+        robot.climber.setPower(0);
 
     }
 }
