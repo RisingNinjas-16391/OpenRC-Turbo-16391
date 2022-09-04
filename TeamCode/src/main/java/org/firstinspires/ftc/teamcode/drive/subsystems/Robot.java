@@ -1,6 +1,5 @@
-package org.firstinspires.ftc.teamcode.drive;
+package org.firstinspires.ftc.teamcode.drive.subsystems;
 
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -11,19 +10,16 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
  * <p>
  * This class can be used to define all the specific hardware for a single robot.
  */
-public class Hardware {
+public class Robot {
     private final ElapsedTime period = new ElapsedTime();
     /* Public OpMode members. */
     public DrivetrainSubsystem drivetrainSubsystem;
 
-    public LiftSubsystem lift;
-    public IntakeSubsystem intake;
-    public ClimberSubsystem climber;
     /* local OpMode members. */
     HardwareMap hwMap = null;
 
     /* Constructor */
-    public Hardware() {
+    public Robot() {
 
     }
 
@@ -31,9 +27,6 @@ public class Hardware {
     public void init(HardwareMap ahwMap) {
         // Save reference to Hardware map
         drivetrainSubsystem = new DrivetrainSubsystem(ahwMap);
-        lift = new LiftSubsystem(ahwMap);
-        intake = new IntakeSubsystem(ahwMap);
-        climber = new ClimberSubsystem(ahwMap);
 
     }
 
@@ -42,8 +35,7 @@ public class Hardware {
                 .addData("Front Left", drivetrainSubsystem.getWheelPositions().get(0))
                 .addData("Front Right", drivetrainSubsystem.getWheelPositions().get(3))
                 .addData("Back Left", drivetrainSubsystem.getWheelPositions().get(1))
-                .addData("Back Right", drivetrainSubsystem.getWheelPositions().get(2))
-                .addData("Lift", lift.getCurrentPosition());
+                .addData("Back Right", drivetrainSubsystem.getWheelPositions().get(2));
         telemetry.update();
     }
 }

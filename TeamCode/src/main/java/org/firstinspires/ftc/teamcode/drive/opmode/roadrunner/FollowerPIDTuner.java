@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.drive.opmode.testing;
+package org.firstinspires.ftc.teamcode.drive.opmode.roadrunner;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.drive.DrivetrainSubsystem;
+import org.firstinspires.ftc.teamcode.drive.subsystems.DrivetrainSubsystem;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 /*
