@@ -26,7 +26,9 @@ public class ArmSubsystem {
         return ArmMotor.getPower();
     }
 
-
+    public int getCurrentPosition() {
+        return ArmMotor.getCurrentPosition();
+    }
 
 
 }
