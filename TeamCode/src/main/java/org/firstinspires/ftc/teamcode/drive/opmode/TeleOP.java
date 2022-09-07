@@ -55,5 +55,26 @@ public class TeleOP extends LinearOpMode {
             robot.intake.setPower(0);
         }
 
-    }
+        if (gamepad1.left_bumper) {
+            robot.intake.setPower(-0.5);
+        } else {
+            robot.intake.setPower(0);
+        }
+
+        if (gamepad1.right_trigger > 0.5) {
+            robot.arm.setPower(0.5);
+        }
+        else {
+            robot.arm.setPower(0);
+        }
+
+        if (gamepad1.left_trigger > 0.5) {
+            robot.arm.setPower(-0.5);
+        }
+        else {
+            robot.arm.setPower(0);
+        }
+
+        }
+
 }
