@@ -10,16 +10,18 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
  * <p>
  * This class can be used to define all the specific hardware for a single robot.
  */
-public class Robot {
+public class Hardware {
     private final ElapsedTime period = new ElapsedTime();
     /* Public OpMode members. */
     public DrivetrainSubsystem drivetrainSubsystem;
+    public ArmSubsystem arm;
+    public IntakeSubsystem intake;
 
     /* local OpMode members. */
     HardwareMap hwMap = null;
 
     /* Constructor */
-    public Robot() {
+    public Hardware() {
 
     }
 
@@ -27,7 +29,8 @@ public class Robot {
     public void init(HardwareMap ahwMap) {
         // Save reference to Hardware map
         drivetrainSubsystem = new DrivetrainSubsystem(ahwMap);
-
+        arm = new ArmSubsystem(ahwMap);
+        intake = new IntakeSubsystem(ahwMap);
     }
 
     public void displayTelemetry(Telemetry telemetry) { 
