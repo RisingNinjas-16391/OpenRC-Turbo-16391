@@ -48,15 +48,16 @@ public class TeleOP extends LinearOpMode {
                 driveValues[3]
         );
 
+
         // YOU CAN TOUCH THIS
         if (gamepad1.right_bumper) {
-            robot.intake.setPower(0.5);
+            robot.intake.setPower(1);
         } else {
             robot.intake.setPower(0);
         }
 
         if (gamepad1.left_bumper) {
-            robot.intake.setPower(-0.5);
+            robot.intake.setPower(-1);
         } else {
             robot.intake.setPower(0);
         }
@@ -74,6 +75,8 @@ public class TeleOP extends LinearOpMode {
         else {
             robot.arm.setPower(0);
         }
+
+        robot.drivetrainSubsystem.drive(forward, strafe, turn);
 
         }
 
