@@ -26,9 +26,9 @@ public class ArmSubsystem {
         return ArmMotor.getPower();
     }
 
-    public int getCurrentPosition() {
-        return ArmMotor.getCurrentPosition();
-    }
+    public int getCurrentPosition() { return ArmMotor.getCurrentPosition(); }
+
+    public void setTargetPosition(int position) { ArmMotor.setTargetPosition(position); }
 
 }
 
