@@ -34,20 +34,20 @@ public class TeleOP extends LinearOpMode {
         double forward  = -gamepad1.left_stick_y;
         double strafe   = -gamepad1.left_stick_x;
         double turn     = -gamepad1.right_stick_x;
-        double[] driveValues = {
-                forward - strafe - turn,
-                forward + strafe - turn,
-                forward - strafe + turn,
-                forward + strafe + turn
-        };
 
-        robot.drivetrainSubsystem.setMotorPowers(
-                driveValues[0],
-                driveValues[1],
-                driveValues[2],
-                driveValues[3]
-        );
-
+//        double[] driveValues = {
+//                forward - strafe - turn,
+//                forward + strafe - turn,
+//                forward - strafe + turn,
+//                forward + strafe + turn
+//        };
+//
+//        robot.drivetrainSubsystem.setMotorPowers(
+//                driveValues[0],
+//                driveValues[1],
+//                driveValues[2],
+//                driveValues[3]
+//        );
 
         // YOU CAN TOUCH THIS
         if (gamepad1.right_bumper) {

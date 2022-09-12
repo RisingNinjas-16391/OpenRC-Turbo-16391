@@ -30,6 +30,5 @@ public class ArmSubsystem {
         return ArmMotor.getCurrentPosition();
     }
 
-
 }
 
