@@ -16,7 +16,7 @@ public class Hardware {
     public DrivetrainSubsystem drivetrainSubsystem;
     public ArmSubsystem arm;
     public IntakeSubsystem intake;
-    public CarouselSubsytem carousel;
+    // public CarouselSubsystem carousel;
 
     /* local OpMode members. */
     HardwareMap hwMap = null;
@@ -32,7 +32,7 @@ public class Hardware {
         drivetrainSubsystem = new DrivetrainSubsystem(ahwMap);
         arm = new ArmSubsystem(ahwMap);
         intake = new IntakeSubsystem(ahwMap);
-        carousel = new CarouselSubsystem(ahwMap);
+//        carousel = new CarouselSubsystem(ahwMap);
     }
 
     public void displayTelemetry(Telemetry telemetry) { 
