@@ -34,6 +34,7 @@ public class TeleOP extends LinearOpMode {
         double forward  = -gamepad1.left_stick_y;
         double strafe   = -gamepad1.left_stick_x;
         double turn     = -gamepad1.right_stick_x;
+
         double[] driveValues = {
                 forward - strafe - turn,
                 forward + strafe - turn,
@@ -50,26 +51,26 @@ public class TeleOP extends LinearOpMode {
 
         // YOU CAN TOUCH THIS
         if (gamepad1.right_bumper) {
-            robot.intake.setPower(10);
+            robot.intake.setPower(30);
         } else {
             robot.intake.setPower(0);
         }
 
         if (gamepad1.left_bumper) {
-            robot.intake.setPower(-10);
+            robot.intake.setPower(-50);
         } else {
             robot.intake.setPower(0);
         }
 
-        if (gamepad1.right_trigger > 0.5) {
-            robot.arm.setPower(5);
+        if (gamepad1.a) {
+            robot.arm.setPower(15);
         }
         else {
             robot.arm.setPower(0);
         }
 
-        if (gamepad1.left_trigger > 0.5) {
-            robot.arm.setPower(-5);
+        if (gamepad1.b) {
+            robot.arm.setPower(-15);
         }
         else {
             robot.arm.setPower(0);

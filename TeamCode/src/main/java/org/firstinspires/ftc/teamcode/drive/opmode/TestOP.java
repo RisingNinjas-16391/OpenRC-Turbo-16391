@@ -113,5 +113,7 @@ public class TestOP extends LinearOpMode {
 //            }
         }
         telemetry.addData("Index", index);
+        telemetry.addLine("joystick stats");
+        telemetry.addData("power: ", forward);
     }
 }
