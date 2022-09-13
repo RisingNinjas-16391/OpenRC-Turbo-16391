@@ -9,7 +9,6 @@ import com.acmerobotics.roadrunner.drive.MecanumDrive;
 import com.acmerobotics.roadrunner.followers.HolonomicPIDVAFollower;
 import com.acmerobotics.roadrunner.followers.TrajectoryFollower;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder;
 import com.acmerobotics.roadrunner.trajectory.constraints.AngularVelocityConstraint;
@@ -49,10 +48,8 @@ import static org.firstinspires.ftc.teamcode.drive.subsystems.Constants.kA;
 import static org.firstinspires.ftc.teamcode.drive.subsystems.Constants.kStatic;
 import static org.firstinspires.ftc.teamcode.drive.subsystems.Constants.kV;
 
-import android.util.Log;
-
 /*
- * Mecanum drive hardware implementation for REV hardware.
+ * Simple mecanum drive hardware implementation for REV hardware.
  */
 @Config
 public class DrivetrainSubsystem extends MecanumDrive {
@@ -65,18 +62,18 @@ public class DrivetrainSubsystem extends MecanumDrive {
     public static double VY_WEIGHT = 1;
     public static double OMEGA_WEIGHT = 1;
 
-    private final TrajectorySequenceRunner trajectorySequenceRunner;
+    private TrajectorySequenceRunner trajectorySequenceRunner;
 
     private static final TrajectoryVelocityConstraint VEL_CONSTRAINT = getVelocityConstraint(MAX_VEL, MAX_ANG_VEL, TRACK_WIDTH);
     private static final TrajectoryAccelerationConstraint ACCEL_CONSTRAINT = getAccelerationConstraint(MAX_ACCEL);
 
     private TrajectoryFollower follower;
 
-    private final DcMotorEx leftFront, leftRear, rightRear, rightFront;
-    private final List<DcMotorEx> motors;
+    private DcMotorEx leftFront, leftRear, rightRear, rightFront;
+    private List<DcMotorEx> motors;
 
-    private final BNO055IMU imu;
-    private final VoltageSensor batteryVoltageSensor;
+    private BNO055IMU imu;
+    private VoltageSensor batteryVoltageSensor;
 
     public DrivetrainSubsystem(HardwareMap hardwareMap) {
         super(kV, kA, kStatic, TRACK_WIDTH, TRACK_WIDTH, LATERAL_MULTIPLIER);
@@ -202,6 +199,7 @@ public class DrivetrainSubsystem extends MecanumDrive {
         trajectorySequenceRunner.followTrajectorySequenceAsync(trajectorySequence);
     }
 
+
     public void followTrajectorySequence(TrajectorySequence trajectorySequence) {
         followTrajectorySequenceAsync(trajectorySequence);
         waitForIdle();
@@ -269,11 +267,6 @@ public class DrivetrainSubsystem extends MecanumDrive {
         setDrivePower(vel);
     }
 
-    public void drive(double forward, double strafe, double turn) {
-        Vector2d input = new Vector2d(forward, strafe);
-        setWeightedDrivePower(new Pose2d(input.getX(), input.getY(), turn));
-    }
-
     @NonNull
     @Override
     public List<Double> getWheelPositions() {
@@ -309,8 +302,8 @@ public class DrivetrainSubsystem extends MecanumDrive {
     @Override
     public Double getExternalHeadingVelocity() {
         // To work around an SDK bug, use -zRotationRate in place of xRotationRate
-        // and -xRotationRate in place of zRotationRate (yRotationRate behaves as 
-        // expected). This bug does NOT affect orientation. 
+        // and -xRotationRate in place of zRotationRate (yRotationRate behaves as
+        // expected). This bug does NOT affect orientation.
         //
         // See https://github.com/FIRST-Tech-Challenge/FtcRobotController/issues/251 for details.
         return (double) -imu.getAngularVelocity().xRotationRate;
