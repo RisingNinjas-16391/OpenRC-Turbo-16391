@@ -11,7 +11,6 @@ public class ArmSubsystem {
 
     public ArmSubsystem(HardwareMap hwMap) {
         ArmMotor = hwMap.get(DcMotorEx.class, "ArmMotor");
-        ArmMotor.setDirection(DcMotorSimple.Direction.FORWARD);
         ArmMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         ArmMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         ArmMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);

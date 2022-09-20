@@ -31,9 +31,9 @@ public class TeleOP extends LinearOpMode {
     }
 
     public void editHere() {
-        double forward  = -gamepad1.left_stick_y;
-        double strafe   = -gamepad1.left_stick_x;
-        double turn     = -gamepad1.right_stick_x;
+        double forward  = gamepad1.left_stick_y;
+        double strafe   = gamepad1.left_stick_x;
+        double turn     = gamepad1.right_stick_x;
 
         double[] driveValues = {
                 forward - strafe - turn,
@@ -51,32 +51,32 @@ public class TeleOP extends LinearOpMode {
 
         // YOU CAN TOUCH THIS
         if (gamepad1.right_bumper) {
-            robot.intake.setPower(30);
+            robot.intake.setPower(1);
         } else {
             robot.intake.setPower(0);
         }
 
         if (gamepad1.left_bumper) {
-            robot.intake.setPower(-50);
+            robot.intake.setPower(-1);
         } else {
             robot.intake.setPower(0);
         }
 
         if (gamepad1.a) {
-            robot.arm.setPower(15);
+            robot.arm.setPower(0.7);
         }
         else {
             robot.arm.setPower(0);
         }
 
         if (gamepad1.b) {
-            robot.arm.setPower(-15);
+            robot.arm.setPower(-0.7);
         }
         else {
             robot.arm.setPower(0);
         }
 
-//        robot.drivetrainSubsystem.drive(forward, strafe, turn);
+        //robot.drivetrainSubsystem.drive(forward, strafe, turn);
 
         }
 

@@ -12,16 +12,14 @@ public class IntakeSubsystem {
 
     public IntakeSubsystem(HardwareMap hwMap) {
         LeftIntake = hwMap.get(DcMotorEx.class, "LeftIntake");
-        LeftIntake.setDirection(DcMotorSimple.Direction.FORWARD);
         LeftIntake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         LeftIntake.setDirection(DcMotorSimple.Direction.REVERSE);
         LeftIntake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         LeftIntake.setPower(0);
 
         RightIntake = hwMap.get(DcMotorEx.class, "RightIntake");
-        RightIntake.setDirection(DcMotorSimple.Direction.REVERSE);
-        RightIntake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         RightIntake.setDirection(DcMotorSimple.Direction.FORWARD);
+        RightIntake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         RightIntake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         RightIntake.setPower(0);
     }
