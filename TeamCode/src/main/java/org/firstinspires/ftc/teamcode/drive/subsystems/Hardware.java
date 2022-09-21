@@ -1,14 +1,9 @@
 package org.firstinspires.ftc.teamcode.drive.subsystems;
 
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.drive.subsystems.ArmSubsystem;
-import org.firstinspires.ftc.teamcode.drive.subsystems.CarouselSubsystem;
-import org.firstinspires.ftc.teamcode.drive.subsystems.DrivetrainSubsystem;
-import org.firstinspires.ftc.teamcode.drive.subsystems.IntakeSubsystem;
 
 /**
  * This is NOT an opmode.
@@ -19,10 +14,7 @@ public class Hardware {
     private final ElapsedTime period = new ElapsedTime();
     /* Public OpMode members. */
     public DrivetrainSubsystem drivetrainSubsystem;
-
-    public ArmSubsystem arm;
-    public IntakeSubsystem intake;
-//    public CarouselSubsystem carousel;
+    public MotorSubsystem motor;
 
     /* local OpMode members. */
     HardwareMap hwMap = null;
@@ -36,10 +28,7 @@ public class Hardware {
     public void init(HardwareMap ahwMap) {
         // Save reference to Hardware map
         drivetrainSubsystem = new DrivetrainSubsystem(ahwMap);
-        arm = new ArmSubsystem(ahwMap);
-        intake = new IntakeSubsystem(ahwMap);
-//        carousel = new CarouselSubsystem(ahwMap);
-
+        motor = new MotorSubsystem(ahwMap);
     }
 
     public void displayTelemetry(Telemetry telemetry) {
