@@ -39,8 +39,8 @@ public class Hardware {
 //                .addData("Back Left", drivetrainSubsystem.getWheelPositions().get(1))
 //                .addData("Back Right", drivetrainSubsystem.getWheelPositions().get(2));
 //
-        telemetry.addLine("Drive Encoder ticks")
-                .addData("Front Left", linearSlide.getCurrentPosition());
+        telemetry.addLine("Linear Slide ticks")
+                .addData("SLIDE", linearSlide.getCurrentPosition());
         telemetry.update();
     }
 }
