@@ -37,14 +37,14 @@ public class Auto extends LinearOpMode {
 
 
     public void editHere() {
-        //TODO: Add auto
-        hardware.drivetrainSubsystem.followTrajectorySequence(hardware.drivetrainSubsystem.trajectorySequenceBuilder(new Pose2d())
-                // TODO: ADD ROBOT CODE BELOW!
-                .forward(40)
-                .back(40)
-                .strafeLeft(40)
-                .strafeRight(40)
-                .turn(Math.toRadians(90))
-                .build());
+        //TODO: ADD AUTO
+//        hardware.drivetrainSubsystem.followTrajectorySequence(hardware.drivetrainSubsystem.trajectorySequenceBuilder(new Pose2d())
+//                // TODO: ADD ROBOT CODE BELOW!
+//                .forward(40)
+//                .back(40)
+//                .strafeLeft(40)
+//                .strafeRight(40)
+//                .turn(Math.toRadians(90))
+//                .build());
     }
 }
