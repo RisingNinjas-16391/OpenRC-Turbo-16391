@@ -67,12 +67,14 @@ public class TeleOP extends LinearOpMode {
             robot.linearSlide.setPower(0);
         }
 
-        if (gamepad1.a){
-            robot.intake.setPosition(-0.5);
+        while (gamepad1.a){
+            robot.intake.setPower(-0.5);
         }
-        else if (gamepad1.b){
-            robot.intake.setPosition(0.5);
+        while (gamepad1.b){
+            robot.intake.setPower(0.5);
         }
+        robot.intake.setPower(0);
+
 //        robot.drivetrainSubsystem.drive(forward, strafe, turn);
 
         }
