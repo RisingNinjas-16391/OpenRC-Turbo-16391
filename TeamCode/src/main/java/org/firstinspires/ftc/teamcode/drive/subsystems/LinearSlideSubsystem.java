@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.drive.subsystems;
 
+import android.transition.Slide;
+
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -21,13 +23,13 @@ public class LinearSlideSubsystem {
         LinearSlide.setPower(power);
     }
 
-    public double getPower() {
-        return LinearSlide.getPower();
-    }
-
-    public int getCurrentPosition() { return LinearSlide.getCurrentPosition(); }
-
-    public void setTargetPosition(int position) { LinearSlide.setTargetPosition(position); }
+//    public double getPower() {
+//        return LinearSlide.getPower();
+//    }
+//
+//    public int getCurrentPosition() { return LinearSlide.getCurrentPosition(); }
+//
+//    public void setTargetPosition(int position) { LinearSlide.setTargetPosition(position); }
 
 }
 
