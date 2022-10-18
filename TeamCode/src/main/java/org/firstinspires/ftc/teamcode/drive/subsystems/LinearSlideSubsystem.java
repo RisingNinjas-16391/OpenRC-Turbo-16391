@@ -23,13 +23,13 @@ public class LinearSlideSubsystem {
         LinearSlide.setPower(power);
     }
 
-//    public double getPower() {
-//        return LinearSlide.getPower();
-//    }
-//
-//    public int getCurrentPosition() { return LinearSlide.getCurrentPosition(); }
-//
-//    public void setTargetPosition(int position) { LinearSlide.setTargetPosition(position); }
+    public double getPower() {
+        return LinearSlide.getPower();
+    }
+
+    public int getCurrentPosition() { return LinearSlide.getCurrentPosition(); }
+
+    public void setTargetPosition(int position) { LinearSlide.setTargetPosition(position); }
 
 }
 

@@ -15,6 +15,7 @@ public class Hardware {
     /* Public OpMode members. */
 //    public DrivetrainSubsystem drivetrainSubsystem;
     public LinearSlideSubsystem linearSlide;
+    public IntakeSubsystem intake;
 
     /* local OpMode members. */
     HardwareMap hwMap = null;
@@ -29,7 +30,7 @@ public class Hardware {
         // Save reference to Hardware map
 //        drivetrainSubsystem = new DrivetrainSubsystem(ahwMap);
         linearSlide = new LinearSlideSubsystem(ahwMap);
-
+        intake = new IntakeSubsystem(ahwMap);
     }
 
     public void displayTelemetry(Telemetry telemetry) {
