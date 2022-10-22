@@ -27,9 +27,5 @@ public class LinearSlideSubsystem {
         return LinearSlide.getPower();
     }
 
-    public int getCurrentPosition() { return LinearSlide.getCurrentPosition(); }
-
-    public void setTargetPosition(int position) { LinearSlide.setTargetPosition(position); }
-
 }
 

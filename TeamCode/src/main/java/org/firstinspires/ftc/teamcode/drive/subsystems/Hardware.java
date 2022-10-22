@@ -16,6 +16,7 @@ public class Hardware {
 //    public DrivetrainSubsystem drivetrainSubsystem;
     public LinearSlideSubsystem linearSlide;
     public IntakeSubsystem intake;
+    public TurretSubsystem turret;
 
     /* local OpMode members. */
     HardwareMap hwMap = null;
@@ -31,6 +32,7 @@ public class Hardware {
 //        drivetrainSubsystem = new DrivetrainSubsystem(ahwMap);
         linearSlide = new LinearSlideSubsystem(ahwMap);
         intake = new IntakeSubsystem(ahwMap);
+        turret = new TurretSubsystem(ahwMap);
     }
 
     public void displayTelemetry(Telemetry telemetry) {
