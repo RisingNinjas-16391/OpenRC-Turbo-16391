@@ -13,13 +13,10 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 public class Hardware {
     private final ElapsedTime period = new ElapsedTime();
     /* Public OpMode members. */
-//    public DrivetrainSubsystem drivetrainSubsystem;
+    public DrivetrainSubsystem drivetrainSubsystem;
     public LinearSlideSubsystem linearSlide;
     public IntakeSubsystem intake;
-    public TurretSubsystem turret;
-
-    /* local OpMode members. */
-    HardwareMap hwMap = null;
+//    public TurretSubsystem turret;
 
     /* Constructor */
     public Hardware() {
@@ -32,7 +29,7 @@ public class Hardware {
 //        drivetrainSubsystem = new DrivetrainSubsystem(ahwMap);
         linearSlide = new LinearSlideSubsystem(ahwMap);
         intake = new IntakeSubsystem(ahwMap);
-        turret = new TurretSubsystem(ahwMap);
+//        turret = new TurretSubsystem(ahwMap);
     }
 
     public void displayTelemetry(Telemetry telemetry) {

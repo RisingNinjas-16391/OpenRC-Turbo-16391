@@ -17,7 +17,7 @@ public class IntakeSubsystem {
         Intake.setPower(0);
     }
 
-    public void setPower(double power) {
+    public void setPower(int power) {
         Intake.setPower(power);
     }
 
