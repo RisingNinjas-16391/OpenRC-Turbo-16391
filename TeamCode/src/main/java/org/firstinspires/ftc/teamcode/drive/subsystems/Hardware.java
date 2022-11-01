@@ -26,21 +26,21 @@ public class Hardware {
     /* Initialize standard Hardware interfaces */
     public void init(HardwareMap ahwMap) {
         // Save reference to Hardware map
-//        drivetrainSubsystem = new DrivetrainSubsystem(ahwMap);
+        drivetrainSubsystem = new DrivetrainSubsystem(ahwMap);
         linearSlide = new LinearSlideSubsystem(ahwMap);
         intake = new IntakeSubsystem(ahwMap);
 //        turret = new TurretSubsystem(ahwMap);
     }
 
     public void displayTelemetry(Telemetry telemetry) {
-//        telemetry.addLine("Drive Encoder ticks")
-//                .addData("Front Left", drivetrainSubsystem.getWheelPositions().get(0))
-//                .addData("Front Right", drivetrainSubsystem.getWheelPositions().get(3))
-//                .addData("Back Left", drivetrainSubsystem.getWheelPositions().get(1))
-//                .addData("Back Right", drivetrainSubsystem.getWheelPositions().get(2));
-//
-//        telemetry.addLine("Linear Slide ticks")
-//                .addData("SLIDE", linearSlide.getCurrentPosition());
-//        telemetry.update();
+        telemetry.addLine("Drive Encoder ticks")
+                .addData("Front Left", drivetrainSubsystem.getWheelPositions().get(0))
+                .addData("Front Right", drivetrainSubsystem.getWheelPositions().get(3))
+                .addData("Back Left", drivetrainSubsystem.getWheelPositions().get(1))
+                .addData("Back Right", drivetrainSubsystem.getWheelPositions().get(2));
+
+        telemetry.addLine("Linear Slide ticks")
+                .addData("SLIDE", linearSlide.getCurrentPosition());
+        telemetry.update();
     }
 }

@@ -43,13 +43,13 @@ public class TeleOP extends LinearOpMode {
                 forward - strafe + turn,
                 forward + strafe + turn
         };
-
-//        robot.drivetrainSubsystem.setMotorPowers(
-//                driveValues[0],
-//                driveValues[1],
-//                driveValues[2],
-//                driveValues[3]
-//        );
+// TODOU: IM IN UR WALLS ANANYA
+        robot.drivetrainSubsystem.setMotorPowers(
+                driveValues[0],
+                driveValues[1],
+                driveValues[2],
+                driveValues[3]
+        );
 
         robot.linearSlide.setPower(gamepad1.left_trigger - gamepad1.right_trigger);
 
