@@ -33,17 +33,17 @@ public class TeleOP extends LinearOpMode {
 
     public void editHere() {
          //TODO: ADD TELEOP CODE
-        double forward  = -gamepad1.left_stick_y;
+        double forward  = gamepad1.left_stick_y;
         double strafe   = -gamepad1.left_stick_x;
         double turn     = -gamepad1.right_stick_x;
 
         double[] driveValues = {
-                forward - strafe - turn,
-                forward + strafe - turn,
                 forward - strafe + turn,
-                forward + strafe + turn
+                forward + strafe + turn,
+                forward - strafe - turn,
+                forward + strafe - turn
         };
-// TODOU: IM IN UR WALLS ANANYA
+
         robot.drivetrainSubsystem.setMotorPowers(
                 driveValues[0],
                 driveValues[1],
@@ -53,12 +53,26 @@ public class TeleOP extends LinearOpMode {
 
         robot.linearSlide.setPower(gamepad1.left_trigger - gamepad1.right_trigger);
 
+        if (gamepad1.x){
+            robot.linearSlide.setTargetPosition(100);
+        }
+
+        else if (gamepad1.y){
+            robot.linearSlide.setTargetPosition(200);
+        }
+
+        else if (gamepad1.b){
+            robot.linearSlide.setTargetPosition(300);
+        }
+
         while (gamepad1.right_bumper){
             robot.intake.setPower(1);
         }
+
         while (gamepad1.left_bumper){
             robot.intake.setPower(-1);
         }
+
         robot.intake.setPower(0);
 
 //        robot.drivetrainSubsystem.drive(forward, strafe, turn);
