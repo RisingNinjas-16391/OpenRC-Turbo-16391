@@ -30,6 +30,7 @@ public class LinearSlideSubsystem {
     public double getCurrentPosition(){
         return LinearSlide.getCurrentPosition();
     }
+
     public void setTargetPosition(int position) { LinearSlide.setTargetPosition(position); }
 
 }
