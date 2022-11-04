@@ -16,7 +16,7 @@ public class Hardware {
     public DrivetrainSubsystem drivetrainSubsystem;
     public LinearSlideSubsystem linearSlide;
     public IntakeSubsystem intake;
-    public TurretSubsystem turret;
+//    public TurretSubsystem turret;
 
     /* Constructor */
     public Hardware() {
@@ -29,7 +29,7 @@ public class Hardware {
         drivetrainSubsystem = new DrivetrainSubsystem(ahwMap);
         linearSlide = new LinearSlideSubsystem(ahwMap);
         intake = new IntakeSubsystem(ahwMap);
-        turret = new TurretSubsystem(ahwMap);
+//        turret = new TurretSubsystem(ahwMap);
     }
 
     public void displayTelemetry(Telemetry telemetry) {
@@ -42,8 +42,8 @@ public class Hardware {
         telemetry.addLine("Linear Slide ticks")
                 .addData("Slide", linearSlide.getCurrentPosition());
 
-        telemetry.addLine("Turret Ticks")
-                .addData("Turret", turret.getCurrentPosition());
+//        telemetry.addLine("Turret Ticks")
+//                .addData("Turret", turret.getCurrentPosition());
         telemetry.update();
     }
 }
