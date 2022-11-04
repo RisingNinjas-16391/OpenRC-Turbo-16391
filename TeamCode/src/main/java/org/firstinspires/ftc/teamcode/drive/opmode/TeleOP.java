@@ -58,11 +58,11 @@ public class TeleOP extends LinearOpMode {
         }
 
         else if (gamepad1.y){
-            robot.linearSlide.setTargetPosition(100);
+            robot.linearSlide.setTargetPosition(200);
         }
 
         else if (gamepad1.b){
-            robot.linearSlide.setTargetPosition(100);
+            robot.linearSlide.setTargetPosition(300);
         }
 
         while (gamepad1.right_bumper){
