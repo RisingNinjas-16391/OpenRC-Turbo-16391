@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.drive.opmode;
 
+/** Class containing constants used for {@link AutonomousTemplate} */
 public class AutoConstants {
     public static final String VUFORIA_KEY =
             "AYNvGMT/////AAABmbqx+cB66Uiuq1x4OtVVYaYqPxwETuoHASIFChwOE0FE5KyJCGATrLe9r1HPlycJfKg4" +

@@ -13,7 +13,7 @@ import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 import java.util.List;
 
 
-public class AutonomousTemplate extends LinearOpMode {
+public abstract class AutonomousTemplate extends LinearOpMode {
     List<Recognition> updatedRecognitions;
 
     private VuforiaLocalizer vuforia;
@@ -63,6 +63,8 @@ public class AutonomousTemplate extends LinearOpMode {
             }
             vuforia.close();
 
+            regularAutonomous();
+
             switch(path) {
                 case 1: leftPath();
                 break;
@@ -74,7 +76,7 @@ public class AutonomousTemplate extends LinearOpMode {
                 break;
             }
 
-            regularAutonomous();
+
         }
     }
 

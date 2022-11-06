@@ -31,6 +31,7 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequenceBuilder;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequenceRunner;
 import org.firstinspires.ftc.teamcode.util.LynxModuleUtil;
+import org.jetbrains.annotations.Contract;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -48,7 +49,7 @@ import static org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.Dri
 import static org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DriveConstants.kStatic;
 import static org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DriveConstants.kV;
 
-/*
+/**
  * Simple mecanum drive hardware implementation for REV hardware.
  */
 @Config
@@ -75,7 +76,7 @@ public class DrivetrainSubsystem extends MecanumDrive {
     private BNO055IMU imu;
     private VoltageSensor batteryVoltageSensor;
 
-    public DrivetrainSubsystem(HardwareMap hardwareMap) {
+    public DrivetrainSubsystem(@NonNull HardwareMap hardwareMap) {
         super(kV, kA, kStatic, TRACK_WIDTH, TRACK_WIDTH, LATERAL_MULTIPLIER);
 
         follower = new HolonomicPIDVAFollower(TRANSLATIONAL_PID, TRANSLATIONAL_PID, HEADING_PID,
@@ -127,19 +128,19 @@ public class DrivetrainSubsystem extends MecanumDrive {
         trajectorySequenceRunner = new TrajectorySequenceRunner(follower, HEADING_PID);
     }
 
-    public TrajectoryBuilder trajectoryBuilder(Pose2d startPose) {
+    public TrajectoryBuilder trajectoryBuilder(@NonNull Pose2d startPose) {
         return new TrajectoryBuilder(startPose, VEL_CONSTRAINT, ACCEL_CONSTRAINT);
     }
 
-    public TrajectoryBuilder trajectoryBuilder(Pose2d startPose, boolean reversed) {
+    public TrajectoryBuilder trajectoryBuilder(@NonNull Pose2d startPose, boolean reversed) {
         return new TrajectoryBuilder(startPose, reversed, VEL_CONSTRAINT, ACCEL_CONSTRAINT);
     }
 
-    public TrajectoryBuilder trajectoryBuilder(Pose2d startPose, double startHeading) {
+    public TrajectoryBuilder trajectoryBuilder(@NonNull Pose2d startPose, double startHeading) {
         return new TrajectoryBuilder(startPose, startHeading, VEL_CONSTRAINT, ACCEL_CONSTRAINT);
     }
 
-    public TrajectorySequenceBuilder trajectorySequenceBuilder(Pose2d startPose) {
+    public TrajectorySequenceBuilder trajectorySequenceBuilder(@NonNull Pose2d startPose) {
         return new TrajectorySequenceBuilder(
                 startPose,
                 VEL_CONSTRAINT, ACCEL_CONSTRAINT,
@@ -160,7 +161,7 @@ public class DrivetrainSubsystem extends MecanumDrive {
         waitForIdle();
     }
 
-    public void followTrajectoryAsync(Trajectory trajectory) {
+    public void followTrajectoryAsync(@NonNull Trajectory trajectory) {
         trajectorySequenceRunner.followTrajectorySequenceAsync(
                 trajectorySequenceBuilder(trajectory.start())
                         .addTrajectory(trajectory)
@@ -168,17 +169,17 @@ public class DrivetrainSubsystem extends MecanumDrive {
         );
     }
 
-    public void followTrajectory(Trajectory trajectory) {
+    public void followTrajectory(@NonNull Trajectory trajectory) {
         followTrajectoryAsync(trajectory);
         waitForIdle();
     }
 
-    public void followTrajectorySequenceAsync(TrajectorySequence trajectorySequence) {
+    public void followTrajectorySequenceAsync(@NonNull TrajectorySequence trajectorySequence) {
         trajectorySequenceRunner.followTrajectorySequenceAsync(trajectorySequence);
     }
 
 
-    public void followTrajectorySequence(TrajectorySequence trajectorySequence) {
+    public void followTrajectorySequence(@NonNull TrajectorySequence trajectorySequence) {
         followTrajectorySequenceAsync(trajectorySequence);
         waitForIdle();
     }
@@ -202,19 +203,19 @@ public class DrivetrainSubsystem extends MecanumDrive {
         return trajectorySequenceRunner.isBusy();
     }
 
-    public void setMode(DcMotor.RunMode runMode) {
+    public void setMode(@NonNull DcMotor.RunMode runMode) {
         for (DcMotorEx motor : motors) {
             motor.setMode(runMode);
         }
     }
 
-    public void setZeroPowerBehavior(DcMotor.ZeroPowerBehavior zeroPowerBehavior) {
+    public void setZeroPowerBehavior(@NonNull DcMotor.ZeroPowerBehavior zeroPowerBehavior) {
         for (DcMotorEx motor : motors) {
             motor.setZeroPowerBehavior(zeroPowerBehavior);
         }
     }
 
-    public void setPIDFCoefficients(DcMotor.RunMode runMode, PIDFCoefficients coefficients) {
+    public void setPIDFCoefficients(@NonNull DcMotor.RunMode runMode, @NonNull PIDFCoefficients coefficients) {
         PIDFCoefficients compensatedCoefficients = new PIDFCoefficients(
                 coefficients.p, coefficients.i, coefficients.d,
                 coefficients.f * 12 / batteryVoltageSensor.getVoltage()
@@ -225,8 +226,8 @@ public class DrivetrainSubsystem extends MecanumDrive {
         }
     }
 
-    public void setWeightedDrivePower(Pose2d drivePower) {
-        Pose2d vel = drivePower;
+    public void setWeightedDrivePower(@NonNull Pose2d drivePower) {
+        Pose2d vel;
 
         if (Math.abs(drivePower.getX()) + Math.abs(drivePower.getY())
                 + Math.abs(drivePower.getHeading()) > 1) {
@@ -240,12 +241,13 @@ public class DrivetrainSubsystem extends MecanumDrive {
                     VY_WEIGHT * drivePower.getY(),
                     OMEGA_WEIGHT * drivePower.getHeading()
             ).div(denom);
+        } else {
+            vel = drivePower;
         }
 
         setDrivePower(vel);
     }
 
-    @NonNull
     @Override
     public List<Double> getWheelPositions() {
         List<Double> wheelPositions = new ArrayList<>();
@@ -282,6 +284,8 @@ public class DrivetrainSubsystem extends MecanumDrive {
         return (double) -imu.getAngularVelocity().xRotationRate;
     }
 
+    @NonNull
+    @Contract("_, _, _ -> new")
     public static TrajectoryVelocityConstraint getVelocityConstraint(double maxVel, double maxAngularVel, double trackWidth) {
         return new MinVelocityConstraint(Arrays.asList(
                 new AngularVelocityConstraint(maxAngularVel),
@@ -289,6 +293,8 @@ public class DrivetrainSubsystem extends MecanumDrive {
         ));
     }
 
+    @NonNull
+    @Contract("_ -> new")
     public static TrajectoryAccelerationConstraint getAccelerationConstraint(double maxAccel) {
         return new ProfileAccelerationConstraint(maxAccel);
     }

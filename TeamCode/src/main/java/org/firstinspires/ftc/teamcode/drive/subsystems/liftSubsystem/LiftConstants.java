@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem;
 
 import com.acmerobotics.roadrunner.control.PIDCoefficients;
 
+/** Class containing constants used for {@link LiftSubsystem}*/
 public final class LiftConstants {
     static final int maxHeight = 1000; // Ticks for fully-extended lift
     static final int endMargin = 10;

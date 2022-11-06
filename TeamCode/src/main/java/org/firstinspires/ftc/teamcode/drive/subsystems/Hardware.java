@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.drive.subsystems;
 
+import androidx.annotation.NonNull;
+
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -25,20 +27,22 @@ public class Hardware {
 
     }
 
-    /* Initialize standard Hardware interfaces */
-    public void init(HardwareMap ahwMap) {
+    /** Initialize standard Hardware interfaces */
+    public void init(@NonNull HardwareMap ahwMap) {
         // Save reference to Hardware map
         drivetrainSubsystem = new DrivetrainSubsystem(ahwMap);
         linearSlide = new LiftSubsystem(ahwMap);
         intake = new IntakeSubsystem(ahwMap);
 //        turret = new TurretSubsystem(ahwMap);
     }
+    /** Runs the update method in all subsystems */
     public void update() {
         drivetrainSubsystem.update();
         linearSlide.update();
     }
 
-    public void displayTelemetry(Telemetry telemetry) {
+    /** Displays important robot information on telemetry*/
+    public void displayTelemetry(@NonNull Telemetry telemetry) {
         telemetry.addLine("Drive Encoder ticks")
                 .addData("Front Left", drivetrainSubsystem.getWheelPositions().get(0))
                 .addData("Front Right", drivetrainSubsystem.getWheelPositions().get(3))
