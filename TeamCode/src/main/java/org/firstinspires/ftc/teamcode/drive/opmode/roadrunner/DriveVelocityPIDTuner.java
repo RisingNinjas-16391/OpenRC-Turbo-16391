@@ -14,15 +14,15 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.RobotLog;
 
-import org.firstinspires.ftc.teamcode.drive.subsystems.DrivetrainSubsystem;
+import org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DrivetrainSubsystem;
 
 import java.util.List;
 
-import static org.firstinspires.ftc.teamcode.drive.subsystems.Constants.MAX_ACCEL;
-import static org.firstinspires.ftc.teamcode.drive.subsystems.Constants.MAX_VEL;
-import static org.firstinspires.ftc.teamcode.drive.subsystems.Constants.MOTOR_VELO_PID;
-import static org.firstinspires.ftc.teamcode.drive.subsystems.Constants.RUN_USING_ENCODER;
-import static org.firstinspires.ftc.teamcode.drive.subsystems.Constants.kV;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DriveConstants.MAX_ACCEL;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DriveConstants.MAX_VEL;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DriveConstants.MOTOR_VELO_PID;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DriveConstants.RUN_USING_ENCODER;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DriveConstants.kV;
 
 /*
  * This routine is designed to tune the PID coefficients used by the REV Expansion Hubs for closed-

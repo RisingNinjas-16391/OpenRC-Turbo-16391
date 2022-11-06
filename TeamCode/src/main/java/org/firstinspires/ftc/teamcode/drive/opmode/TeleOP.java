@@ -1,9 +1,9 @@
 package org.firstinspires.ftc.teamcode.drive.opmode;
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.drive.subsystems.Hardware;
-import org.firstinspires.ftc.teamcode.drive.subsystems.LinearSlideSubsystem;
 
 @TeleOp(name = "TeleOp", group = "Teleop")
 public class TeleOP extends LinearOpMode {
@@ -25,6 +25,7 @@ public class TeleOP extends LinearOpMode {
         waitForStart();
         while (opModeIsActive()) {
             editHere();
+            robot.update();
             robot.displayTelemetry(telemetry);
             // Pace this loop so jaw action is reasonable speed.
             sleep(25);
@@ -37,21 +38,21 @@ public class TeleOP extends LinearOpMode {
         double strafe   = gamepad1.left_stick_x;
         double turn     = gamepad1.right_stick_x;
 
-        double[] driveValues = {
-                forward - strafe - turn,
-                forward + strafe - turn,
-                forward - strafe + turn,
-                forward + strafe + turn
-        };
+//        double[] driveValues = {
+//                forward - strafe - turn,
+//                forward + strafe - turn,
+//                forward - strafe + turn,
+//                forward + strafe + turn
+//        };
+//
+//        robot.drivetrainSubsystem.setMotorPowers(
+//                driveValues[0],
+//                driveValues[1],
+//                driveValues[2],
+//                driveValues[3]
+//        );
 
-        robot.drivetrainSubsystem.setMotorPowers(
-                driveValues[0],
-                driveValues[1],
-                driveValues[2],
-                driveValues[3]
-        );
-
-        robot.linearSlide.setPower(gamepad1.left_trigger - gamepad1.right_trigger);
+        robot.drivetrainSubsystem.setWeightedDrivePower(new Pose2d(forward, strafe, turn));
 
         if (gamepad1.x){
             robot.linearSlide.setTargetPosition(100);
@@ -63,6 +64,8 @@ public class TeleOP extends LinearOpMode {
 
         else if (gamepad1.b){
             robot.linearSlide.setTargetPosition(300);
+        } else {
+            robot.linearSlide.setPower(gamepad1.left_trigger - gamepad1.right_trigger);
         }
 
         while (gamepad1.right_bumper){
@@ -75,7 +78,6 @@ public class TeleOP extends LinearOpMode {
 
         robot.intake.setPower(0);
 
-//        robot.drivetrainSubsystem.drive(forward, strafe, turn);
         }
 
 }

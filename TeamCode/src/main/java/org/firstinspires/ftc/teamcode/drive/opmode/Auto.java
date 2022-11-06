@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.drive.opmode;
 
-import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -10,7 +9,7 @@ import org.firstinspires.ftc.teamcode.drive.subsystems.Hardware;
 //@Disabled
 public class Auto extends LinearOpMode {
     /* Declare OpMode members. */
-    static Hardware hardware = new Hardware();
+    static Hardware robot = new Hardware();
     static ElapsedTime runtime = new ElapsedTime();
 
     @Override
@@ -19,7 +18,7 @@ public class Auto extends LinearOpMode {
         telemetry.addLine("Status: Booting");
         telemetry.update();
 
-        hardware.init(hardwareMap);
+        robot.init(hardwareMap);
         telemetry.addData("Robot initialized: ", true);
         telemetry.update();
 
@@ -32,13 +31,14 @@ public class Auto extends LinearOpMode {
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
+        runtime.reset();
         editHere();
     }
 
 
     public void editHere() {
         //TODO: ADD AUTO
-//        hardware.drivetrainSubsystem.followTrajectorySequence(hardware.drivetrainSubsystem.trajectorySequenceBuilder(new Pose2d())
+//        robot.drivetrainSubsystem.followTrajectorySequence(hardware.drivetrainSubsystem.trajectorySequenceBuilder(new Pose2d())
 //                // TODO: ADD ROBOT CODE BELOW!
 //                .forward(40)
 //                .back(40)

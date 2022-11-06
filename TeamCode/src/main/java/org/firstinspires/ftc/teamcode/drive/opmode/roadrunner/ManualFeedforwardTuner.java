@@ -14,16 +14,16 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.RobotLog;
 
-import org.firstinspires.ftc.teamcode.drive.subsystems.DrivetrainSubsystem;
+import org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DrivetrainSubsystem;
 
 import java.util.Objects;
 
-import static org.firstinspires.ftc.teamcode.drive.subsystems.Constants.MAX_ACCEL;
-import static org.firstinspires.ftc.teamcode.drive.subsystems.Constants.MAX_VEL;
-import static org.firstinspires.ftc.teamcode.drive.subsystems.Constants.RUN_USING_ENCODER;
-import static org.firstinspires.ftc.teamcode.drive.subsystems.Constants.kA;
-import static org.firstinspires.ftc.teamcode.drive.subsystems.Constants.kStatic;
-import static org.firstinspires.ftc.teamcode.drive.subsystems.Constants.kV;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DriveConstants.MAX_ACCEL;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DriveConstants.MAX_VEL;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DriveConstants.RUN_USING_ENCODER;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DriveConstants.kA;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DriveConstants.kStatic;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DriveConstants.kV;
 
 /*
  * This routine is designed to tune the open-loop feedforward coefficients. Although it may seem unnecessary,
