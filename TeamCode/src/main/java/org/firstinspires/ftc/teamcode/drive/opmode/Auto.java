@@ -1,12 +1,15 @@
 package org.firstinspires.ftc.teamcode.drive.opmode;
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.drive.subsystems.Hardware;
+import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 @com.qualcomm.robotcore.eventloop.opmode.Autonomous(name="Autonomous", group="Autonomous")
 //@Disabled
+
 public class Auto extends LinearOpMode {
     /* Declare OpMode members. */
     static Hardware robot = new Hardware();
@@ -38,13 +41,34 @@ public class Auto extends LinearOpMode {
 
     public void editHere() {
         //TODO: ADD AUTO
-//        robot.drivetrainSubsystem.followTrajectorySequence(hardware.drivetrainSubsystem.trajectorySequenceBuilder(new Pose2d())
-//                // TODO: ADD ROBOT CODE BELOW!
-//                .forward(40)
-//                .back(40)
-//                .strafeLeft(40)
-//                .strafeRight(40)
-//                .turn(Math.toRadians(90))
-//                .build());
+            // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
+            TrajectorySequence initToStack = robot.drivetrain.trajectorySequenceBuilder(new Pose2d(-35, -60, Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(-58, -60,  Math.toRadians(90)))
+                .splineToLinearHeading(new Pose2d(-58, -12,  Math.toRadians(180)), Math.toRadians(90))
+                .build();
+
+            TrajectorySequence stackToHigh = robot.drivetrain.trajectorySequenceBuilder(new Pose2d(-58, -12, Math.toRadians(180)))
+                    .lineToLinearHeading(new Pose2d(-38, -12,  Math.toRadians(180)))
+                    .lineToLinearHeading(new Pose2d(-32, -7,  Math.toRadians(45)))
+                    .build();
+
+            TrajectorySequence highToStack = robot.drivetrain.trajectorySequenceBuilder(new Pose2d(-32, -7, Math.toRadians(180)))
+                    .lineToLinearHeading(new Pose2d(-38, -12,  Math.toRadians(180)))
+                    .splineToLinearHeading(new Pose2d(-58, -12,  Math.toRadians(180)), Math.toRadians(180))
+                    .build();
+
+            robot.drivetrain.followTrajectorySequence(initToStack);
+            robot.linearSlide.setTargetPosition(50);
+            robot.intake.setPower(1);
+            robot.drivetrain.followTrajectorySequence(stackToHigh);
+            robot.linearSlide.setTargetPosition(300);
+            robot.intake.setPower(-1);
+            robot.drivetrain.followTrajectorySequence(highToStack);
+            robot.linearSlide.setTargetPosition(45);
+            robot.intake.setPower(1);
+            robot.drivetrain.followTrajectorySequence(stackToHigh);
+            robot.linearSlide.setTargetPosition(300);
+            robot.intake.setPower(-1);
+
     }
 }
