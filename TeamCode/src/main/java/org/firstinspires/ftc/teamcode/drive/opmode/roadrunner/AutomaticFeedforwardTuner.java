@@ -11,16 +11,16 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.robotcore.internal.system.Misc;
-import org.firstinspires.ftc.teamcode.drive.subsystems.DrivetrainSubsystem;
+import org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DrivetrainSubsystem;
 import org.firstinspires.ftc.teamcode.util.LoggingUtil;
 import org.firstinspires.ftc.teamcode.util.RegressionUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.firstinspires.ftc.teamcode.drive.subsystems.Constants.MAX_RPM;
-import static org.firstinspires.ftc.teamcode.drive.subsystems.Constants.RUN_USING_ENCODER;
-import static org.firstinspires.ftc.teamcode.drive.subsystems.Constants.rpmToVelocity;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DriveConstants.MAX_RPM;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DriveConstants.RUN_USING_ENCODER;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DriveConstants.rpmToVelocity;
 
 /*
  * Op mode for computing kV, kStatic, and kA from various drive routines. For the curious, here's an

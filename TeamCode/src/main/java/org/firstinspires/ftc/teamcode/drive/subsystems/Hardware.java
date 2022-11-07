@@ -1,9 +1,13 @@
 package org.firstinspires.ftc.teamcode.drive.subsystems;
 
+import androidx.annotation.NonNull;
+
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DrivetrainSubsystem;
+import org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftSubsystem;
 
 /**
  * This is NOT an opmode.
@@ -14,25 +18,31 @@ public class Hardware {
     private final ElapsedTime period = new ElapsedTime();
     /* Public OpMode members. */
     public DrivetrainSubsystem drivetrainSubsystem;
-    public LinearSlideSubsystem linearSlide;
+    public LiftSubsystem linearSlide;
     public IntakeSubsystem intake;
-    public TurretSubsystem turret;
+//    public TurretSubsystem turret;
 
     /* Constructor */
     public Hardware() {
 
     }
 
-    /* Initialize standard Hardware interfaces */
-    public void init(HardwareMap ahwMap) {
+    /** Initialize standard Hardware interfaces */
+    public void init(@NonNull HardwareMap ahwMap) {
         // Save reference to Hardware map
         drivetrainSubsystem = new DrivetrainSubsystem(ahwMap);
-        linearSlide = new LinearSlideSubsystem(ahwMap);
+        linearSlide = new LiftSubsystem(ahwMap);
         intake = new IntakeSubsystem(ahwMap);
-        turret = new TurretSubsystem(ahwMap);
+//        turret = new TurretSubsystem(ahwMap);
+    }
+    /** Runs the update method in all subsystems */
+    public void update() {
+        drivetrainSubsystem.update();
+        linearSlide.update();
     }
 
-    public void displayTelemetry(Telemetry telemetry) {
+    /** Displays important robot information on telemetry*/
+    public void displayTelemetry(@NonNull Telemetry telemetry) {
         telemetry.addLine("Drive Encoder ticks")
                 .addData("Front Left", drivetrainSubsystem.getWheelPositions().get(0))
                 .addData("Front Right", drivetrainSubsystem.getWheelPositions().get(3))
@@ -42,8 +52,8 @@ public class Hardware {
         telemetry.addLine("Linear Slide ticks")
                 .addData("Slide", linearSlide.getCurrentPosition());
 
-        telemetry.addLine("Turret Ticks")
-                .addData("Turret", turret.getCurrentPosition());
+//        telemetry.addLine("Turret Ticks")
+//                .addData("Turret", turret.getCurrentPosition());
         telemetry.update();
     }
 }
