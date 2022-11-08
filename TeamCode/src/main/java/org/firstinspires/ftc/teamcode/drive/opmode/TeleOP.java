@@ -25,6 +25,7 @@ public class TeleOP extends LinearOpMode {
         while (opModeIsActive()) {
             editHere();
             robot.displayTelemetry(telemetry);
+            robot.update();
             // Pace this loop so jaw action is reasonable speed.
             sleep(25);
         }
@@ -32,9 +33,9 @@ public class TeleOP extends LinearOpMode {
 
     public void editHere() {
         // TODO: ADD TELEOP CODE
-        double forward = gamepad1.left_stick_y;
-        double strafe = -gamepad1.left_stick_x;
-        double turn = -gamepad1.right_stick_x;
+        double forward = -gamepad1.left_stick_y;
+        double strafe = gamepad1.left_stick_x;
+        double turn = gamepad1.right_stick_x;
 
         double[] driveValues = {
                 forward - strafe + turn,
@@ -43,27 +44,22 @@ public class TeleOP extends LinearOpMode {
                 forward + strafe - turn
         };
 
-        robot.linearSlide.setPower(gamepad1.left_trigger - gamepad1.right_trigger);
+        robot.drivetrain.setMotorPowers(driveValues[0], driveValues[1], driveValues[2], driveValues[3]);
+
+        //robot.linearSlide.setPower(gamepad1.left_trigger - gamepad1.right_trigger);
 
         if (gamepad1.x) {
             robot.linearSlide.setTargetPosition(100);
         }
         else if (gamepad1.y) {
-            robot.linearSlide.setTargetPosition(200);
+            robot.linearSlide.setTargetPosition(3200);
         }
         else if (gamepad1.b) {
-            robot.linearSlide.setTargetPosition(300);
+            robot.linearSlide.setTargetPosition(4000);
         }
 
-        while (gamepad1.right_bumper) {
-            robot.intake.setPower(1);
-        }
+        robot.intake.setPower(gamepad1.right_bumper ? 1 :gamepad1.right_bumper ? -1 :0);
 
-        while (gamepad1.left_bumper) {
-            robot.intake.setPower(-1);
-        }
-
-        robot.intake.setPower(0);
 
 //        robot.drivetrainSubsystem.drive(forward, strafe, turn);
     }

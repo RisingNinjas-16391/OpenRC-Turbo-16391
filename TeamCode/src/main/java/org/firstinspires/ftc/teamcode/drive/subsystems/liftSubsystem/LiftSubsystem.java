@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import com.acmerobotics.roadrunner.control.PIDFController;
@@ -24,7 +26,7 @@ public class LiftSubsystem {
 
         motor = hwMap.get(DcMotorEx.class, LiftConstants.name);
         motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        motor.setDirection(DcMotorSimple.Direction.FORWARD);
+        motor.setDirection(DcMotorSimple.Direction.REVERSE);
         motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         motor.setPower(0);
@@ -57,7 +59,9 @@ public class LiftSubsystem {
     public void update() {
         switch (mode) {
             case RUN_TO_POSITION:
-                motor.setPower(controller.update(motor.getCurrentPosition(), motor.getVelocity()));
+                motor.setPower(controller.update(motor.getCurrentPosition()));
+                Log.i("Lift Power", String.format("%f", motor.getPower()));
+                Log.i("Lift Error", String.format("%f", controller.getLastError()));
                 break;
             case RUN_USING_ENCODER:
                 motor.setPower(0);

@@ -50,10 +50,12 @@ public class Hardware {
                 .addData("Back Right", drivetrain.getWheelPositions().get(2));
 
         telemetry.addLine("Linear Slide ticks")
-                .addData("Slide", linearSlide.getCurrentPosition());
-
+                .addData("slide", linearSlide.getCurrentPosition());
+        telemetry.addLine("Intake Power")
+                .addData("intake", intake.getPower());
 //        telemetry.addLine("Turret Ticks")
 //                .addData("Turret", turret.getCurrentPosition());
+
         telemetry.update();
     }
 }

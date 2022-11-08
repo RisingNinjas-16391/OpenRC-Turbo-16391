@@ -97,10 +97,10 @@ public class DrivetrainSubsystem extends MecanumDrive {
 
         // BNO055IMUUtil.remapZAxis(imu, AxisDirection.NEG_Y);
 
-        leftFront = hardwareMap.get(DcMotorEx.class, "Left Front");
-        leftRear = hardwareMap.get(DcMotorEx.class, "Left Rear");
-        rightRear = hardwareMap.get(DcMotorEx.class, "Right Rear");
-        rightFront = hardwareMap.get(DcMotorEx.class, "Right Front");
+        leftFront = hardwareMap.get(DcMotorEx.class, "left front");
+        leftRear = hardwareMap.get(DcMotorEx.class, "left rear");
+        rightRear = hardwareMap.get(DcMotorEx.class, "right rear");
+        rightFront = hardwareMap.get(DcMotorEx.class, "right front");
 
         motors = Arrays.asList(leftFront, leftRear, rightRear, rightFront);
 
