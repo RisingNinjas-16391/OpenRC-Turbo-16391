@@ -59,35 +59,35 @@ public class Auto extends LinearOpMode {
 
             robot.drivetrain.followTrajectorySequence(initToStack);
 
-            robot.linearSlide.setTargetPosition(55);
+            robot.slide.setTargetPosition(55);
             robot.intake.setPower(1);
-            robot.linearSlide.setTargetPosition(50);
+            robot.slide.setTargetPosition(50);
             robot.intake.setPower(0);
 
 
             robot.drivetrain.followTrajectorySequence(stackToHigh);
-            robot.linearSlide.setTargetPosition(300);
+            robot.slide.setTargetPosition(300);
             robot.intake.setPower(-1);
             robot.intake.setPower(0);
 
 
             robot.drivetrain.followTrajectorySequence(highToStack);
-            robot.linearSlide.setTargetPosition(50);
+            robot.slide.setTargetPosition(50);
             robot.intake.setPower(1);
-            robot.linearSlide.setTargetPosition(45);
+            robot.slide.setTargetPosition(45);
             robot.intake.setPower(0);
 
 
             robot.drivetrain.followTrajectorySequence(stackToHigh);
-            robot.linearSlide.setTargetPosition(300);
+            robot.slide.setTargetPosition(300);
             robot.intake.setPower(-1);
             robot.intake.setPower(0);
 
 
             robot.drivetrain.followTrajectorySequence(highToStack);
-            robot.linearSlide.setTargetPosition(45);
+            robot.slide.setTargetPosition(45);
             robot.intake.setPower(1);
-            robot.linearSlide.setTargetPosition(40);
+            robot.slide.setTargetPosition(40);
             robot.intake.setPower(0);
 
     }

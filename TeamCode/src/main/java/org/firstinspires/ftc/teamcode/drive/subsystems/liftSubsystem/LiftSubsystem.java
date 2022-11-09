@@ -24,6 +24,7 @@ public class LiftSubsystem {
         controller.setOutputBounds(-1, 1);
         mode = DcMotor.RunMode.RUN_TO_POSITION;
 
+
         motor = hwMap.get(DcMotorEx.class, LiftConstants.name);
         motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motor.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -47,6 +48,11 @@ public class LiftSubsystem {
         return motor.getPower();
     }
 
+    public void resetEncoders() {
+        motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    }
+
     /** Get motor encoder ticks*/
     public double getCurrentPosition() {
         return motor.getCurrentPosition();
@@ -59,7 +65,7 @@ public class LiftSubsystem {
     public void update() {
         switch (mode) {
             case RUN_TO_POSITION:
-                motor.setPower(controller.update(motor.getCurrentPosition()));
+                motor.setPower(controller.update(motor.getCurrentPosition()*0.4));
                 Log.i("Lift Power", String.format("%f", motor.getPower()));
                 Log.i("Lift Error", String.format("%f", controller.getLastError()));
                 break;
