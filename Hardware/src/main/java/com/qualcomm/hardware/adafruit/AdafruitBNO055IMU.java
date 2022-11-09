@@ -33,7 +33,6 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package com.qualcomm.hardware.adafruit;
 
 import com.qualcomm.hardware.bosch.BNO055IMUImpl;
-import com.qualcomm.robotcore.hardware.I2cController;
 import com.qualcomm.robotcore.hardware.I2cDeviceSynch;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.I2cDeviceConfigurationType;
 import com.qualcomm.robotcore.hardware.configuration.annotations.DeviceProperties;
@@ -54,8 +53,8 @@ public class AdafruitBNO055IMU extends BNO055IMUImpl
     //----------------------------------------------------------------------------------------------
 
     /**
-     * This constructor is used by {@link I2cDeviceConfigurationType#createInstance(I2cController, int)}
-     * @see I2cDeviceConfigurationType#createInstance(I2cController, int)
+     * This constructor is used by {@link I2cDeviceConfigurationType#createInstance}
+     * @see I2cDeviceConfigurationType#createInstance
      * @see I2cDeviceType
      */
     public AdafruitBNO055IMU(I2cDeviceSynch deviceClient)

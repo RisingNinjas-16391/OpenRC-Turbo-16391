@@ -33,14 +33,28 @@ class RangeAccess extends Access {
   @SuppressWarnings("unused")
   @JavascriptInterface
   public double clip(double number, double min, double max) {
-    startBlockExecution(BlockType.FUNCTION, ".clip");
-    return Range.clip(number, min, max);
+    try {
+      startBlockExecution(BlockType.FUNCTION, ".clip");
+      return Range.clip(number, min, max);
+    } catch (Throwable e) {
+      blocksOpMode.handleFatalException(e);
+      throw new AssertionError("impossible", e);
+    } finally {
+      endBlockExecution();
+    }
   }
 
   @SuppressWarnings("unused")
   @JavascriptInterface
   public double scale(double number, double x1, double x2, double y1, double y2) {
-    startBlockExecution(BlockType.FUNCTION, ".scale");
-    return Range.scale(number, x1, x2, y1, y2);
+    try {
+      startBlockExecution(BlockType.FUNCTION, ".scale");
+      return Range.scale(number, x1, x2, y1, y2);
+    } catch (Throwable e) {
+      blocksOpMode.handleFatalException(e);
+      throw new AssertionError("impossible", e);
+    } finally {
+      endBlockExecution();
+    }
   }
 }

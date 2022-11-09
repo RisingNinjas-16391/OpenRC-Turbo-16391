@@ -10,9 +10,9 @@
 <variable id="C-j=_t;@/fsV)+=e~^La">recognitions</variable>
 <variable id="A7n%5a@8jC6}[rgS1GS8">index</variable>
 </variables>
-<block type="procedures_defnoreturn" id="WtpyD@tEu+EoY=P9iY,D" deletable="false" editable="false" x="41" y="15">
+<block type="procedures_defnoreturn" id="WtpyD@tEu+EoY=P9iY,D" deletable="false" x="41" y="15">
 <field name="NAME">runOpMode</field>
-<comment pinned="false" h="32" w="532">This function is executed when this Op Mode is selected from the Driver Station.</comment>
+<comment pinned="false" h="45" w="532">This function is executed when this Op Mode is selected from the Driver Station.</comment>
 <statement name="STACK">
 <block type="comment" id="Lc#BFtj*NTB48YL;eBl.">
 <field name="COMMENT">Sample TFOD Op Mode</field>
@@ -122,7 +122,7 @@
 <block type="tfod_setZoom" id="vSb=@hTz=nXMZN-T0R7r">
 <value name="MAGNIFICATION">
 <shadow type="math_number" id="qKv3X|N=wOGF@rg4S`u#">
-<field name="NUM">2.5</field>
+<field name="NUM">1.0</field>
 </shadow>
 </value>
 <value name="ASPECT_RATIO">

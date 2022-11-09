@@ -50,7 +50,7 @@ public class LynxSetServoConfigurationCommand extends LynxDekaInterfaceCommand<L
     //----------------------------------------------------------------------------------------------
 
     public final static int cbPayload = 3;
-    public final static int apiFramePeriodFirst = 0;
+    public final static int apiFramePeriodFirst = 2;
     public final static int apiFramePeriodLast  = 65535;
 
     private byte channel;
@@ -77,12 +77,6 @@ public class LynxSetServoConfigurationCommand extends LynxDekaInterfaceCommand<L
     //----------------------------------------------------------------------------------------------
     // Operations
     //----------------------------------------------------------------------------------------------
-
-    @Override
-    public boolean isResponseExpected()
-        {
-        return false;
-        }
 
     @Override
     public byte[] toPayloadByteArray()

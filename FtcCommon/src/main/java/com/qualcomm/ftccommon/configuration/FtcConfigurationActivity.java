@@ -49,21 +49,15 @@ import com.qualcomm.ftccommon.CommandList;
 import com.qualcomm.ftccommon.R;
 import com.qualcomm.robotcore.exception.DuplicateNameException;
 import com.qualcomm.robotcore.exception.RobotCoreException;
-import com.qualcomm.robotcore.hardware.ControlSystem;
 import com.qualcomm.robotcore.hardware.DeviceManager;
 import com.qualcomm.robotcore.hardware.ScannedDevices;
 import com.qualcomm.robotcore.hardware.configuration.BuiltInConfigurationType;
 import com.qualcomm.robotcore.hardware.configuration.ConfigurationType;
 import com.qualcomm.robotcore.hardware.configuration.ControllerConfiguration;
 import com.qualcomm.robotcore.hardware.configuration.DeviceConfiguration;
-import com.qualcomm.robotcore.hardware.configuration.DeviceInterfaceModuleConfiguration;
-import com.qualcomm.robotcore.hardware.configuration.LegacyModuleControllerConfiguration;
 import com.qualcomm.robotcore.hardware.configuration.LynxModuleConfiguration;
 import com.qualcomm.robotcore.hardware.configuration.LynxUsbDeviceConfiguration;
-import com.qualcomm.robotcore.hardware.configuration.ModernRoboticsConstants;
-import com.qualcomm.robotcore.hardware.configuration.MotorControllerConfiguration;
 import com.qualcomm.robotcore.hardware.configuration.ReadXMLFileHandler;
-import com.qualcomm.robotcore.hardware.configuration.ServoControllerConfiguration;
 import com.qualcomm.robotcore.robocol.Command;
 import com.qualcomm.robotcore.util.RobotLog;
 import com.qualcomm.robotcore.util.SerialNumber;
@@ -72,6 +66,7 @@ import com.qualcomm.robotcore.util.ThreadPool;
 import org.firstinspires.ftc.robotcore.internal.network.CallbackResult;
 import org.firstinspires.ftc.robotcore.internal.network.NetworkConnectionHandler;
 import org.firstinspires.ftc.robotcore.internal.network.RecvLoopRunnable;
+import org.firstinspires.ftc.robotcore.internal.network.RobotCoreCommandList;
 import org.firstinspires.ftc.robotcore.internal.system.Misc;
 import org.firstinspires.ftc.robotcore.internal.ui.UILocation;
 import org.xmlpull.v1.XmlPullParser;
@@ -160,7 +155,7 @@ public class FtcConfigurationActivity extends EditActivity {
       populateListAndWarnDevices();
     } else if (remoteConfigure) {
       // Ask for the data of this configuration. We'll populate when we receive same.
-      networkConnectionHandler.sendCommand(new Command(CommandList.CMD_REQUEST_PARTICULAR_CONFIGURATION, currentCfgFile.toString()));
+      networkConnectionHandler.sendCommand(new Command(RobotCoreCommandList.CMD_REQUEST_PARTICULAR_CONFIGURATION, currentCfgFile.toString()));
     } else {
       // Read the config and populate right now
       readFile();
@@ -506,36 +501,7 @@ public class FtcConfigurationActivity extends EditActivity {
         {
         ControllerConfiguration controllerConfiguration = (ControllerConfiguration) adapterView.getItemAtPosition(pos);
         ConfigurationType itemType = controllerConfiguration.getConfigurationType();
-        if (itemType == BuiltInConfigurationType.MOTOR_CONTROLLER) {
-          EditParameters parameters = initParameters(ModernRoboticsConstants.INITIAL_MOTOR_PORT,
-                  DeviceConfiguration.class,
-                  controllerConfiguration,
-                  ((MotorControllerConfiguration)controllerConfiguration).getMotors());
-          handleLaunchEdit(EditMotorControllerActivity.requestCode, EditMotorControllerActivity.class, parameters);
-          }
-        else if (itemType == BuiltInConfigurationType.SERVO_CONTROLLER) {
-          EditParameters parameters = initParameters(ModernRoboticsConstants.INITIAL_SERVO_PORT,
-                  DeviceConfiguration.class,
-                  controllerConfiguration,
-                  ((ServoControllerConfiguration)controllerConfiguration).getServos());
-          parameters.setControlSystem(ControlSystem.MODERN_ROBOTICS);
-          handleLaunchEdit(EditServoControllerActivity.requestCode, EditServoControllerActivity.class, parameters);
-          }
-        else if (itemType == BuiltInConfigurationType.LEGACY_MODULE_CONTROLLER) {
-          EditParameters parameters = initParameters(0,
-                  DeviceConfiguration.class,
-                  controllerConfiguration,
-                  ((LegacyModuleControllerConfiguration)controllerConfiguration).getDevices());
-          handleLaunchEdit(EditLegacyModuleControllerActivity.requestCode, EditLegacyModuleControllerActivity.class, parameters);
-          }
-        else if (itemType == BuiltInConfigurationType.DEVICE_INTERFACE_MODULE) {
-          EditParameters parameters = initParameters(0,
-                  DeviceConfiguration.class,
-                  controllerConfiguration,
-                  ((DeviceInterfaceModuleConfiguration)controllerConfiguration).getDevices());
-          handleLaunchEdit(EditDeviceInterfaceModuleActivity.requestCode, EditDeviceInterfaceModuleActivity.class, parameters);
-          }
-        else if (itemType == BuiltInConfigurationType.LYNX_USB_DEVICE) {
+        if (itemType == BuiltInConfigurationType.LYNX_USB_DEVICE) {
           EditParameters parameters = initParameters(0,
                   LynxModuleConfiguration.class,
                   controllerConfiguration,
@@ -792,7 +758,7 @@ public class FtcConfigurationActivity extends EditActivity {
           result = handleCommandScanResp(extra);
         } else if (name.equals(CommandList.CMD_DISCOVER_LYNX_MODULES_RESP)) {
           result = handleCommandDiscoverLynxModulesResp(extra);
-        } else if (name.equals(CommandList.CMD_REQUEST_PARTICULAR_CONFIGURATION_RESP)) {
+        } else if (name.equals(RobotCoreCommandList.CMD_REQUEST_PARTICULAR_CONFIGURATION_RESP)) {
           result = handleCommandRequestParticularConfigurationResp(extra);
         }
       } catch (RobotCoreException e) {

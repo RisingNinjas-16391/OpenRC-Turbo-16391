@@ -76,6 +76,7 @@ function initializeBlocks() {
     });
     fetchBlkFileContent(currentProjectName, function(blkFileContent, errorMessage) {
       if (blkFileContent) {
+        savedBlkFileContent = blkFileContent;
         var blocksLoadedCallback = function() {
           showJava();
         };
@@ -192,75 +193,59 @@ function yesSaveWithWarningsDialog() {
   saveProjectNow();
 }
 
+function getCurrentBlkFileContent() {
+  // Get the blocks as xml (text).
+  var allBlocks = workspace.getAllBlocks();
+  for (var iBlock = 0, block; block = allBlocks[iBlock]; iBlock++) {
+    saveBlockWarningHidden(block);
+  }
+  var blocksContent = Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(workspace));
+  var flavorSelect = document.getElementById('project_flavor');
+  var flavor = flavorSelect.options[flavorSelect.selectedIndex].value;
+  var group = document.getElementById('project_group').value;
+  var autoTransitionSelect = document.getElementById('project_autoTransition');
+  var autoTransition = autoTransitionSelect.options[autoTransitionSelect.selectedIndex].value;
+  var blkFileContent = blocksContent + formatExtraXml(flavor, group, autoTransition, projectEnabled);
+  // Break the blocks content into multiple lines so it is easier to read/diff.
+  var formattedBlkFileContent = blkFileContent
+      .replace(/></g, '>\n<')
+      .replace(/>\n<\/field>/g, '></field>')
+      .replace(/<\/Extra> /g, '</Extra>');
+  if (!formattedBlkFileContent.endsWith('\n')) {
+    formattedBlkFileContent += '\n';
+  }
+  return formattedBlkFileContent;
+}
+
 function saveProjectNow(opt_success_callback) {
   if (currentProjectName) {
-    var allBlocks = workspace.getAllBlocks();
-    for (var iBlock = 0, block; block = allBlocks[iBlock]; iBlock++) {
-      saveBlockWarningHidden(block);
-    }
     // Get the blocks as xml (text).
-    var blocksContent = Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(workspace));
-    // Don't bother saving if there are no blocks.
-    if (blocksContent.indexOf('<block') > -1) {
-      var disabled = disableOrphans();
-      // Generate JavaScript code.
-      var jsFileContent = Blockly.JavaScript.workspaceToCode(workspace);
-      reenableOrphans(disabled);
-      var flavorSelect = document.getElementById('project_flavor');
-      var flavor = flavorSelect.options[flavorSelect.selectedIndex].value;
-      var group = document.getElementById('project_group').value;
-      var autoTransitionSelect = document.getElementById('project_autoTransition');
-      var autoTransition = autoTransitionSelect.options[autoTransitionSelect.selectedIndex].value;
-      var blkFileContent = blocksContent + formatExtraXml(flavor, group, autoTransition, projectEnabled);
-      saveProject(currentProjectName, blkFileContent, jsFileContent,
-          function(success, errorMessage) {
-        if (success) {
-          isDirty = false;
-          document.getElementById('saveSuccess').style.display = 'inline-block';
-          document.getElementById('saveFailure').style.display = 'none';
-          window.setTimeout(function() {
-            document.getElementById('saveSuccess').style.display = 'none';
-          }, 3000);
-          if (opt_success_callback) {
-            opt_success_callback();
-          }
-        } else {
+    const blkFileContent = getCurrentBlkFileContent();
+
+    // Generate JavaScript code.
+    const jsFileContent = generateJavaScriptCode();
+
+    saveProject(currentProjectName, blkFileContent, jsFileContent,
+        function(success, errorMessage) {
+      if (success) {
+        savedBlkFileContent = blkFileContent;
+        document.getElementById('saveSuccess').style.display = 'inline-block';
+        document.getElementById('saveFailure').style.display = 'none';
+        window.setTimeout(function() {
           document.getElementById('saveSuccess').style.display = 'none';
-          document.getElementById('saveFailure').innerHTML = errorMessage;
-          document.getElementById('saveFailure').style.display = 'inline-block';
+        }, 3000);
+        if (opt_success_callback) {
+          opt_success_callback();
         }
-      });
-    }
+      } else {
+        document.getElementById('saveSuccess').style.display = 'none';
+        document.getElementById('saveFailure').innerHTML = errorMessage;
+        document.getElementById('saveFailure').style.display = 'inline-block';
+      }
+    });
   } else {
     alert('The specified project name is not valid');
   }
-}
-
-function disableOrphans() {
-  Blockly.Events.disable();
-  var disabled = [];
-  var blocks = workspace.getTopBlocks(true);
-  for (var x = 0, block; block = blocks[x]; x++) {
-    if (block.type != 'procedures_defnoreturn' &&
-        block.type != 'procedures_defreturn' &&
-        block.isEnabled()) {
-      do {
-        block.setEnabled(false);
-        disabled.push(block);
-        block = block.getNextBlock();
-      } while (block);
-    }
-  }
-  Blockly.Events.enable();
-  return disabled;
-}
-
-function reenableOrphans(disabled) {
-  Blockly.Events.disable();
-  for (var x = 0, block; block = disabled[x]; x++) {
-    block.setEnabled(true);
-  }
-  Blockly.Events.enable();
 }
 
 /**
@@ -314,7 +299,6 @@ function initializeBlockly() {
     }
   };
 
-  isDirty = false;
   showJavaCheckbox = document.getElementById('show_java');
   javaArea = document.getElementById('javaArea');
   javaContent = document.getElementById('javaContent');
@@ -348,7 +332,8 @@ function initializeBlockly() {
   window.addEventListener('resize', resizeBlocklyArea, false);
   resizeBlocklyArea();
   window.addEventListener('beforeunload', function(e) {
-    if (!isDirty) {
+    // Determine whether the blocks content is the same as the last time it was saved.
+    if (getCurrentBlkFileContent() == savedBlkFileContent) {
       return undefined;
     }
     // It doesn't matter what string we return here. The browser will always use a standard message
@@ -358,8 +343,6 @@ function initializeBlockly() {
   });
 
   workspace.addChangeListener(function(event) {
-    isDirty = true;
-
     // Check blocks.
     var blockIds = [];
     switch (event.type) {
@@ -387,6 +370,32 @@ function initializeBlockly() {
     for (var i = 0; i < blockIds.length; i++) {
       var block = workspace.getBlockById(blockIds[i]);
       if (block) {
+        if (block.type == 'procedures_defnoreturn' &&
+            block.getFieldValue('NAME') == 'runOpMode' &&
+            !block.getInput('PROJECT_NAME')) {
+          // Add the project name to the block.
+          block.appendDummyInput('PROJECT_NAME')
+               .appendField(createNonEditableField(currentProjectName));
+          block.moveInputBefore('PROJECT_NAME', 'STACK');
+
+          if (!block.isEditable()) {
+            // This will only happen to old blk files that were created before we made this block
+            // editable in all the sample blk files.
+            // Make the block editable, so the user can modify the comment.
+            // Unfortunately, this will make the blk content different, so we'll think the user has
+            // modified the blocks and we'll warn them if they close the tab or navigate.
+            block.setEditable(true);
+          }
+          // Remove the mutator so the user can't add parameters to the runOpMode block.
+          if (block.mutator) {
+            block.setMutator(null);
+            if (block.rendered) {
+              block.render();
+              block.bumpNeighbours_();
+            }
+          }
+        }
+
         var hasWarningBits = checkBlock(block, missingHardware);
         if (hasWarningBits & WarningBits.MISSING_HARDWARE) {
           if (!blockIdsWithMissingHardware.includes(blockIds[i])) {
@@ -484,7 +493,7 @@ function loadBlocksIntoWorkspace(blocksContent, opt_blocksLoaded_callback) {
   Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(blocksContent), workspace);
 
   // Use a timeout to allow the workspace change event to come through. Then, show an alert
-  // if any blocks have warnings. Then clear isDirty.
+  // if any blocks have warnings.
   setTimeout(function() {
     if (blockIdsWithMissingHardware.length > 0) {
       var message = (blockIdsWithMissingHardware.length == 1)
@@ -501,8 +510,6 @@ function loadBlocksIntoWorkspace(blocksContent, opt_blocksLoaded_callback) {
           'blocks project, please activate the appropriate configuration and reload this page.';
       alert(message);
     }
-
-    isDirty = false;
 
     if (opt_blocksLoaded_callback) {
       opt_blocksLoaded_callback();
@@ -958,7 +965,6 @@ function isExternal(url) {
 }
 
 function projectFlavorChanged() {
-  isDirty = true;
   setAutoTransitionDisplay();
   showJava();
 }
@@ -972,12 +978,10 @@ function setAutoTransitionDisplay() {
 }
 
 function projectGroupChanged() {
-  isDirty = true;
   showJava();
 }
 
 function projectAutoTransitionChanged() {
-  isDirty = true;
   showJava();
 }
 

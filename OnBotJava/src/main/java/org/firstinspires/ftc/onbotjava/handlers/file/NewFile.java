@@ -40,7 +40,6 @@ import com.google.blocks.ftcrobotcontroller.hardware.HardwareItem;
 import com.google.blocks.ftcrobotcontroller.hardware.HardwareItemMap;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.HardwareDevice;
-import com.qualcomm.robotcore.hardware.LegacyModule;
 import com.qualcomm.robotcore.hardware.ServoController;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.ReadWriteFile;
@@ -48,6 +47,7 @@ import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.onbotjava.EditorSettings;
 import org.firstinspires.ftc.onbotjava.JavaSourceFile;
+import org.firstinspires.ftc.onbotjava.OnBotJavaFileSystemUtils;
 import org.firstinspires.ftc.onbotjava.OnBotJavaManager;
 import org.firstinspires.ftc.onbotjava.OnBotJavaProgrammingMode;
 import org.firstinspires.ftc.onbotjava.OnBotJavaSecurityManager;
@@ -76,6 +76,7 @@ import static org.firstinspires.ftc.onbotjava.OnBotJavaFileSystemUtils.EXT_JAVA_
 import static org.firstinspires.ftc.onbotjava.OnBotJavaFileSystemUtils.PATH_SEPARATOR;
 
 /**
+ * <ul>
  * <li>New
  * <p>
  * Requires a "new" entry in data map. If url ends in "/", a new folder will be created,
@@ -91,11 +92,12 @@ import static org.firstinspires.ftc.onbotjava.OnBotJavaFileSystemUtils.PATH_SEPA
  * data entries for template use
  * </p>
  * </li>
+ * </ul>
  */
 @RegisterWebHandler(uri = OnBotJavaProgrammingMode.URI_FILE_NEW)
 public class NewFile implements WebHandler {
     private static final String TAG = NewFile.class.getName();
-    private static final List<Class<? extends HardwareDevice>> HARDWARE_TYPES_PREVENTED_FROM_HARDWARE_SETUP = Arrays.asList(DcMotorController.class,ServoController.class,VoltageSensor.class,LegacyModule.class);
+    private static final List<Class<? extends HardwareDevice>> HARDWARE_TYPES_PREVENTED_FROM_HARDWARE_SETUP = Arrays.asList(DcMotorController.class,ServoController.class,VoltageSensor.class);
 
     @Override
     public NanoHTTPD.Response getResponse(NanoHTTPD.IHTTPSession session) {
