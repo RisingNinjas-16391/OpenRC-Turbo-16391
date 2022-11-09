@@ -46,16 +46,16 @@ public class TeleOP extends LinearOpMode {
 
         robot.drivetrain.setMotorPowers(driveValues[0], driveValues[1], driveValues[2], driveValues[3]);
 
-        robot.linearSlide.setPower(gamepad1.left_trigger - gamepad1.right_trigger);
+        robot.slide.setPower(gamepad1.left_trigger - gamepad1.right_trigger);
 
         if (gamepad1.x) {
-            robot.linearSlide.setTargetPosition(100);
+            robot.slide.setTargetPosition(100);
         }
         else if (gamepad1.y) {
-            robot.linearSlide.setTargetPosition(3200);
+            robot.slide.setTargetPosition(3200);
         }
         else if (gamepad1.b) {
-            robot.linearSlide.setTargetPosition(4000);
+            robot.slide.setTargetPosition(4000);
         }
 
         robot.intake.setPower(gamepad1.right_bumper ? 1 :gamepad1.left_bumper ? -1 : 0);
