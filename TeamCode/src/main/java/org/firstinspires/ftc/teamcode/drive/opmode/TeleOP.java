@@ -39,7 +39,7 @@ public class TeleOP extends LinearOpMode {
         double driveSpeed = 1;
 
         if (gamepad1.right_bumper) {
-            driveSpeed = 0.6;
+            driveSpeed = 0.5;
         }
         double forward = -driveSpeed * gamepad1.left_stick_y;
         double strafe = driveSpeed * gamepad1.left_stick_x;
