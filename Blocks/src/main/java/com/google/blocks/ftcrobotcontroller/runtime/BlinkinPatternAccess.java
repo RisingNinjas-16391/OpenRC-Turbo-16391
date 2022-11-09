@@ -33,62 +33,104 @@ class BlinkinPatternAccess extends Access {
   @SuppressWarnings("unused")
   @JavascriptInterface
   public String fromNumber(int number) {
-    startBlockExecution(BlockType.FUNCTION, ".fromNumber");
-    return BlinkinPattern.fromNumber(number).toString();
+    try {
+      startBlockExecution(BlockType.FUNCTION, ".fromNumber");
+      return BlinkinPattern.fromNumber(number).toString();
+    } catch (Throwable e) {
+      blocksOpMode.handleFatalException(e);
+      throw new AssertionError("impossible", e);
+    } finally {
+      endBlockExecution();
+    }
   }
 
   @SuppressWarnings("unused")
   @JavascriptInterface
   public int toNumber(String blinkinPatternString) {
-    startBlockExecution(BlockType.FUNCTION, ".toNumber");
-    BlinkinPattern blinkinPattern = checkBlinkinPattern(blinkinPatternString);
-    if (blinkinPattern != null) {
-      return blinkinPattern.ordinal();
+    try {
+      startBlockExecution(BlockType.FUNCTION, ".toNumber");
+      BlinkinPattern blinkinPattern = checkBlinkinPattern(blinkinPatternString);
+      if (blinkinPattern != null) {
+        return blinkinPattern.ordinal();
+      }
+      return 0;
+    } catch (Throwable e) {
+      blocksOpMode.handleFatalException(e);
+      throw new AssertionError("impossible", e);
+    } finally {
+      endBlockExecution();
     }
-    return 0;
   }
 
   @SuppressWarnings("unused")
   @JavascriptInterface
   public String fromText(String text) {
-    startBlockExecution(BlockType.FUNCTION, ".fromText");
-    BlinkinPattern blinkinPattern = checkBlinkinPattern(text);
-    if (blinkinPattern != null) {
-      return blinkinPattern.toString();
+    try {
+      startBlockExecution(BlockType.FUNCTION, ".fromText");
+      BlinkinPattern blinkinPattern = checkBlinkinPattern(text);
+      if (blinkinPattern != null) {
+        return blinkinPattern.toString();
+      }
+      return "";
+    } catch (Throwable e) {
+      blocksOpMode.handleFatalException(e);
+      throw new AssertionError("impossible", e);
+    } finally {
+      endBlockExecution();
     }
-    return "";
   }
 
   @SuppressWarnings("unused")
   @JavascriptInterface
   public String toText(String blinkinPatternString) {
-    startBlockExecution(BlockType.FUNCTION, ".toText");
-    BlinkinPattern blinkinPattern = checkBlinkinPattern(blinkinPatternString);
-    if (blinkinPattern != null) {
-      return blinkinPattern.toString();
+    try {
+      startBlockExecution(BlockType.FUNCTION, ".toText");
+      BlinkinPattern blinkinPattern = checkBlinkinPattern(blinkinPatternString);
+      if (blinkinPattern != null) {
+        return blinkinPattern.toString();
+      }
+      return "";
+    } catch (Throwable e) {
+      blocksOpMode.handleFatalException(e);
+      throw new AssertionError("impossible", e);
+    } finally {
+      endBlockExecution();
     }
-    return "";
   }
 
   @SuppressWarnings("unused")
   @JavascriptInterface
   public String next(String blinkinPatternString) {
-    startBlockExecution(BlockType.FUNCTION, ".next");
-    BlinkinPattern blinkinPattern = checkBlinkinPattern(blinkinPatternString);
-    if (blinkinPattern != null) {
-      return blinkinPattern.next().toString();
+    try {
+      startBlockExecution(BlockType.FUNCTION, ".next");
+      BlinkinPattern blinkinPattern = checkBlinkinPattern(blinkinPatternString);
+      if (blinkinPattern != null) {
+        return blinkinPattern.next().toString();
+      }
+      return "";
+    } catch (Throwable e) {
+      blocksOpMode.handleFatalException(e);
+      throw new AssertionError("impossible", e);
+    } finally {
+      endBlockExecution();
     }
-    return "";
   }
 
   @SuppressWarnings("unused")
   @JavascriptInterface
   public String previous(String blinkinPatternString) {
-    startBlockExecution(BlockType.FUNCTION, ".previous");
-    BlinkinPattern blinkinPattern = checkBlinkinPattern(blinkinPatternString);
-    if (blinkinPattern != null) {
-      return blinkinPattern.previous().toString();
+    try {
+      startBlockExecution(BlockType.FUNCTION, ".previous");
+      BlinkinPattern blinkinPattern = checkBlinkinPattern(blinkinPatternString);
+      if (blinkinPattern != null) {
+        return blinkinPattern.previous().toString();
+      }
+      return "";
+    } catch (Throwable e) {
+      blocksOpMode.handleFatalException(e);
+      throw new AssertionError("impossible", e);
+    } finally {
+      endBlockExecution();
     }
-    return "";
   }
 }

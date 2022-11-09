@@ -47,6 +47,8 @@ import android.os.Bundle;
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import android.util.Log;
 import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
@@ -86,7 +88,6 @@ import com.vuforia.VideoMode;
 import com.vuforia.Vuforia;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
-import org.firstinspires.ftc.robotcore.external.android.util.Size;
 import org.firstinspires.ftc.robotcore.external.function.Consumer;
 import org.firstinspires.ftc.robotcore.external.function.Continuation;
 import org.firstinspires.ftc.robotcore.external.function.ContinuationResult;
@@ -109,7 +110,7 @@ import org.firstinspires.ftc.robotcore.internal.opengl.models.SolidCylinder;
 import org.firstinspires.ftc.robotcore.internal.opengl.models.Teapot;
 import org.firstinspires.ftc.robotcore.internal.opengl.shaders.CubeMeshProgram;
 import org.firstinspires.ftc.robotcore.internal.opengl.shaders.SimpleColorProgram;
-import org.firstinspires.ftc.robotcore.internal.opmode.OpModeManagerImpl;
+import com.qualcomm.robotcore.eventloop.opmode.OpModeManagerImpl;
 import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 import org.firstinspires.ftc.robotcore.internal.system.Assert;
 import org.firstinspires.ftc.robotcore.internal.system.Misc;
@@ -1375,8 +1376,12 @@ public class VuforiaLocalizerImpl implements VuforiaLocalizer
          * Besides, we lived with incorrectly using the internal camera projection matrix
          * with webcams for 2 seasons so it can't be THAT bad. Though admittedly not great....
          */
-        if (webcamCal.isFake())
+        if (webcamCal == null || webcamCal.isFake())
             {
+            if (webcamCal == null)
+                {
+                Log.e(TAG, "Webcam calibration was null - this should not happen!");
+                }
             generateProjectionMatrixForInternalCam();
             return;
             }

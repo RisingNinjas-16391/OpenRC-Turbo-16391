@@ -12,12 +12,15 @@
     <string name="controlHubOsVersionLabel">Control Hub OS Version:</string>
     <string name="driverHubOsVersionLabel">Driver Hub OS Version:</string>
     <string name="driverStationLabel">Driver Station:</string>
+    <string name="dsVersionMismatch">No, the DS version is %d.%d</string>
     <string name="hubFirmwareLabel">Hub Firmware:</string>
     <string name="inspection_activity">Inspection Mode</string>
     <string name="locationLabel">Location services:</string>
     <string name="matchesDSVersionLabel">Matches DS version:</string>
     <string name="menuButtonContentDescription">Menu button</string>
     <string name="passwordLabel">RC Password:</string>
+    <string name="qrInvalid">Please activate your competition config before scanning</string>
+    <string name="qrNoGamepad">Please connect or bind your gamepads before scanning</string>
     <string name="robotControllerLabel">Robot Controller:</string>
     <string name="stringManufacturer">Manufacturer:</string>
     <string name="stringModel">Model:</string>

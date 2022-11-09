@@ -54,7 +54,7 @@ public class LynxConstants
     public static final int MINIMUM_LEGAL_CH_OS_VERSION_CODE = 6; // Corresponds to Control Hub OS 1.1.2
     public static final String MINIMUM_LEGAL_CH_OS_VERSION_STRING = "1.1.2"; // ONLY for display. Do not use in comparisons.
 
-    public static final int MINIMUM_LEGAL_DH_OS_VERSION_CODE = 20; // Corresponds to Driver Hub OS 1.1.0
+    public static final int MINIMUM_LEGAL_DH_OS_VERSION_CODE = 21; // Corresponds to Driver Hub OS 1.2.0
     public static final String MINIMUM_LEGAL_DH_OS_VERSION_STRING = "1.1.0"; // ONLY for display. Do not use in comparisons.
 
     private static final String DRAGONBOARD_MODEL = "FIRST Control Hub";
@@ -180,7 +180,8 @@ public class LynxConstants
     public final static int MAX_UNRESERVED_MODULE_ADDRESS = 10;
     public final static int DEFAULT_PARENT_MODULE_ADDRESS = 1;              // try to avoid using: query the device instead
 
-    public static final String EMBEDDED_IMU_XML_TAG = "LynxEmbeddedIMU";
+    public static final String EMBEDDED_BNO055_IMU_XML_TAG = "LynxEmbeddedIMU";
+    public static final String EMBEDDED_BHI260AP_IMU_XML_TAG = "ControlHubImuBHI260AP";
 
     public static void validateMotorZ(int motorZ)
         {

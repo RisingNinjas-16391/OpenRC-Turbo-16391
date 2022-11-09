@@ -143,6 +143,14 @@ public abstract class OpMode {
   }
 
   /**
+   * Immediately stops execution of the calling OpMode; and transitions to the STOP state.
+   * No further code in the OpMode will execute once this has been called.
+   */
+  public final void terminateOpModeNow() {
+    throw new OpModeManagerImpl.ForceStopException();
+  }
+
+  /**
    * Get the number of seconds this op mode has been running
    * <p>
    * This method has sub millisecond accuracy.
@@ -154,9 +162,9 @@ public abstract class OpMode {
   }
 
   /**
-   * Reset the start time to zero.
+   * Reset the runtime to zreo.
    */
-  public void resetStartTime() {
+  public void resetRuntime() {
     startTime = System.nanoTime();
   }
 

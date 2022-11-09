@@ -52,6 +52,7 @@ import com.qualcomm.robotcore.hardware.I2cDeviceSynchReadHistory;
 import com.qualcomm.robotcore.hardware.I2cDeviceSynchReadHistoryImpl;
 import com.qualcomm.robotcore.hardware.I2cDeviceSynchSimple;
 import com.qualcomm.robotcore.hardware.I2cWaitControl;
+import com.qualcomm.robotcore.hardware.I2cWarningManager;
 import com.qualcomm.robotcore.hardware.TimestampedData;
 import com.qualcomm.robotcore.hardware.TimestampedI2cData;
 import com.qualcomm.robotcore.util.RobotLog;
@@ -76,7 +77,6 @@ public abstract class LynxI2cDeviceSynch extends LynxController implements I2cDe
     private boolean     loggingEnabled;
     private String      loggingTag;
     private String      name;
-    private int         msBusyWait = 3;
     private final I2cDeviceSynchReadHistoryImpl readHistory = new I2cDeviceSynchReadHistoryImpl();
 
     protected LynxUsbUtil.Placeholder<TimestampedData> readTimeStampedPlaceholder = new LynxUsbUtil.Placeholder<TimestampedData>(TAG, "readTimestamped");
@@ -116,6 +116,7 @@ public abstract class LynxI2cDeviceSynch extends LynxController implements I2cDe
     public void resetDeviceConfigurationForOpMode()
         {
         super.resetDeviceConfigurationForOpMode();
+        setBusSpeed(BusSpeed.STANDARD_100K);
         readTimeStampedPlaceholder.reset();
         readStatusQueryPlaceholder.reset();
         }
@@ -222,7 +223,7 @@ public abstract class LynxI2cDeviceSynch extends LynxController implements I2cDe
     //------------------------------------------------------------------------------------------------------------
 
     @Override
-    public  byte[] read(int ireg, int creg)
+    public byte[] read(int ireg, int creg)
         {
         return this.readTimeStamped(ireg, creg).data;
         }
@@ -230,26 +231,7 @@ public abstract class LynxI2cDeviceSynch extends LynxController implements I2cDe
     @Override
     public synchronized byte read8(final int ireg)
         {
-        final LynxI2cWriteSingleByteCommand writeTx = new LynxI2cWriteSingleByteCommand(this.getModule(), this.bus, this.i2cAddr, ireg);
-        try {
-            return acquireI2cLockWhile(new Supplier<Byte>()
-                {
-                @Override public Byte get() throws InterruptedException, RobotCoreException, LynxNackException
-                    {
-                    sendI2cWriteTx(writeTx);
-
-                    LynxI2cReadSingleByteCommand readTx = new LynxI2cReadSingleByteCommand(getModule(), bus, i2cAddr);
-                    readTx.send();
-
-                    return pollForReadResult(i2cAddr, ireg, 1).data[0];
-                    }
-                });
-            }
-        catch (InterruptedException|LynxNackException|RobotCoreException|RuntimeException e)
-            {
-            handleException(e);
-            }
-        return LynxUsbUtil.makePlaceholderValue((byte)0);
+        return this.read(ireg, 1)[0];
         }
 
     @Override //NB: this is firmware-version specific, but the (below) non-register-based version isn't
@@ -269,13 +251,21 @@ public abstract class LynxI2cDeviceSynch extends LynxController implements I2cDe
     public synchronized byte read8()
         {
         try {
+            final Supplier<LynxI2cReadSingleByteCommand> readTxSupplier = new Supplier<LynxI2cReadSingleByteCommand>()
+                {
+                @Override
+                public LynxI2cReadSingleByteCommand get()
+                    {
+                    return new LynxI2cReadSingleByteCommand(getModule(), bus, i2cAddr);
+                    }
+                };
+
             return acquireI2cLockWhile(new Supplier<Byte>()
                 {
                 @Override
-                public Byte get() throws InterruptedException, LynxNackException
+                public Byte get() throws InterruptedException, LynxNackException, RobotCoreException
                     {
-                    LynxI2cReadSingleByteCommand readTx = new LynxI2cReadSingleByteCommand(getModule(), bus, i2cAddr);
-                    readTx.send();
+                    sendI2cTransaction(readTxSupplier);
 
                     /*
                      * The 'ireg' parameter is never read by *anything*
@@ -306,22 +296,28 @@ public abstract class LynxI2cDeviceSynch extends LynxController implements I2cDe
     @Override
     public synchronized TimestampedData readTimeStamped(final int creg)
         {
-        LynxI2cDeviceSynch deviceHavingProblems = null;
-
         try {
-            return acquireI2cLockWhile(new Supplier<TimestampedData>()
+            final Supplier<LynxCommand<?>> readTxSupplier = new Supplier<LynxCommand<?>>()
                 {
                 @Override
-                public TimestampedData get() throws InterruptedException, LynxNackException
+                public LynxCommand<?> get()
                     {
                     /*
                      * LynxI2cReadMultipleBytesCommand does not support a
                      * byte count of one, so we manually differentiate here.
                      */
-                    LynxCommand<?> readTx = creg==1
+                    return creg==1
                             ? new LynxI2cReadSingleByteCommand(getModule(), bus, i2cAddr)
                             : new LynxI2cReadMultipleBytesCommand(getModule(), bus, i2cAddr, creg);
-                    readTx.send();
+                    }
+                };
+
+            return acquireI2cLockWhile(new Supplier<TimestampedData>()
+                {
+                @Override
+                public TimestampedData get() throws InterruptedException, LynxNackException, RobotCoreException
+                    {
+                    sendI2cTransaction(readTxSupplier);
 
                     readTimeStampedPlaceholder.reset();
 
@@ -344,11 +340,11 @@ public abstract class LynxI2cDeviceSynch extends LynxController implements I2cDe
             /*
              * This is a possible device problem, go ahead and tell makeFakeData to warn.
              */
-            deviceHavingProblems = this;
+            I2cWarningManager.notifyProblemI2cDevice(this);
             handleException(e);
             }
 
-        return readTimeStampedPlaceholder.log(TimestampedI2cData.makeFakeData(deviceHavingProblems, getI2cAddress(), 0, creg));
+        return readTimeStampedPlaceholder.log(TimestampedI2cData.makeFakeData(getI2cAddress(), 0, creg));
         }
 
     //------------------------------------------------------------------------------------------------------------
@@ -384,20 +380,28 @@ public abstract class LynxI2cDeviceSynch extends LynxController implements I2cDe
         if (data.length > 0) // paranoia, but safe
             {
             // For register-based I2c devices: convention: first byte in a write is the initial register number
-            byte[] payload = Util.concatenateByteArrays(new byte[] {(byte)ireg}, data);
+            final byte[] payload = Util.concatenateByteArrays(new byte[] {(byte)ireg}, data);
 
-            // We use the single-byte case when we can out of paranoia about the LynxI2cWriteMultipleBytesCommand
-            // not being able to handle a byte count of one (that has not been verified with the firmware
-            // programmers, but the corresponding read case has been)
-            final LynxCommand<?> writeTx = payload.length==1
-                    ? new LynxI2cWriteSingleByteCommand(this.getModule(), this.bus, this.i2cAddr, payload[0])
-                    : new LynxI2cWriteMultipleBytesCommand(this.getModule(), this.bus, this.i2cAddr, payload);
+            final Supplier<LynxCommand<?>> writeTxSupplier = new Supplier<LynxCommand<?>>()
+                {
+                @Override
+                public LynxCommand<?> get()
+                    {
+                    // We use the single-byte case when we can out of paranoia about the LynxI2cWriteMultipleBytesCommand
+                    // not being able to handle a byte count of one (that has not been verified with the firmware
+                    // programmers, but the corresponding read case has been)
+                    return payload.length==1
+                            ? new LynxI2cWriteSingleByteCommand(getModule(), bus, i2cAddr, payload[0])
+                            : new LynxI2cWriteMultipleBytesCommand(getModule(), bus, i2cAddr, payload);
+                    }
+                };
+
             try {
                 acquireI2cLockWhile(new Supplier<Object>()
                     {
                     @Override public Object get() throws InterruptedException, RobotCoreException, LynxNackException
                         {
-                        sendI2cWriteTx(writeTx);
+                        sendI2cTransaction(writeTxSupplier);
                         internalWaitForWriteCompletions(waitControl);
                         return null;
                         }
@@ -438,22 +442,30 @@ public abstract class LynxI2cDeviceSynch extends LynxController implements I2cDe
         internalWrite(new byte[] {(byte)bVal}, waitControl);
         }
 
-    private void internalWrite(byte[] payload, final I2cWaitControl waitControl)
+    private void internalWrite(final byte[] payload, final I2cWaitControl waitControl)
         {
         if(payload.length > 0) // paranoia, but safe
             {
-            // We use the single-byte case when we can out of paranoia about the LynxI2cWriteMultipleBytesCommand
-            // not being able to handle a byte count of one (that has not been verified with the firmware
-            // programmers, but the corresponding read case has been)
-            final LynxCommand<?> writeTx = payload.length==1
-                    ? new LynxI2cWriteSingleByteCommand(this.getModule(), this.bus, this.i2cAddr, payload[0])
-                    : new LynxI2cWriteMultipleBytesCommand(this.getModule(), this.bus, this.i2cAddr, payload);
+            final Supplier<LynxCommand<?>> writeTxSupplier = new Supplier<LynxCommand<?>>()
+                {
+                @Override
+                public LynxCommand<?> get()
+                    {
+                    // We use the single-byte case when we can out of paranoia about the LynxI2cWriteMultipleBytesCommand
+                    // not being able to handle a byte count of one (that has not been verified with the firmware
+                    // programmers, but the corresponding read case has been)
+                    return payload.length==1
+                            ? new LynxI2cWriteSingleByteCommand(getModule(), bus, i2cAddr, payload[0])
+                            : new LynxI2cWriteMultipleBytesCommand(getModule(), bus, i2cAddr, payload);
+                    }
+                };
+
             try {
                 acquireI2cLockWhile(new Supplier<Object>()
                     {
                     @Override public Object get() throws InterruptedException, RobotCoreException, LynxNackException
                         {
-                        sendI2cWriteTx(writeTx);
+                        sendI2cTransaction(writeTxSupplier);
                         internalWaitForWriteCompletions(waitControl);
                         return null;
                         }
@@ -472,7 +484,7 @@ public abstract class LynxI2cDeviceSynch extends LynxController implements I2cDe
         try {
             acquireI2cLockWhile(new Supplier<Object>()
                 {
-                @Override public Object get() throws InterruptedException, RobotCoreException, LynxNackException
+                @Override public Object get()
                     {
                     internalWaitForWriteCompletions(waitControl);
                     return null;
@@ -501,12 +513,22 @@ public abstract class LynxI2cDeviceSynch extends LynxController implements I2cDe
     // I2cDeviceSynch API support methods
     //----------------------------------------------------------------------------------------------
 
-    protected void sendI2cWriteTx(LynxCommand writeTx) throws LynxNackException, InterruptedException
+    /**
+     * Waits for the current I2C transaction to finish, then executes the supplied transaction.
+     * <p>
+     * Only intended for use with I2C commands that directly cause the firmware to perform an I2C
+     * transaction.
+     *
+     * @param transactionSupplier A {@link Supplier} that provides a new {@link LynxCommand} every
+     *                            time it's called. The command must perform an on-the-wire I2C
+     *                            transaction.
+     */
+    protected void sendI2cTransaction(Supplier<? extends LynxCommand<?>> transactionSupplier) throws LynxNackException, InterruptedException, RobotCoreException
         {
         for (;;)
             {
             try {
-                writeTx.send();
+                transactionSupplier.get().send();
                 break;
                 }
             catch (LynxNackException e)
@@ -515,7 +537,6 @@ public abstract class LynxI2cDeviceSynch extends LynxController implements I2cDe
                     {
                     case I2C_MASTER_BUSY:
                     case I2C_OPERATION_IN_PROGRESS:
-                        Thread.sleep(msBusyWait);
                         break;
                     default:
                         throw e;
@@ -531,7 +552,7 @@ public abstract class LynxI2cDeviceSynch extends LynxController implements I2cDe
 
     protected void internalWaitForWriteCompletions(I2cWaitControl waitControl)
         {
-        /** Note: called with i2c lock held!
+        /* Note: called with i2c lock held!
          *
          * For {@link I2cWaitControl#NONE} and {@link I2cWaitControl#ATOMIC}, we have nothing to do
          * because we transmit synchronously to USB in the original write call. For
@@ -547,8 +568,15 @@ public abstract class LynxI2cDeviceSynch extends LynxController implements I2cDe
                     LynxI2cWriteStatusQueryResponse response = writeStatus.sendReceive();
                     if (response.isStatusOk())
                         {
-                        setHealthyIfArmed();
+                        I2cWarningManager.removeProblemI2cDevice(this);
                         }
+                    else
+                        {
+                        I2cWarningManager.notifyProblemI2cDevice(this);
+                        }
+                    // Receiving a query response instead of an I2C_OPERATION_IN_PROGRESS nack means
+                    // that the write either failed or was completed, so we can go ahead and exit.
+                    return;
                     }
                 catch (LynxNackException e)
                     {
@@ -557,7 +585,6 @@ public abstract class LynxI2cDeviceSynch extends LynxController implements I2cDe
                         case I2C_NO_RESULTS_PENDING:
                             return;
                         case I2C_OPERATION_IN_PROGRESS:
-                            try { Thread.sleep(msBusyWait); } catch (InterruptedException ignored) { Thread.currentThread().interrupt(); }
                             continue;
                         default:
                             handleException(e);
@@ -578,7 +605,6 @@ public abstract class LynxI2cDeviceSynch extends LynxController implements I2cDe
         {
         // Poll until the data is available
         boolean keepTrying = true;
-        LynxI2cDeviceSynch deviceHavingProblems = null;
 
         while (keepTrying)
             {
@@ -599,13 +625,13 @@ public abstract class LynxI2cDeviceSynch extends LynxController implements I2cDe
                     {
                     readStatusQueryPlaceholder.reset();
                     readHistory.addToHistoryQueue(result);
-                    setHealthyIfArmed();
+                    I2cWarningManager.removeProblemI2cDevice(this);
                     return result;
                     }
 
-                // Log the error and return placeholder data if we don't
+                // Log the error, alert the user, and return placeholder data if we don't
                 RobotLog.ee(loggingTag, "readStatusQuery: cbExpected=%d cbRead=%d", creg, result.data.length);
-                deviceHavingProblems = this;
+                I2cWarningManager.notifyProblemI2cDevice(this);
                 keepTrying = false;
                 }
             catch (LynxNackException e)
@@ -614,23 +640,17 @@ public abstract class LynxI2cDeviceSynch extends LynxController implements I2cDe
                     {
                     case I2C_MASTER_BUSY:               // TODO: REVIEW: is this ever actually returned in this situation?
                     case I2C_OPERATION_IN_PROGRESS:
-                        // We used to sleep for 3ms while waiting for the result to avoid a "busy loop", but that
-                        // caused a serious performance hit over what we could get otherwise, at least on the CH.
-                        // Besides, we're not *truly* busy looping, we still end up waiting for the module's response
-                        // and what not.
-
-                        //try { Thread.sleep(msBusyWait); } catch (InterruptedException ignored) { Thread.currentThread().interrupt(); }
                         continue;
                     case I2C_NO_RESULTS_PENDING:
                         // This is an internal error of some sort
                         handleException(e);
                         keepTrying = false;
-                        deviceHavingProblems = this;
+                        I2cWarningManager.notifyProblemI2cDevice(this);
                         break;
                     default:
                         handleException(e);
                         keepTrying = false;
-                        deviceHavingProblems = this;
+                        I2cWarningManager.notifyProblemI2cDevice(this);
                         break;
                     }
                 }
@@ -640,7 +660,7 @@ public abstract class LynxI2cDeviceSynch extends LynxController implements I2cDe
                 keepTrying = false;
                 }
             }
-        return readStatusQueryPlaceholder.log(TimestampedI2cData.makeFakeData(deviceHavingProblems, i2cAddr, ireg, creg));
+        return readStatusQueryPlaceholder.log(TimestampedI2cData.makeFakeData(i2cAddr, ireg, creg));
         }
 
     //----------------------------------------------------------------------------------------------

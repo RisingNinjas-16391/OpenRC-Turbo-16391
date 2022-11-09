@@ -40,11 +40,12 @@ import com.qualcomm.hardware.lynx.commands.core.LynxI2cReadSingleByteCommand;
 import com.qualcomm.hardware.lynx.commands.core.LynxI2cWriteSingleByteCommand;
 import com.qualcomm.robotcore.exception.RobotCoreException;
 import com.qualcomm.robotcore.hardware.I2cWaitControl;
+import com.qualcomm.robotcore.hardware.I2cWarningManager;
 import com.qualcomm.robotcore.hardware.TimestampedData;
 import com.qualcomm.robotcore.hardware.TimestampedI2cData;
 
 /*
- * Supporting firmware version 1.6
+ * Used for firmware versions prior to 1.8.2
  */
 public class LynxI2cDeviceSynchV1 extends LynxI2cDeviceSynch
 {
@@ -55,24 +56,38 @@ public class LynxI2cDeviceSynchV1 extends LynxI2cDeviceSynch
     @Override
     public synchronized TimestampedData readTimeStamped(final int ireg, final int creg)
     {
-        LynxI2cDeviceSynchV1 deviceHavingProblems = null;
-
         try {
-            final LynxI2cWriteSingleByteCommand writeTx = new LynxI2cWriteSingleByteCommand(this.getModule(), this.bus, this.i2cAddr, ireg);
-            return acquireI2cLockWhile(new Supplier<TimestampedData>()
-            {
-                @Override public TimestampedData get() throws InterruptedException, RobotCoreException, LynxNackException
+            final Supplier<LynxI2cWriteSingleByteCommand> writeTxSupplier = new Supplier<LynxI2cWriteSingleByteCommand>()
                 {
-                    sendI2cWriteTx(writeTx);
-                    internalWaitForWriteCompletions(I2cWaitControl.ATOMIC);
+                @Override
+                public LynxI2cWriteSingleByteCommand get()
+                    {
+                    return new LynxI2cWriteSingleByteCommand(getModule(), bus, i2cAddr, ireg);
+                    }
+                };
+
+            final Supplier<LynxCommand<?>> readTxSupplier = new Supplier<LynxCommand<?>>()
+                {
+                @Override
+                public LynxCommand<?> get()
+                    {
                     /*
                      * LynxI2cReadMultipleBytesCommand does not support a
                      * byte count of one, so we manually differentiate here.
                      */
-                    LynxCommand<?> readTx = creg==1
+                    return creg==1
                             ? new LynxI2cReadSingleByteCommand(getModule(), bus, i2cAddr)
                             : new LynxI2cReadMultipleBytesCommand(getModule(), bus, i2cAddr, creg);
-                    readTx.send();
+                    }
+                };
+
+            return acquireI2cLockWhile(new Supplier<TimestampedData>()
+            {
+                @Override public TimestampedData get() throws InterruptedException, RobotCoreException, LynxNackException
+                {
+                    sendI2cTransaction(writeTxSupplier);
+                    internalWaitForWriteCompletions(I2cWaitControl.ATOMIC);
+                    sendI2cTransaction(readTxSupplier);
 
                     readTimeStampedPlaceholder.reset();
                     return pollForReadResult(i2cAddr, ireg, creg);
@@ -82,11 +97,11 @@ public class LynxI2cDeviceSynchV1 extends LynxI2cDeviceSynch
             handleException(e);
         } catch (LynxNackException e) {
             /*
-             * This is a possible device problem, go ahead and tell makeFakeData to warn.
+             * This is a possible device problem, go ahead and tell I2cWarningManager to warn.
              */
-            deviceHavingProblems = this;
+            I2cWarningManager.notifyProblemI2cDevice(this);
             handleException(e);
         }
-        return readTimeStampedPlaceholder.log(TimestampedI2cData.makeFakeData(deviceHavingProblems, getI2cAddress(), ireg, creg));
+        return readTimeStampedPlaceholder.log(TimestampedI2cData.makeFakeData(getI2cAddress(), ireg, creg));
     }
 }

@@ -46,8 +46,8 @@ import java.io.IOException;
 import java.util.Locale;
 
 /**
- * {@link GpioPin} controls an exported GPIO pin on an Android board
- *
+ * {@link GpioPin} controls an exported GPIO pin on an Android board.
+ * <p>
  * If you're accessing a new pin, it should be defined as an abstract getter in {@link AndroidBoard}
  * and implemented in all {@link AndroidBoard} subclasses.
  */
@@ -75,17 +75,17 @@ public class GpioPin implements DigitalChannel
     /**
      * See comments in the {@link AndroidBoard} subclasses for documentation on calculating the raw GPIO number
      */
-    public GpioPin(int rawGpioNumber, String name)
+    public static GpioPin createInput(int rawGpioNumber, Active active, String name)
         {
-        this(rawGpioNumber, Mode.INPUT, false, Active.HIGH, name);
+        return new GpioPin(rawGpioNumber, Mode.INPUT, false, active, name);
         }
 
     /**
      * See comments in the {@link AndroidBoard} subclasses for documentation on calculating the raw GPIO number
      */
-    public GpioPin(int rawGpioNumber, boolean initialState, Active active, String name)
+    public static GpioPin createOutput(int rawGpioNumber, boolean initialState, Active active, String name)
         {
-        this(rawGpioNumber, Mode.OUTPUT, initialState, active, name);
+        return new GpioPin(rawGpioNumber, Mode.OUTPUT, initialState, active, name);
         }
 
     private GpioPin(int rawGpioNumber, DigitalChannel.Mode defaultMode, boolean defaultStateIfOutput, Active active, String name)
@@ -94,19 +94,19 @@ public class GpioPin implements DigitalChannel
         this.path = new File(String.format(Locale.US, "/sys/class/gpio/gpio%d", rawGpioNumber));
         this.active = active;
         //
-        this.lastKnownMode = new LastKnown<Mode>();
-        this.lastKnownMode.invalidate();
+        this.lastKnownMode = new LastKnown<>();
         this.defaultMode = defaultMode;
         this.defaultStateIfOutput = defaultStateIfOutput;
         this.TAG = name;
+        setDefaultState();
         }
 
     //----------------------------------------------------------------------------------------------
     // Operations
     //----------------------------------------------------------------------------------------------
 
-    /** If it's an input pin, then read the value directly from the device. Otherwise, return
-     * what we last wrote */
+    // TODO: If it's an input pin, then read the value directly from the device. Otherwise, return
+    //       what we last wrote
     @Override public boolean getState()
         {
         return adjustActive(getRawState());
@@ -121,6 +121,7 @@ public class GpioPin implements DigitalChannel
             }
         catch (IOException e)
             {
+            RobotLog.logExceptionHeader(TAG, e, "exception in getRawState(); ignored");
             return false;
             }
         }
@@ -135,7 +136,7 @@ public class GpioPin implements DigitalChannel
                 }
             catch (IOException e)
                 {
-                // ignored
+                RobotLog.logExceptionHeader(TAG, e, "exception in setState(); ignored");
                 }
             }
         }
@@ -163,6 +164,7 @@ public class GpioPin implements DigitalChannel
             }
         catch (IOException e)
             {
+            RobotLog.logExceptionHeader(TAG, e, "exception in getRawMode(); ignored");
             return Mode.INPUT;  // arbitrary
             }
         }
@@ -170,8 +172,14 @@ public class GpioPin implements DigitalChannel
     @Override public synchronized void setMode(Mode mode)
         {
         try {
-            String contents = mode==Mode.INPUT ? "in" : "out";
-            writeAspect("direction", contents);
+            // To avoid permissions errors for pins that we're not allowed to set the direction of,
+            // we first check if the mode is already as-desired.
+            String desiredContents = mode==Mode.INPUT ? "in" : "out";
+            String actualContents = readAspect("direction");
+            if (!desiredContents.equals(actualContents))
+                {
+                writeAspect("direction", desiredContents);
+                }
             lastKnownMode.setValue(mode);
             }
         catch (IOException e)
@@ -196,12 +204,12 @@ public class GpioPin implements DigitalChannel
 
     @Override public String getDeviceName()
         {
-        return "DB GPIO Pin " + TAG;
+        return "GPIO Pin " + TAG;
         }
 
     @Override public String getConnectionInfo()
         {
-        return String.format("GPIO #", rawGpioNumber);
+        return String.format(Locale.ENGLISH, "GPIO #%d", rawGpioNumber);
         }
 
     @Override public int getVersion()
@@ -214,15 +222,6 @@ public class GpioPin implements DigitalChannel
         // Nothing to do
         }
 
-    public void setDefaultState()
-        {
-        setMode(defaultMode);
-        if (defaultMode == Mode.OUTPUT)
-            {
-            setState(defaultStateIfOutput);
-            }
-        }
-
     @Override public void close()
         {
         // Nothing to do
@@ -231,6 +230,15 @@ public class GpioPin implements DigitalChannel
     //----------------------------------------------------------------------------------------------
     // Utility
     //----------------------------------------------------------------------------------------------
+
+    private void setDefaultState()
+        {
+        setMode(defaultMode);
+        if (defaultMode == Mode.OUTPUT)
+            {
+            setState(defaultStateIfOutput);
+            }
+        }
 
     protected boolean adjustActive(boolean state)
         {
@@ -252,7 +260,6 @@ public class GpioPin implements DigitalChannel
         File aspectFile = new File(getPath(), aspect);
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(aspectFile)))
             {
-            RobotLog.vv(TAG, "writing aspect=%s value=%s", aspectFile.getAbsolutePath(), value);
             writer.write(value);
             }
         }

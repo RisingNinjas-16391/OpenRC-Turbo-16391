@@ -397,11 +397,12 @@ function finishNewOrUploadProject(projectName, blkFileContent, errorElement, dia
   // Create a headless workspace to generate the JavaScript.
   var jsFileContent = '';
   try {
-    var workspace = new Blockly.Workspace();
+    // workspace is a global variable defined in vars.js
+    workspace = new Blockly.Workspace();
     // For consistency with previous versions, we explicitly set oneBasedIndex to true.
     workspace.options.oneBasedIndex = true;
     Blockly.Xml.domToWorkspace(dom, workspace);
-    jsFileContent = Blockly.JavaScript.workspaceToCode(workspace);
+    jsFileContent = generateJavaScriptCode();
   } catch (e) {
     errorElement.innerHTML = 'Error: Could not generate code for blocks. ' + e;
     return;
@@ -411,12 +412,15 @@ function finishNewOrUploadProject(projectName, blkFileContent, errorElement, dia
     return;
   }
 
+  document.body.classList.add('waitCursor');
   saveProject(projectName, blkFileContent, jsFileContent, function(success, errorMessage) {
     if (success) {
+      document.body.classList.remove('waitCursor');
       // Close the dialog.
       dialogElement.style.display = 'none';
       openProjectBlocks(projectName);
     } else {
+      document.body.classList.remove('waitCursor');
       errorElement.innerHTML = errorMessage;
     }
   });
