@@ -11,6 +11,7 @@ public class TeleOP extends LinearOpMode {
 
     Hardware robot = new Hardware();   //Uses heavily modified untested hardware
 
+
     @Override
     public void runOpMode() {
 
@@ -35,9 +36,15 @@ public class TeleOP extends LinearOpMode {
 
     public void editHere() {
         // TODO: ADD TELEOP CODE
-        double forward = -gamepad1.left_stick_y;
-        double strafe = gamepad1.left_stick_x;
-        double turn = gamepad1.right_stick_x;
+        double driveSpeed = 1;
+
+        if (gamepad1.right_bumper) {
+            driveSpeed = 0.6;
+        }
+        double forward = -driveSpeed * gamepad1.left_stick_y;
+        double strafe = driveSpeed * gamepad1.left_stick_x;
+        double turn = driveSpeed * gamepad1.right_stick_x;
+
 
         double[] driveValues = {
                 forward - strafe + turn,
