@@ -8,20 +8,20 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class IntakeSubsystem {
 
-    public CRServo motor;
+    public CRServo intake;
 
     public IntakeSubsystem(@NonNull HardwareMap hwMap) {
-        motor = hwMap.get(CRServo.class, "intake");
-        motor.setDirection(CRServo.Direction.FORWARD);
-        motor.setPower(0);
+        intake = hwMap.get(CRServo.class, "intake");
+        intake.setDirection(CRServo.Direction.FORWARD);
+        intake.setPower(0);
     }
 
     public void setPower(double power) {
-        motor.setPower(power);
+        intake.setPower(power);
     }
 
     public double getPower() {
-        return motor.getPower();
+        return intake.getPower();
     }
 
 }

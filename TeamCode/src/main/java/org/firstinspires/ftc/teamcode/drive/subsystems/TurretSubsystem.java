@@ -7,18 +7,18 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class TurretSubsystem {
 
-    public DcMotor Turret;
+    public DcMotor turret;
 
     public TurretSubsystem(HardwareMap hwMap){
-        Turret = hwMap.get(DcMotorEx.class, "turret");
-        Turret.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        Turret.setDirection(DcMotorSimple.Direction.FORWARD);
-        Turret.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        Turret.setPower(0);
+        turret = hwMap.get(DcMotorEx.class, "turret");
+        turret.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        turret.setDirection(DcMotorSimple.Direction.FORWARD);
+        turret.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        turret.setPower(0);
     }
 
-    public int getCurrentPosition() { return Turret.getCurrentPosition(); }
+    public int getCurrentPosition() { return turret.getCurrentPosition(); }
 
-    public void setTargetPosition(int position) { Turret.setTargetPosition(position); }
+    public void setTargetPosition(int position) { turret.setTargetPosition(position); }
 
 }

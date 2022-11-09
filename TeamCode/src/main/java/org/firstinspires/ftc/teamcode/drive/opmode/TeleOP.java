@@ -34,7 +34,7 @@ public class TeleOP extends LinearOpMode {
     public void editHere() {
         // TODO: ADD TELEOP CODE
         double forward = -gamepad1.left_stick_y;
-        double strafe = gamepad1.left_stick_x;
+        double strafe = -gamepad1.left_stick_x;
         double turn = gamepad1.right_stick_x;
 
         double[] driveValues = {
@@ -46,7 +46,7 @@ public class TeleOP extends LinearOpMode {
 
         robot.drivetrain.setMotorPowers(driveValues[0], driveValues[1], driveValues[2], driveValues[3]);
 
-        //robot.linearSlide.setPower(gamepad1.left_trigger - gamepad1.right_trigger);
+        robot.linearSlide.setPower(gamepad1.left_trigger - gamepad1.right_trigger);
 
         if (gamepad1.x) {
             robot.linearSlide.setTargetPosition(100);
@@ -58,10 +58,9 @@ public class TeleOP extends LinearOpMode {
             robot.linearSlide.setTargetPosition(4000);
         }
 
-        robot.intake.setPower(gamepad1.right_bumper ? 1 :gamepad1.right_bumper ? -1 :0);
+        robot.intake.setPower(gamepad1.right_bumper ? 1 :gamepad1.left_bumper ? -1 : 0);
 
 
-//        robot.drivetrainSubsystem.drive(forward, strafe, turn);
     }
 
 }
