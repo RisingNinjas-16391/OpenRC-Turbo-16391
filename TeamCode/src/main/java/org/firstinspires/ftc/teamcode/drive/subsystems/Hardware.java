@@ -52,6 +52,9 @@ public class Hardware {
         telemetry.addLine("Linear Slide ticks")
                 .addData("slide", slide.getCurrentPosition());
 
+        telemetry.addLine("Linear Slide power")
+                .addData("slide", slide.getPower());
+
 //        telemetry.addLine("Intake Power")
 //                .addData("intake", intake.getPower());
 //

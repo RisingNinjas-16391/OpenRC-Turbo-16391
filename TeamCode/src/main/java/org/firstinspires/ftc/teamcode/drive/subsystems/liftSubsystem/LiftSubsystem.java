@@ -19,8 +19,8 @@ public class LiftSubsystem {
 
 
     public LiftSubsystem(@NonNull HardwareMap hwMap) {
-        controller = new PIDFController(LiftConstants.kPosPID, LiftConstants.kV, LiftConstants.kA, LiftConstants.kS, (x, v) -> LiftConstants.kG);
-        controller.setInputBounds(0, LiftConstants.maxHeight);
+        controller = new PIDFController(LiftConstants.kPosPID, LiftConstants.kV, LiftConstants.kA, LiftConstants.kS, (x, y) -> LiftConstants.kG);
+//        controller.setInputBounds(0, LiftConstants.maxHeight);
         controller.setOutputBounds(-1, 1);
         mode = DcMotor.RunMode.RUN_TO_POSITION;
 
@@ -65,20 +65,20 @@ public class LiftSubsystem {
     public void update() {
         switch (mode) {
             case RUN_TO_POSITION:
-                motor.setPower(controller.update(motor.getCurrentPosition()*0.4));
+                motor.setPower(controller.update(motor.getCurrentPosition()));
                 Log.i("Lift Power", String.format("%f", motor.getPower()));
                 Log.i("Lift Error", String.format("%f", controller.getLastError()));
                 break;
             case RUN_USING_ENCODER:
-                motor.setPower(0);
+//                motor.setPower(0);
                 break;
         }
         // Soft limit
-        if (motor.getCurrentPosition() + LiftConstants.endMargin > LiftConstants.maxHeight && motor.getPower() > 0) {
-            motor.setPower(-0.1);
-        } else if (motor.getCurrentPosition() - LiftConstants.endMargin > 0 && motor.getPower() < 0) {
-            motor.setPower(0.1);
-        }
+//        if (motor.getCurrentPosition() + LiftConstants.endMargin > LiftConstants.maxHeight && motor.getPower() > 0) {
+//            motor.setPower(-0.1);
+//        } else if (motor.getCurrentPosition() - LiftConstants.endMargin > 0 && motor.getPower() < 0) {
+//            motor.setPower(0.1);
+//        }
     }
 
 }
