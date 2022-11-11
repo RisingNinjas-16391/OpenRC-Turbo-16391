@@ -19,6 +19,7 @@ public class AprilTagDetectorConstants {
     public final static float DECIMATION_LOW = 2;
     public final static float THRESHOLD_HIGH_DECIMATION_RANGE_METERS = 1.0f;
     public final static int THRESHOLD_NUM_FRAMES_NO_DETECTION_BEFORE_LOW_DECIMATION = 4;
-    public final static int TAG_ID_A = 0;
-    public final static int TAG_ID_B = 1;
+    public final static int TAG_ID_LEFT = 0;
+    public final static int TAG_ID_CENTER = 1;
+    public final static int TAG_ID_RIGHT = 2;
 }

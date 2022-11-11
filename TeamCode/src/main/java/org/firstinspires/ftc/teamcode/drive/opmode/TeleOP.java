@@ -59,8 +59,6 @@ public class TeleOP extends LinearOpMode {
             driveSpeed *= correction;
         }
 
-
-
         double forward = -driveSpeed * gamepad1.left_stick_y;
         double strafe = driveSpeed * gamepad1.left_stick_x;
         double turn = - driveSpeed * gamepad1.right_stick_x;
@@ -71,13 +69,23 @@ public class TeleOP extends LinearOpMode {
 
         if (gamepad2.x) {
             robot.slide.setTargetPosition(LiftConstants.bottomPos);
-        } else if (gamepad2.y) {
+        } else if (gamepad2.dpad_down) {
+            robot.slide.setTargetPosition(LiftConstants.feedPos);
+        }
+        else if (gamepad2.y) {
             robot.slide.setTargetPosition(LiftConstants.lowPos);
-        } else if (gamepad2.b) {
+        }
+        else if (gamepad2.b) {
             robot.slide.setTargetPosition(LiftConstants.midPos);
-        } else if (gamepad2.a) {
+        }
+        else if (gamepad2.a) {
             robot.slide.setTargetPosition(LiftConstants.highPos);
-        } else if (gamepad2.start) {
+        }
+        else if (gamepad2.options){
+            while (gamepad2.options) {
+                robot.slide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                robot.slide.setPower(-0.2);
+            }
             robot.slide.resetEncoders();
         } else if (gamepad2.back) {
             robot.slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -87,16 +95,7 @@ public class TeleOP extends LinearOpMode {
             robot.slide.setPower(gamepad2.right_trigger - gamepad2.left_trigger);
         }
 
-        robot.intake.setPower(gamepad2.right_bumper ? -1 :gamepad2.left_bumper ? 1 : -0.15);
-//        if(gamepad2.left_bumper) {
-//            robot.intake.setPower(-1);
-//            robot.slide.setTargetPosition((int) Math.abs(robot.slide.getCurrentPosition() - 100));
-//        }
-//        if(gamepad2.right_bumper) {
-//            robot.intake.setPower(1);
-//        } else {
-//            robot.intake.setPower(-0.1);
-//        }
+        robot.intake.setPower(gamepad2.right_bumper ? 1 :gamepad2.left_bumper ? -1 : -0.2);
     }
 
 }

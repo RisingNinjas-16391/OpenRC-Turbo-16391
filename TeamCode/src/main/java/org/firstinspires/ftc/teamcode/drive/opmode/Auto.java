@@ -18,16 +18,33 @@ public class Auto extends AutonomousTemplate {
         robot.init(hardwareMap);
     }
 
-    public void pathA() {
-        //TODO: Trajectories for A auto
+    public void parkLeft() {
+        //TODO: Trajectories for LEFT auto
+        robot.drivetrain.followTrajectorySequence(
+                robot.drivetrain.trajectorySequenceBuilder(new Pose2d(-58, -12, Math.toRadians(90)))
+                        .lineToLinearHeading(new Pose2d(-58, -34,  Math.toRadians(90)))
+                        .build()
+        );
     }
 
-    public void pathB() {
-        //TODO: Trajectories for B auto
+    public void parkCenter() {
+        //TODO: Trajectories for CENTER auto
+        robot.drivetrain.followTrajectorySequence(
+                robot.drivetrain.trajectorySequenceBuilder(new Pose2d(-58, -12, Math.toRadians(90)))
+                        .lineToLinearHeading(new Pose2d(-34, -12, Math.toRadians(90)))
+                        .lineToLinearHeading(new Pose2d(-34, -34,  Math.toRadians(90)))
+                        .build()
+        );
     }
 
-    public void pathC() {
-        //TODO: Trajectories for C auto
+    public void parkRight() {
+        //TODO: Trajectories for RIGHT auto
+        robot.drivetrain.followTrajectorySequence(
+                robot.drivetrain.trajectorySequenceBuilder(new Pose2d(-58, -12, Math.toRadians(90)))
+                        .lineToLinearHeading(new Pose2d(-15, -12, Math.toRadians(90)))
+                        .lineToLinearHeading(new Pose2d(-15, -34,  Math.toRadians(90)))
+                        .build()
+        );
     }
 
     public void regularAutonomous() {

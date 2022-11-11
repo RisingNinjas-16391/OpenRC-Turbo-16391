@@ -2,8 +2,9 @@ package org.firstinspires.ftc.teamcode.drive.opmode;
 
 import static org.firstinspires.ftc.teamcode.drive.opmode.AutoConstants.threshold;
 import static org.firstinspires.ftc.teamcode.drive.opmode.AutoConstants.timeout;
-import static org.firstinspires.ftc.teamcode.drive.opmode.aprilTagDetector.AprilTagDetectorConstants.TAG_ID_A;
-import static org.firstinspires.ftc.teamcode.drive.opmode.aprilTagDetector.AprilTagDetectorConstants.TAG_ID_B;
+import static org.firstinspires.ftc.teamcode.drive.opmode.aprilTagDetector.AprilTagDetectorConstants.TAG_ID_LEFT;
+import static org.firstinspires.ftc.teamcode.drive.opmode.aprilTagDetector.AprilTagDetectorConstants.TAG_ID_CENTER;
+import static org.firstinspires.ftc.teamcode.drive.opmode.aprilTagDetector.AprilTagDetectorConstants.TAG_ID_RIGHT;
 
 import android.util.Log;
 
@@ -55,21 +56,29 @@ public abstract class AutonomousTemplate extends LinearOpMode {
             regularAutonomous();
 
             switch(maxDetection.getKey()) {
-                case TAG_ID_A: pathA();
+                case TAG_ID_LEFT:
+                    parkLeft();
                     Log.i("Robot", "auto a");
                     telemetry.addLine("auto a");
                     telemetry.update();
                     break;
 
-                case TAG_ID_B: pathB();
+                case TAG_ID_CENTER:
+                    parkCenter();
                     Log.i("Robot", "auto b");
                     telemetry.addLine("auto b");
                     telemetry.update();
                 break;
 
-                default: pathC();
+                case TAG_ID_RIGHT:
+                    parkRight();
                     Log.i("Robot", "auto c");
                     telemetry.addLine("auto c");
+                    telemetry.update();
+                break;
+
+                default:
+                    telemetry.addLine("No park auto");
                     telemetry.update();
                 break;
             }
@@ -80,11 +89,11 @@ public abstract class AutonomousTemplate extends LinearOpMode {
 
     public abstract void initialize();
 
-    public abstract void pathA();
-
-    public abstract void pathB();
-
-    public abstract void pathC();
-
     public abstract void regularAutonomous();
+
+    public abstract void parkLeft();
+
+    public abstract void parkCenter();
+
+    public abstract void parkRight();
 }
