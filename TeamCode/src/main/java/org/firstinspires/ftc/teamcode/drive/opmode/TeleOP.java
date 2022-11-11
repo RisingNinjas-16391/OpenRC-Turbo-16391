@@ -41,9 +41,9 @@ public class TeleOP extends LinearOpMode {
         if (gamepad1.right_bumper) {
             driveSpeed = 0.5;
         }
-        double forward = -driveSpeed * gamepad1.left_stick_y;
-        double strafe = driveSpeed * gamepad1.left_stick_x;
-        double turn = driveSpeed * gamepad1.right_stick_x;
+        double forward = -driveSpeed * gamepad1.left_stick_y * 0.7;
+        double strafe = driveSpeed * gamepad1.left_stick_x * 0.7;
+        double turn = driveSpeed * gamepad1.right_stick_x* 0.7;
 
 
         double[] driveValues = {
@@ -79,7 +79,16 @@ public class TeleOP extends LinearOpMode {
 
         }
 
-        robot.intake.setPower(gamepad2.right_bumper ? -1 :gamepad2.left_bumper ? 1 : -0.1);
+        // robot.intake.setPower(gamepad2.right_bumper ? -1 :gamepad2.left_bumper ? 1 : -0.1);
+        if(gamepad2.left_bumper) {
+            robot.intake.setPower(-1);
+            robot.slide.setTargetPosition((int) Math.abs(robot.slide.getCurrentPosition() - 100));
+        }
+        if(gamepad2.right_bumper) {
+            robot.intake.setPower(1);
+        } else {
+            robot.intake.setPower(-0.1);
+        }
 
 
     }
