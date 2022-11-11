@@ -53,6 +53,10 @@ public class LiftSubsystem {
         motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
+    public DcMotor.RunMode getMode() {
+        return mode;
+    }
+
     /** Get motor encoder ticks*/
     public double getCurrentPosition() {
         return motor.getCurrentPosition();
@@ -70,15 +74,15 @@ public class LiftSubsystem {
                 Log.i("Lift Error", String.format("%f", controller.getLastError()));
                 break;
             case RUN_USING_ENCODER:
-//                motor.setPower(0);
+                motor.setPower(0);
                 break;
         }
-        // Soft limit
-//        if (motor.getCurrentPosition() + LiftConstants.endMargin > LiftConstants.maxHeight && motor.getPower() > 0) {
-//            motor.setPower(-0.1);
-//        } else if (motor.getCurrentPosition() - LiftConstants.endMargin > 0 && motor.getPower() < 0) {
-//            motor.setPower(0.1);
-//        }
+        //Soft limit
+        if (motor.getCurrentPosition() > LiftConstants.maxHeight && motor.getPower() > 0) {
+            motor.setPower(-0.1);
+        } else if (motor.getCurrentPosition() < 0 && motor.getPower() < 0) {
+            motor.setPower(0.1);
+        }
     }
 
 }

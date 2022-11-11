@@ -44,18 +44,18 @@ public class Auto extends LinearOpMode {
         //TODO: ADD AUTO
             // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
             TrajectorySequence initToStack = robot.drivetrain.trajectorySequenceBuilder(new Pose2d(-35, -60, Math.toRadians(90)))
-                .lineToLinearHeading(new Pose2d(-58, -60,  Math.toRadians(90)))
-                .splineToLinearHeading(new Pose2d(-58, -12,  Math.toRadians(180)), Math.toRadians(90))
+                .lineToLinearHeading(new Pose2d(58, -60,  Math.toRadians(90)))
+                .splineToLinearHeading(new Pose2d(58, -12,  Math.toRadians(180)), Math.toRadians(90))
                 .build();
 
             TrajectorySequence stackToHigh = robot.drivetrain.trajectorySequenceBuilder(new Pose2d(-58, -12, Math.toRadians(180)))
-                    .lineToLinearHeading(new Pose2d(-38, -12,  Math.toRadians(180)))
-                    .lineToLinearHeading(new Pose2d(-32, -7,  Math.toRadians(45)))
+                    .lineToLinearHeading(new Pose2d(38, -12,  Math.toRadians(180)))
+                    .lineToLinearHeading(new Pose2d(32, -7,  Math.toRadians(45)))
                     .build();
 
             TrajectorySequence highToStack = robot.drivetrain.trajectorySequenceBuilder(new Pose2d(-32, -7, Math.toRadians(180)))
-                    .lineToLinearHeading(new Pose2d(-38, -12,  Math.toRadians(180)))
-                    .splineToLinearHeading(new Pose2d(-58, -12,  Math.toRadians(180)), Math.toRadians(180))
+                    .lineToLinearHeading(new Pose2d(38, -12,  Math.toRadians(180)))
+                    .splineToLinearHeading(new Pose2d(58, -12,  Math.toRadians(180)), Math.toRadians(180))
                     .build();
 
             robot.drivetrain.followTrajectorySequence(initToStack);
