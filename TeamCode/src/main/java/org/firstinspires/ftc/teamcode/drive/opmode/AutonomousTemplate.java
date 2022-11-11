@@ -1,78 +1,76 @@
 package org.firstinspires.ftc.teamcode.drive.opmode;
 
+import static org.firstinspires.ftc.teamcode.drive.opmode.AutoConstants.threshold;
+import static org.firstinspires.ftc.teamcode.drive.opmode.AutoConstants.timeout;
+import static org.firstinspires.ftc.teamcode.drive.opmode.aprilTagDetector.AprilTagDetectorConstants.TAG_ID_A;
+import static org.firstinspires.ftc.teamcode.drive.opmode.aprilTagDetector.AprilTagDetectorConstants.TAG_ID_B;
+
 import android.util.Log;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.robotcore.external.ClassFactory;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection;
-import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
-import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
+import org.firstinspires.ftc.teamcode.drive.opmode.aprilTagDetector.AprilTagDetector;
+import org.openftc.apriltag.AprilTagDetection;
 
-import java.util.List;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public abstract class AutonomousTemplate extends LinearOpMode {
-    List<Recognition> updatedRecognitions;
-
-    private VuforiaLocalizer vuforia;
-
-    private TFObjectDetector tensorflow;
+    final AprilTagDetector aprilTagdetector = new AprilTagDetector(hardwareMap);
 
     @Override
     public void runOpMode() {
-        initVuforia();
-        initTfod();
-        if (tensorflow != null) {
-            tensorflow.activate();
-
-            tensorflow.setZoom(1.25, 2.5);
-        }
         initialize();
-
-        telemetry.addData(">", "Press Play to start op mode");
+        telemetry.addData(">", "Ready when you are!");
         telemetry.update();
         Log.i("Robot", "standby");
         waitForStart();
         if (opModeIsActive()) {
-            int path = 3;
-            starting();
-            if (tensorflow != null) {
-                updatedRecognitions = tensorflow.getUpdatedRecognitions();
-                if (updatedRecognitions != null) {
-                    telemetry.addData("# Object Detected", updatedRecognitions.size());
-
-                    // step through the list of recognitions and display boundary info.
-                    for (Recognition recognition : updatedRecognitions) {
-                        if (recognition.getLabel().equals("Duck")) {
-                            if (recognition.getLeft() <= 400) {
-                                path = 1;
-                            } else {
-                                path = 2;
-                            }
-                        }
-                        Log.i("Robot", String.format("Duck found at %f", recognition.getLeft()));
+            ArrayList<AprilTagDetection> detections =  aprilTagdetector.detect(timeout, threshold);
+            Map.Entry<Integer, Integer> maxDetection = null;
+            if (detections.size() > 0) {
+                Map<Integer, Integer> detectionsCount = new HashMap<>();
+                for (AprilTagDetection d: detections) {
+                    if(detectionsCount.containsKey(d.id)) {
+                        detectionsCount.put(d.id, detectionsCount.get(d.id) + 1);
+                    } else {
+                        detectionsCount.put(d.id, 0);
                     }
-                    telemetry.update();
-                }
-            }
 
-            if (tensorflow != null) {
-                tensorflow.deactivate();
+
+                    for (Map.Entry<Integer, Integer> entry: detectionsCount.entrySet())
+                    {
+                        if (maxDetection == null || entry.getValue().compareTo(maxDetection.getValue()) > 0)
+                        {
+                            maxDetection = entry;
+                        }
+                    }
+                }
+
+
             }
-            vuforia.close();
 
             regularAutonomous();
 
-            switch(path) {
-                case 1: leftPath();
+            switch(maxDetection.getKey()) {
+                case TAG_ID_A: pathA();
+                    Log.i("Robot", "auto a");
+                    telemetry.addLine("auto a");
+                    telemetry.update();
+                    break;
+
+                case TAG_ID_B: pathB();
+                    Log.i("Robot", "auto b");
+                    telemetry.addLine("auto b");
+                    telemetry.update();
                 break;
 
-                case 2: rightPath();
-                break;
-
-                default: unseenPath();
+                default: pathC();
+                    Log.i("Robot", "auto c");
+                    telemetry.addLine("auto c");
+                    telemetry.update();
                 break;
             }
 
@@ -80,64 +78,13 @@ public abstract class AutonomousTemplate extends LinearOpMode {
         }
     }
 
-    public void initialize() {
-        telemetry.addLine("SetUp");
-        telemetry.update();
-        Log.i("Robot", "initializing");
-    }
+    public abstract void initialize();
 
-    public void starting() {
-        telemetry.addLine("SetUp");
-        telemetry.update();
-        Log.i("Robot", "starting");
+    public abstract void pathA();
 
-    }
+    public abstract void pathB();
 
-    public void leftPath() {
-        telemetry.addLine("leftPath");
-        telemetry.update();
-        Log.i("Robot", "left path");
+    public abstract void pathC();
 
-    }
-
-    public void rightPath() {
-        telemetry.addLine("right path");
-        telemetry.update();
-        Log.i("Robot", "right path");
-
-    }
-
-    public void unseenPath() {
-        telemetry.addLine("unseen path");
-        telemetry.update();
-        Log.i("Robot", "unseen path");
-
-    }
-
-    public void regularAutonomous() {
-        telemetry.addLine("Regular Autonomous");
-        telemetry.update();
-        Log.i("Robot", "regular path");
-    }
-
-    private void initVuforia() {
-        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
-
-        parameters.vuforiaLicenseKey = AutoConstants.VUFORIA_KEY;
-        parameters.cameraDirection = CameraDirection.BACK;
-
-        vuforia = ClassFactory.getInstance().createVuforia(parameters);
-    }
-
-    private void initTfod() {
-        int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
-                "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
-        tfodParameters.minResultConfidence = 0.67f;
-        tfodParameters.isModelTensorFlow2 = true;
-        tfodParameters.inputSize = 320;
-        tensorflow = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
-        tensorflow.loadModelFromAsset(AutoConstants.TENSORFLOW_MODEL_ASSET, AutoConstants.LABELS);
-
-    }
+    public abstract void regularAutonomous();
 }

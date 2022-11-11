@@ -11,36 +11,26 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 @Autonomous(name="Autonomous", group="Autonomous")
 //@Disabled
 
-public class Auto extends LinearOpMode {
-    /* Declare OpMode members. */
-    static Hardware robot = new Hardware();
-    static ElapsedTime runtime = new ElapsedTime();
+public class Auto extends AutonomousTemplate {
+    Hardware robot = new Hardware();   //Uses heavily modified untested hardware
 
-    @Override
-    public void runOpMode() {
-        telemetry.setAutoClear(false);
-        telemetry.addLine("Status: Booting");
-        telemetry.update();
-
+    public void initialize() {
         robot.init(hardwareMap);
-        telemetry.addData("Robot initialized: ", true);
-        telemetry.update();
-
-
-        // Send telemetry message to signify robot waiting;
-        telemetry.addLine("Waiting for start");
-        telemetry.update();
-        telemetry.setAutoClear(true);
-
-
-        // Wait for the game to start (driver presses PLAY)
-        waitForStart();
-        runtime.reset();
-        editHere();
     }
 
+    public void pathA() {
+        //TODO: Trajectories for A auto
+    }
 
-    public void editHere() {
+    public void pathB() {
+        //TODO: Trajectories for B auto
+    }
+
+    public void pathC() {
+        //TODO: Trajectories for C auto
+    }
+
+    public void regularAutonomous() {
         //TODO: ADD AUTO
             // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
             TrajectorySequence initToStack = robot.drivetrain.trajectorySequenceBuilder(new Pose2d(-35, -60, Math.toRadians(90)))
@@ -90,6 +80,5 @@ public class Auto extends LinearOpMode {
             robot.intake.setPower(1);
             robot.slide.setTargetPosition(40);
             robot.intake.setPower(0);
-
     }
 }

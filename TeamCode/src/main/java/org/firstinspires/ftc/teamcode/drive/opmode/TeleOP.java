@@ -49,6 +49,7 @@ public class TeleOP extends LinearOpMode {
         } else {
             driveSpeed = 0.7;
         }
+
         if (robot.slide.getCurrentPosition() > 0) {
             double correction = 1 - (robot.slide.getCurrentPosition() / 5000);
             correction /= 2;
@@ -87,6 +88,15 @@ public class TeleOP extends LinearOpMode {
         }
 
         robot.intake.setPower(gamepad2.right_bumper ? -1 :gamepad2.left_bumper ? 1 : -0.15);
+//        if(gamepad2.left_bumper) {
+//            robot.intake.setPower(-1);
+//            robot.slide.setTargetPosition((int) Math.abs(robot.slide.getCurrentPosition() - 100));
+//        }
+//        if(gamepad2.right_bumper) {
+//            robot.intake.setPower(1);
+//        } else {
+//            robot.intake.setPower(-0.1);
+//        }
     }
 
 }
