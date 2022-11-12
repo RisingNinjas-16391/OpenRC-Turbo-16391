@@ -6,8 +6,9 @@ import com.acmerobotics.roadrunner.control.PIDCoefficients;
 /** Class containing constants used for {@link LiftSubsystem}*/
 @Config
 public final class LiftConstants {
-    public static final int endMargin = 10;
     public static final int maxHeight = 4500; // Ticks for fully-extended lift
+
+    public static final int tickMargin = 100; // Margin for getBusy() false
 
     /** Ticks for lift presets */
     public static final int bottomPos = 0;

@@ -1,6 +1,9 @@
 package org.firstinspires.ftc.teamcode.drive.subsystems;
 
+import android.os.Build;
+
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -9,22 +12,32 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DrivetrainSubsystem;
 import org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftSubsystem;
 
+import java.util.function.BooleanSupplier;
+
 /**
  * This is NOT an opmode.
  * <p>
  * This class can be used to define all the specific hardware for a single robot.
  */
+@RequiresApi(api = Build.VERSION_CODES.N)
 public class Hardware {
     private final ElapsedTime period = new ElapsedTime();
     /* Public OpMode members. */
     public DrivetrainSubsystem drivetrain;
     public LiftSubsystem slide;
     public IntakeSubsystem intake;
-//    public TurretSubsystem turret;
+    private final BooleanSupplier isOpmodeRunning;
+    private final BooleanSupplier isStopRequested;
 
     /* Constructor */
     public Hardware() {
+        this.isOpmodeRunning = () -> false;
+        this.isStopRequested = () -> true;
+    }
 
+    public Hardware(BooleanSupplier isOpmodeRunning, BooleanSupplier isStopRequested) {
+        this.isOpmodeRunning = isOpmodeRunning;
+        this.isStopRequested = isStopRequested;
     }
 
     /** Initialize standard Hardware interfaces */
@@ -39,6 +52,27 @@ public class Hardware {
     public void update() {
         drivetrain.update();
         slide.update();
+    }
+
+    public void finishTrajectory(int timeout) {
+        ElapsedTime timer = new ElapsedTime();
+        while (isOpmodeRunning.getAsBoolean() && !isStopRequested.getAsBoolean() && this.drivetrain.isBusy() && timer.time() < timeout) {
+            this.update();
+        }
+    }
+
+    public void finishLift(int timeout) {
+        ElapsedTime timer = new ElapsedTime();
+        while (isOpmodeRunning.getAsBoolean() && !isStopRequested.getAsBoolean() && this.slide.isBusy() && timer.time() < timeout) {
+            this.update();
+        }
+    }
+
+    public void wait(int timeout) {
+        ElapsedTime timer = new ElapsedTime();
+        while (isOpmodeRunning.getAsBoolean() && !isStopRequested.getAsBoolean() && timer.time() < timeout) {
+            this.update();
+        }
     }
 
     /** Displays important robot information on telemetry*/

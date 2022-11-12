@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem;
 
+import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.tickMargin;
+
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -53,6 +55,8 @@ public class LiftSubsystem {
         motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
+    public boolean isBusy() { return(Math.abs(controller.getLastError()) > tickMargin);}
+
     public DcMotor.RunMode getMode() {
         return mode;
     }
@@ -69,7 +73,7 @@ public class LiftSubsystem {
     public void update() {
         switch (mode) {
             case RUN_TO_POSITION:
-                motor.setPower(controller.update(motor.getCurrentPosition()));
+                motor.setPower(controller.update(motor.getCurrentPosition(), motor.getVelocity()));
                 Log.i("Lift Power", String.format("%f", motor.getPower()));
                 Log.i("Lift Error", String.format("%f", controller.getLastError()));
                 break;
