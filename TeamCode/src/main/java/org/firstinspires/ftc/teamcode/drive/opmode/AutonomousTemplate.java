@@ -19,11 +19,12 @@ import java.util.Map;
 
 
 public abstract class AutonomousTemplate extends LinearOpMode {
-    final AprilTagDetector aprilTagdetector = new AprilTagDetector(hardwareMap);
+    AprilTagDetector aprilTagdetector;
 
     @Override
     public void runOpMode() {
         initialize();
+        aprilTagdetector = new AprilTagDetector(hardwareMap);
         telemetry.addData(">", "Ready when you are!");
         telemetry.update();
         Log.i("Robot", "standby");

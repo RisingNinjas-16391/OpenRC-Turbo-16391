@@ -76,6 +76,10 @@ public class AprilTagDetector {
             {
                 numFramesWithoutDetection = 0;
 
+                if (detections == null) {
+                    return new ArrayList<>();
+                }
+
                 // If the target is within 1 meter, turn on high decimation to
                 // increase the frame rate
                 if(detections.get(0).pose.z < THRESHOLD_HIGH_DECIMATION_RANGE_METERS)

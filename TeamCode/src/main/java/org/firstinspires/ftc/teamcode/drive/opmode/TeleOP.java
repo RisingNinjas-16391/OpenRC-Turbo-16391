@@ -95,7 +95,7 @@ public class TeleOP extends LinearOpMode {
             robot.slide.setPower(gamepad2.right_trigger - gamepad2.left_trigger);
         }
 
-        robot.intake.setPower(gamepad2.right_bumper ? 1 :gamepad2.left_bumper ? -1 : -0.2);
+        robot.intake.setPower(gamepad2.left_bumper ? 1 : -1);
     }
 
 }
