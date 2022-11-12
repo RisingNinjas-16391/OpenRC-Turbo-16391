@@ -42,7 +42,7 @@ public class TeleOP extends LinearOpMode {
     }
 
     // Slide input control
-    public void slideInput() {
+    private void slideInput() {
         if (gamepad2.x) {   // Low preset
             robot.slide.setTargetPosition(LiftConstants.bottomPos);
         } else if (gamepad2.dpad_down) {    // Intake preset
@@ -67,7 +67,7 @@ public class TeleOP extends LinearOpMode {
     }
 
     // Drive input control
-    public void driveInput() {
+    private void driveInput() {
         double driveSpeed;
 
         // Slowmode control

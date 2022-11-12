@@ -82,41 +82,50 @@ public class Auto extends AutonomousTemplate {
         robot.slide.setTargetPosition(LiftConstants.feedPos + 100);
         robot.finishLift(1000);
 
+        stackToHigh();
+
         for (int i = 0; i < 4; i ++) {
-            // Approach rod from stack
-            TrajectorySequence stackToHigh = robot.drivetrain.trajectorySequenceBuilder(robot.drivetrain.getPoseEstimate())
-                    .lineToLinearHeading(new Pose2d(-38, -12,  Math.toRadians(180)))
-                    .lineToLinearHeading(new Pose2d(-32, -7,  Math.toRadians(45)))
-                    .build();
-
-            // Follow trajectory to stack and set slides to scoring position
-            robot.drivetrain.followTrajectorySequenceAsync(stackToHigh);
-            robot.slide.setTargetPosition(4000);
-            robot.finishTrajectory(5000);
-
-            // Drop cone onto rod
-            robot.intake.setPower(1);
-            robot.wait(500);
-
-            // Approach stack from rod
-            TrajectorySequence highToStack = robot.drivetrain.trajectorySequenceBuilder(robot.drivetrain.getPoseEstimate())
-                    .lineToLinearHeading(new Pose2d(-38, -12,  Math.toRadians(180)))
-                    .splineToLinearHeading(new Pose2d(-58, -12,  Math.toRadians(180)), Math.toRadians(180))
-                    .build();
-
-            // Follow trajectory to stack and set lift to intake position
-            robot.drivetrain.followTrajectorySequence(highToStack);
-            robot.slide.setTargetPosition(LiftConstants.feedPos);
-            robot.intake.setPower(-1);
-            robot.finishTrajectory(5000);
-
-            // Intake cone
-            robot.slide.setTargetPosition(LiftConstants.feedPos - 500 - i * 100);
-            robot.finishLift(1000);
-
-            // Clear stack
-            robot.slide.setTargetPosition(LiftConstants.feedPos + 100);
-            robot.finishLift(1000);
+            highToStack(i);
+            stackToHigh();
         }
+    }
+
+    private void stackToHigh() {
+        // Approach rod from stack
+        TrajectorySequence stackToHigh = robot.drivetrain.trajectorySequenceBuilder(robot.drivetrain.getPoseEstimate())
+                .lineToLinearHeading(new Pose2d(-38, -12,  Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(-32, -7,  Math.toRadians(45)))
+                .build();
+
+        // Follow trajectory to stack and set slides to scoring position
+        robot.drivetrain.followTrajectorySequenceAsync(stackToHigh);
+        robot.slide.setTargetPosition(4000);
+        robot.finishTrajectory(5000);
+
+        // Drop cone onto rod
+        robot.intake.setPower(1);
+        robot.wait(500);
+    }
+
+    private void highToStack(int i) {
+        // Approach stack from rod
+        TrajectorySequence highToStack = robot.drivetrain.trajectorySequenceBuilder(robot.drivetrain.getPoseEstimate())
+                .lineToLinearHeading(new Pose2d(-38, -12,  Math.toRadians(180)))
+                .splineToLinearHeading(new Pose2d(-58, -12,  Math.toRadians(180)), Math.toRadians(180))
+                .build();
+
+        // Follow trajectory to stack and set lift to intake position
+        robot.drivetrain.followTrajectorySequence(highToStack);
+        robot.slide.setTargetPosition(LiftConstants.feedPos);
+        robot.intake.setPower(-1);
+        robot.finishTrajectory(5000);
+
+        // Intake cone
+        robot.slide.setTargetPosition(LiftConstants.feedPos - 500 - i * 100);
+        robot.finishLift(1000);
+
+        // Clear stack
+        robot.slide.setTargetPosition(LiftConstants.feedPos + 100);
+        robot.finishLift(1000);
     }
 }
