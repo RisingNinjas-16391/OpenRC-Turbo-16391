@@ -89,7 +89,7 @@ public class TeleOP extends LinearOpMode {
 
 
         // Gamepad inputs multiplied by the drive speed multiplier
-        double forward = -driveSpeed * gamepad1.left_stick_y;
+        double forward = - driveSpeed * gamepad1.left_stick_y;
         double strafe = driveSpeed * gamepad1.left_stick_x;
         double turn = - driveSpeed * gamepad1.right_stick_x;
 

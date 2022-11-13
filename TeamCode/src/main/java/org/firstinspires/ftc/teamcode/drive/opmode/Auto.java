@@ -22,13 +22,13 @@ public class Auto extends AutonomousTemplate {
     Hardware robot = new Hardware(this::opModeIsActive, this::isStopRequested);   //Uses heavily modified untested hardware
 
     public void initialize() {
-        Log.i("Auton", "Init hardware");
+        Log.i("Auto", "Init hardware");
         robot.init(hardwareMap);
         robot.drivetrain.setPoseEstimate(new Pose2d(-35, -60, Math.toRadians(90)));
     }
 
     public void parkLeft() {
-        //TODO: Trajectories for LEFT Auton
+        //TODO: Trajectories for LEFT Auto
         robot.drivetrain.followTrajectorySequence(
                 robot.drivetrain.trajectorySequenceBuilder(robot.drivetrain.getPoseEstimate())
                         .lineToLinearHeading(new Pose2d(-10, -34,  Math.toRadians(90)))
@@ -37,7 +37,7 @@ public class Auto extends AutonomousTemplate {
     }
 
     public void parkCenter() {
-        //TODO: Trajectories for CENTER Auton
+        //TODO: Trajectories for CENTER Auto
         robot.drivetrain.followTrajectorySequence(
                 robot.drivetrain.trajectorySequenceBuilder(robot.drivetrain.getPoseEstimate())
                         .lineToLinearHeading(new Pose2d(-34, -12, Math.toRadians(90)))
@@ -47,7 +47,7 @@ public class Auto extends AutonomousTemplate {
     }
 
     public void parkRight() {
-        //TODO: Trajectories for RIGHT Auton
+        //TODO: Trajectories for RIGHT Auto
         robot.drivetrain.followTrajectorySequence(
                 robot.drivetrain.trajectorySequenceBuilder(robot.drivetrain.getPoseEstimate())
                         .lineToLinearHeading(new Pose2d(-15, -12, Math.toRadians(90)))
