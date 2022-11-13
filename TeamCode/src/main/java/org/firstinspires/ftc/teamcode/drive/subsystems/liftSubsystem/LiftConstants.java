@@ -13,7 +13,7 @@ public final class LiftConstants {
     /** Ticks for lift presets */
     public static final int bottomPos = 0;
     public static final int feedPos = 1000;
-    public static final int lowPos = 2000;
+    public static final int lowPos = 1800;
     public static final int midPos = 3000;
     public static final int highPos = 4020;
 

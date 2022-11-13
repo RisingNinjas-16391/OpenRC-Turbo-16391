@@ -31,32 +31,32 @@ public abstract class AutonomousTemplate extends LinearOpMode {
         waitForStart();
         if (opModeIsActive()) {
             ArrayList<AprilTagDetection> detections =  aprilTagdetector.detect(timeout, threshold);
-            Map.Entry<Integer, Integer> maxDetection = null;
-            if (detections.size() > 0) {
-                Map<Integer, Integer> detectionsCount = new HashMap<>();
-                for (AprilTagDetection d: detections) {
-                    if(detectionsCount.containsKey(d.id)) {
-                        detectionsCount.put(d.id, detectionsCount.get(d.id) + 1);
-                    } else {
-                        detectionsCount.put(d.id, 0);
-                    }
-
-
-                    for (Map.Entry<Integer, Integer> entry: detectionsCount.entrySet())
-                    {
-                        if (maxDetection == null || entry.getValue().compareTo(maxDetection.getValue()) > 0)
-                        {
-                            maxDetection = entry;
-                        }
-                    }
-                }
-
-
-            }
+//            Map.Entry<Integer, Integer> maxDetection = null;
+//            if (detections.size() > 0) {
+//                Map<Integer, Integer> detectionsCount = new HashMap<>();
+//                for (AprilTagDetection d: detections) {
+//                    if(detectionsCount.containsKey(d.id)) {
+//                        detectionsCount.put(d.id, detectionsCount.get(d.id) + 1);
+//                    } else {
+//                        detectionsCount.put(d.id, 0);
+//                    }
+//
+//
+//                    for (Map.Entry<Integer, Integer> entry: detectionsCount.entrySet())
+//                    {
+//                        if (maxDetection == null || entry.getValue().compareTo(maxDetection.getValue()) > 0)
+//                        {
+//                            maxDetection = entry;
+//                        }
+//                    }
+//                }
+//
+//
+//            }
 
             regularAutonomous();
 
-            switch(maxDetection.getKey()) {
+            switch (detections.get(0).id) {
                 case TAG_ID_LEFT:
                     parkLeft();
                     Log.i("Robot", "auto a");

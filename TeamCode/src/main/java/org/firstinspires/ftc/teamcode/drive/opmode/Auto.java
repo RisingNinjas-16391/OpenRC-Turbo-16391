@@ -6,12 +6,11 @@ import android.util.Log;
 import androidx.annotation.RequiresApi;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.drive.subsystems.Hardware;
+import org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DriveConstants;
+import org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DrivetrainSubsystem;
 import org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
@@ -23,22 +22,22 @@ public class Auto extends AutonomousTemplate {
     Hardware robot = new Hardware(this::opModeIsActive, this::isStopRequested);   //Uses heavily modified untested hardware
 
     public void initialize() {
-        Log.i("Auto", "Init hardware");
+        Log.i("Auton", "Init hardware");
         robot.init(hardwareMap);
         robot.drivetrain.setPoseEstimate(new Pose2d(-35, -60, Math.toRadians(90)));
     }
 
     public void parkLeft() {
-        //TODO: Trajectories for LEFT auto
+        //TODO: Trajectories for LEFT Auton
         robot.drivetrain.followTrajectorySequence(
                 robot.drivetrain.trajectorySequenceBuilder(robot.drivetrain.getPoseEstimate())
-                        .lineToLinearHeading(new Pose2d(-58, -34,  Math.toRadians(90)))
+                        .lineToLinearHeading(new Pose2d(-10, -34,  Math.toRadians(90)))
                         .build()
         );
     }
 
     public void parkCenter() {
-        //TODO: Trajectories for CENTER auto
+        //TODO: Trajectories for CENTER Auton
         robot.drivetrain.followTrajectorySequence(
                 robot.drivetrain.trajectorySequenceBuilder(robot.drivetrain.getPoseEstimate())
                         .lineToLinearHeading(new Pose2d(-34, -12, Math.toRadians(90)))
@@ -48,11 +47,11 @@ public class Auto extends AutonomousTemplate {
     }
 
     public void parkRight() {
-        //TODO: Trajectories for RIGHT auto
+        //TODO: Trajectories for RIGHT Auton
         robot.drivetrain.followTrajectorySequence(
                 robot.drivetrain.trajectorySequenceBuilder(robot.drivetrain.getPoseEstimate())
                         .lineToLinearHeading(new Pose2d(-15, -12, Math.toRadians(90)))
-                        .lineToLinearHeading(new Pose2d(-15, -34,  Math.toRadians(90)))
+                        .lineToLinearHeading(new Pose2d(-58, -20,  Math.toRadians(90)))
                         .build()
         );
     }
@@ -64,8 +63,7 @@ public class Auto extends AutonomousTemplate {
 
         // Approaching autonomous cone stack from initialization point
         TrajectorySequence initToStack = robot.drivetrain.trajectorySequenceBuilder(robot.drivetrain.getPoseEstimate())
-                .lineToLinearHeading(new Pose2d(-58, -60,  Math.toRadians(90)))
-                .splineToLinearHeading(new Pose2d(-58, -12,  Math.toRadians(180)), Math.toRadians(90))
+                .lineToLinearHeading(new Pose2d(-34, -34,  Math.toRadians(90)))
                 .build();
 
         // Follow trajectory and set lift to intake position

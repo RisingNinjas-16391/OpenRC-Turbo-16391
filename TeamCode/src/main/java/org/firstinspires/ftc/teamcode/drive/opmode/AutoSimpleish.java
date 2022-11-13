@@ -9,14 +9,13 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.drive.subsystems.Hardware;
-import org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants;
-import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
+import org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DrivetrainSubsystem;
 
 @RequiresApi(api = Build.VERSION_CODES.N)
-@Autonomous(name="Just Park", group="Autonomous")
+@Autonomous(name="Also Preload", group="Autonomous")
 //@Disabled
 
-public class AutoSimple extends AutonomousTemplate {
+public class AutoSimpleish extends AutonomousTemplate {
     Hardware robot = new Hardware(this::opModeIsActive, this::isStopRequested);   //Uses heavily modified untested hardware
 
     public void initialize() {
@@ -29,7 +28,6 @@ public class AutoSimple extends AutonomousTemplate {
         //TODO: Trajectories for LEFT auto
         robot.drivetrain.followTrajectorySequence(
                 robot.drivetrain.trajectorySequenceBuilder(robot.drivetrain.getPoseEstimate())
-                        .lineToLinearHeading(new Pose2d(-34, -34, Math.toRadians(90)))
                         .lineToLinearHeading(new Pose2d(-10, -34,  Math.toRadians(90)))
                         .build()
         );
@@ -48,12 +46,38 @@ public class AutoSimple extends AutonomousTemplate {
         //TODO: Trajectories for RIGHT auto
         robot.drivetrain.followTrajectorySequence(
                 robot.drivetrain.trajectorySequenceBuilder(robot.drivetrain.getPoseEstimate())
-                        .lineToLinearHeading(new Pose2d(-33, -34, Math.toRadians(90)))
                         .lineToLinearHeading(new Pose2d(-60, -34,  Math.toRadians(90)))
                         .build()
         );
     }
 
 
-    public void regularAutonomous() {}
+    public void regularAutonomous() {
+        robot.intake.setPower(-1);
+        Log.i("Simple Auto", "Start regular auto");
+        robot.drivetrain.followTrajectorySequence(
+                robot.drivetrain.trajectorySequenceBuilder(robot.drivetrain.getPoseEstimate())
+                        .lineToLinearHeading(new Pose2d(-33, 0, Math.toRadians(90)))
+                        .lineToLinearHeading(new Pose2d(-33, -10, Math.toRadians(90)))
+                        .build()
+        );
+        Log.i("Simple Auto", "Set slide target position");
+        robot.slide.setTargetPosition(4000);
+        robot.finishLift(2000);
+
+        robot.drivetrain.followTrajectorySequence(
+                robot.drivetrain.trajectorySequenceBuilder(robot.drivetrain.getPoseEstimate())
+                        .lineToLinearHeading(new Pose2d(-20, -10, Math.toRadians(0)))
+                        .build()
+        );
+        robot.intake.setPower(1);
+        Log.i("Simple Auto", "Drop cone");
+        robot.drivetrain.followTrajectorySequence(
+                robot.drivetrain.trajectorySequenceBuilder(robot.drivetrain.getPoseEstimate())
+                        .lineToLinearHeading(new Pose2d(-33, -10, Math.toRadians(0)))
+                        .lineToLinearHeading(new Pose2d(-33, -34, Math.toRadians(90)))
+                        .build()
+        );
+        Log.i("Simple Auto", "Finish Auto");
+    }
 }

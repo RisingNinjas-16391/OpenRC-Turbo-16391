@@ -20,10 +20,10 @@ public final class DriveConstants {
     public static double kV = 1.0 / rpmToVelocity(MAX_RPM);
     public static double kA = 0;
     public static double kStatic = 0;
-    public static double MAX_VEL = 60;
-    public static double MAX_ACCEL = 60;
-    public static double MAX_ANG_VEL = Math.toRadians(184);
-    public static double MAX_ANG_ACCEL = Math.toRadians(184);
+    public static double MAX_VEL = 20;
+    public static double MAX_ACCEL = 20;
+    public static double MAX_ANG_VEL = Math.toRadians(92);
+    public static double MAX_ANG_ACCEL = Math.toRadians(92);
 
 
     public static double encoderTicksToInches(double ticks) {
