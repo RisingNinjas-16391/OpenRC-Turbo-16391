@@ -26,6 +26,7 @@ public class Hardware {
     public DrivetrainSubsystem drivetrain;
     public LiftSubsystem slide;
     public IntakeSubsystem intake;
+    public TurretSubsystem turret;
     private final BooleanSupplier isOpmodeRunning;
     private final BooleanSupplier isStopRequested;
 
@@ -46,7 +47,7 @@ public class Hardware {
         drivetrain = new DrivetrainSubsystem(ahwMap);
         slide = new LiftSubsystem(ahwMap);
         intake = new IntakeSubsystem(ahwMap);
-//        turret = new TurretSubsystem(ahwMap);
+        turret = new TurretSubsystem(ahwMap);
     }
     /** Runs the update method in all subsystems */
     public void update() {
@@ -88,6 +89,9 @@ public class Hardware {
 
         telemetry.addLine("Linear Slide power")
                 .addData("slide", slide.getPower());
+
+        telemetry.addLine("Turret Encoder Position")
+                .addData("Ticks: ", turret.getCurrentPosition());
 
 //        telemetry.addLine("Intake Power")
 //                .addData("intake", intake.getPower());

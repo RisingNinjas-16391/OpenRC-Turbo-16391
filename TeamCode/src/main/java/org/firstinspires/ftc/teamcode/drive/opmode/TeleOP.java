@@ -11,6 +11,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.drive.subsystems.Hardware;
 import org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants;
+
 @RequiresApi(api = Build.VERSION_CODES.N)
 @TeleOp(name = "TeleOp", group = "Teleop")
 public class TeleOP extends LinearOpMode {
@@ -39,6 +40,10 @@ public class TeleOP extends LinearOpMode {
             // Pace this loop so jaw action is reasonable speed.
             sleep(25);
         }
+    }
+
+    // Turret Method
+    private void turretControl() {
     }
 
     // Slide input control
