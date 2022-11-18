@@ -11,7 +11,8 @@ public class TurretSubsystem {
 
     public TurretSubsystem(HardwareMap hwMap){
         turret = hwMap.get(DcMotorEx.class, "turret");
-        turret.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        // TODO: Turn back to brake mode
+        turret.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         turret.setDirection(DcMotorSimple.Direction.FORWARD);
         turret.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         turret.setPower(0);
