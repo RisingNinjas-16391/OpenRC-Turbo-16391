@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem;
 
+import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.rotationDirection;
 import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.tickMargin;
 
 import android.util.Log;
@@ -29,7 +30,7 @@ public class LiftSubsystem {
 
         motor = hwMap.get(DcMotorEx.class, LiftConstants.name);
         motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        motor.setDirection(DcMotorSimple.Direction.REVERSE);
+        motor.setDirection(rotationDirection);
         motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         motor.setPower(0);

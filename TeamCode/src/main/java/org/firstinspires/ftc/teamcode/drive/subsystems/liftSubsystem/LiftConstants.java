@@ -2,10 +2,13 @@ package org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.control.PIDCoefficients;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 /** Class containing constants used for {@link LiftSubsystem}*/
 @Config
 public final class LiftConstants {
+    public static final DcMotorSimple.Direction rotationDirection = DcMotorSimple.Direction.REVERSE;
+
     public static final int maxHeight = 4500; // Ticks for fully-extended lift
 
     public static final int tickMargin = 100; // Margin for getBusy() false
