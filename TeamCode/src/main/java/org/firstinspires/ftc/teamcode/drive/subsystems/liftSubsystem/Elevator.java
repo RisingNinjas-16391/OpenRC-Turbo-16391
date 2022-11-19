@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem;
 
-import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.GEAR_RATIO;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DriveConstants.GEAR_RATIO;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.DIRECTION;
 import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.MAX_ACCEL;
 import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.MAX_HEIGHT;
 import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.MAX_JERK;
@@ -13,7 +14,6 @@ import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.Lift
 import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.kStatic;
 import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.kV;
 import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.name;
-import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.DIRECTION;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.control.PIDFController;
@@ -34,6 +34,9 @@ public class Elevator {
 
     private DcMotorEx motor;
     private PIDFController controller;
+    ElevatorFeedforward feedforward = new ElevatorFeedforward(
+            kStatic, kG, kV, kA
+    );
     private MotionProfile profile;
     private NanoClock clock = NanoClock.system();
     private double profileStartTime, desiredHeight = 0;
@@ -51,19 +54,13 @@ public class Elevator {
     public Elevator(HardwareMap hardwareMap) {
         motor = hardwareMap.get(DcMotorEx.class, name);
         motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        // if necessary, reverse the motor so "up" is positive
+
         motor.setDirection(DIRECTION);
 
-        // motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        controller = new PIDFController(kPID);
 
-        // note: if the elevator is affected by a non-negligible constant force along the direction
-        // of motion (e.g., gravity, kinetic friction, or a combination thereof), it may be
-        // beneficial to compensate for it with a gravity feedforward
-        controller = new PIDFController(kPID, kV, kA, kStatic);
         // Create a new ElevatorFeedforward with gains kS, kG, kV, and kA
-        ElevatorFeedforward feedforward = new ElevatorFeedforward(
-                kStatic, kG, kV, kA
-        );
+
         offset = motor.getCurrentPosition();
     }
 
@@ -97,7 +94,7 @@ public class Elevator {
             double time = clock.seconds() - profileStartTime;
             MotionState state = profile.get(time);
             controller.setTargetPosition(state.getX());
-            power = controller.update(currentHeight, state.getV());
+            power = controller.update(currentHeight, state.getV()) + feedforward.calculate(state.getV(), state.getA());
         } else {
             // just hold the position
             controller.setTargetPosition(desiredHeight);
