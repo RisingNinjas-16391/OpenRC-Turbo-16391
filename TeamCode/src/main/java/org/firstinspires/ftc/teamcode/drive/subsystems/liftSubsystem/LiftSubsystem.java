@@ -1,17 +1,15 @@
 package org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem;
 
-import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.rotationDirection;
-import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.tickMargin;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.DIRECTION;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.TICK_MARGIN;
 
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 
 import com.acmerobotics.roadrunner.control.PIDFController;
-import com.acmerobotics.roadrunner.control.PIDCoefficients;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 /** Subsystem representing lifting mechanism*/
@@ -22,7 +20,7 @@ public class LiftSubsystem {
 
 
     public LiftSubsystem(@NonNull HardwareMap hwMap) {
-        controller = new PIDFController(LiftConstants.kPosPID, LiftConstants.kV, LiftConstants.kA, LiftConstants.kS, (x, y) -> LiftConstants.kG);
+        controller = new PIDFController(LiftConstants.kPID, LiftConstants.kV, LiftConstants.kA, LiftConstants.kS, (x, y) -> LiftConstants.kG);
 //        controller.setInputBounds(0, LiftConstants.maxHeight);
         controller.setOutputBounds(-1, 1);
         mode = DcMotor.RunMode.RUN_TO_POSITION;
@@ -30,7 +28,7 @@ public class LiftSubsystem {
 
         motor = hwMap.get(DcMotorEx.class, LiftConstants.name);
         motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        motor.setDirection(rotationDirection);
+        motor.setDirection(DIRECTION);
         motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         motor.setPower(0);
@@ -56,7 +54,7 @@ public class LiftSubsystem {
         motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
-    public boolean isBusy() { return(Math.abs(controller.getLastError()) > tickMargin);}
+    public boolean isBusy() { return(Math.abs(controller.getLastError()) > TICK_MARGIN);}
 
     public DcMotor.RunMode getMode() {
         return mode;
@@ -83,7 +81,7 @@ public class LiftSubsystem {
                 break;
         }
         //Soft limit
-        if (motor.getCurrentPosition() > LiftConstants.maxHeight && motor.getPower() > 0) {
+        if (motor.getCurrentPosition() > LiftConstants.MAX_HEIGHT && motor.getPower() > 0) {
             motor.setPower(-0.1);
         } else if (motor.getCurrentPosition() < 0 && motor.getPower() < 0) {
             motor.setPower(0.1);

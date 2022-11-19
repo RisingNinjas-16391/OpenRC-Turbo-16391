@@ -9,8 +9,6 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.drive.subsystems.Hardware;
-import org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DriveConstants;
-import org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DrivetrainSubsystem;
 import org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
@@ -68,7 +66,7 @@ public class Auto extends AutonomousTemplate {
 
         // Follow trajectory and set lift to intake position
         robot.drivetrain.followTrajectorySequenceAsync(initToStack);
-        robot.slide.setTargetPosition(LiftConstants.feedPos);
+        robot.slide.setTargetPosition(LiftConstants.FEED_POS);
         robot.intake.setPower(-1);
         robot.finishTrajectory(5000);
 
@@ -77,7 +75,7 @@ public class Auto extends AutonomousTemplate {
         robot.finishLift(1000);
 
         // Clear stack
-        robot.slide.setTargetPosition(LiftConstants.feedPos + 100);
+        robot.slide.setTargetPosition(LiftConstants.FEED_POS + 100);
         robot.finishLift(1000);
 
         stackToHigh();
@@ -114,16 +112,16 @@ public class Auto extends AutonomousTemplate {
 
         // Follow trajectory to stack and set lift to intake position
         robot.drivetrain.followTrajectorySequence(highToStack);
-        robot.slide.setTargetPosition(LiftConstants.feedPos);
+        robot.slide.setTargetPosition(LiftConstants.FEED_POS);
         robot.intake.setPower(-1);
         robot.finishTrajectory(5000);
 
         // Intake cone
-        robot.slide.setTargetPosition(LiftConstants.feedPos - 500 - i * 100);
+        robot.slide.setTargetPosition(LiftConstants.FEED_POS - 500 - i * 100);
         robot.finishLift(1000);
 
         // Clear stack
-        robot.slide.setTargetPosition(LiftConstants.feedPos + 100);
+        robot.slide.setTargetPosition(LiftConstants.FEED_POS + 100);
         robot.finishLift(1000);
     }
 }
