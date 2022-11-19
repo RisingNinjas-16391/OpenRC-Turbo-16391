@@ -1,18 +1,19 @@
 package org.firstinspires.ftc.teamcode.drive.subsystems.turretSubsystem;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
 import static org.firstinspires.ftc.teamcode.drive.subsystems.turretSubsystem.TurretConstants.homePos;
 import static org.firstinspires.ftc.teamcode.drive.subsystems.turretSubsystem.TurretConstants.kPosPID;
 import static org.firstinspires.ftc.teamcode.drive.subsystems.turretSubsystem.TurretConstants.otherSidePos;
 
+import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-public class TurretSubsystem {
+public class TurretSubsystem extends SubsystemBase {
 
     public DcMotorEx turret;
-    private boolean toggle = false;
 
     public TurretSubsystem(HardwareMap hwMap){
         turret = hwMap.get(DcMotorEx.class, "turret");
@@ -26,22 +27,14 @@ public class TurretSubsystem {
         turret.setPIDFCoefficients(DcMotor.RunMode.RUN_TO_POSITION, kPosPID);
     }
 
-    public int getCurrentPosition() { return turret.getCurrentPosition(); }
-
-    public void setTargetPosition(int position) { turret.setTargetPosition(position); }
-
-    public void togglePosition() {
-        toggle = !toggle;
-        if (toggle){
-            turret.setTargetPosition(homePos);
-        } else {
-            turret.setTargetPosition(otherSidePos);
-        }
+    @Override
+    public void periodic() {
+        telemetry.addLine("Turret Encoder Position")
+                .addData("Ticks: ", turret.getCurrentPosition());
     }
 
     public void togglePosition(boolean toggle) {
-        this.toggle = toggle;
-        if (this.toggle){
+        if (toggle){
             turret.setTargetPosition(homePos);
         } else {
             turret.setTargetPosition(otherSidePos);
