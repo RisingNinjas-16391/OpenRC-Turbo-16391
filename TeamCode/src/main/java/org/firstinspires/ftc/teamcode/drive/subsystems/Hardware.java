@@ -20,6 +20,7 @@ import java.util.function.BooleanSupplier;
  * <p>
  * This class can be used to define all the specific hardware for a single robot.
  */
+@RequiresApi(api = Build.VERSION_CODES.N)
 public class Hardware {
     private final ElapsedTime period = new ElapsedTime();
     /* Public OpMode members. */
