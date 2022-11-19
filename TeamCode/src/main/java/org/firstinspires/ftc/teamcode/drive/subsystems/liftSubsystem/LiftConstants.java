@@ -29,6 +29,11 @@ public final class LiftConstants {
     public static double MAX_HEIGHT = 10; // in
 
     public static PIDCoefficients kPID =  new PIDCoefficients(0.005, 0, 0);
+
+    public static double MAX_VEL = 10; // in/s
+    public static double MAX_ACCEL = 10; // in/s^2
+    public static double MAX_JERK = 20; // in/s^3
+
     public static double kV = 0;
     public static double kA = 0;
     public static double kS = 0.05;

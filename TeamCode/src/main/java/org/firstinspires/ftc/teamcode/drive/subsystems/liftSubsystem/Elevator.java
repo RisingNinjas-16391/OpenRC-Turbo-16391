@@ -1,15 +1,20 @@
 package org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem;
 
+import static org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DriveConstants.kStatic;
 import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.GEAR_RATIO;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.MAX_ACCEL;
 import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.MAX_HEIGHT;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.MAX_JERK;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.MAX_VEL;
 import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.MOTOR_CONFIG;
 import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.SPOOL_RADIUS;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.kA;
 import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.kPID;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.kV;
 import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.name;
 import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.DIRECTION;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.roadrunner.control.PIDCoefficients;
 import com.acmerobotics.roadrunner.control.PIDFController;
 import com.acmerobotics.roadrunner.profile.MotionProfile;
 import com.acmerobotics.roadrunner.profile.MotionProfileGenerator;
@@ -24,15 +29,6 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
  */
 @Config
 public class Elevator {
-
-    public static double MAX_VEL = 10; // in/s
-    public static double MAX_ACCEL = 10; // in/s^2
-    public static double MAX_JERK = 20; // in/s^3
-
-    public static double kV = 0;
-    public static double kA = 0;
-    public static double kStatic = 0;
-
 
     private DcMotorEx motor;
     private PIDFController controller;
