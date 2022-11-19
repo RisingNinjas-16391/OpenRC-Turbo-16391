@@ -1,9 +1,5 @@
 package org.firstinspires.ftc.teamcode.drive.opmode;
 
-import android.os.Build;
-
-import androidx.annotation.RequiresApi;
-
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -12,7 +8,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.teamcode.drive.subsystems.Hardware;
 import org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants;
 
-@RequiresApi(api = Build.VERSION_CODES.N)
 @TeleOp(name = "TeleOp", group = "Teleop")
 public class TeleOP extends LinearOpMode {
 
@@ -49,15 +44,15 @@ public class TeleOP extends LinearOpMode {
     // Slide input control
     private void slideInput() {
         if (gamepad2.x) {   // Low preset
-            robot.slide.setTargetPosition(LiftConstants.bottomPos);
+            robot.slide.setTargetPosition(LiftConstants.BOTTOM_POS);
         } else if (gamepad2.dpad_down) {    // Intake preset
-            robot.slide.setTargetPosition(LiftConstants.feedPos);
+            robot.slide.setTargetPosition(LiftConstants.FEED_POS);
         } else if (gamepad2.y) {    // Low scoring preset
-            robot.slide.setTargetPosition(LiftConstants.lowPos);
+            robot.slide.setTargetPosition(LiftConstants.LOW_POS);
         } else if (gamepad2.b) {    // Middle scoring preset
-            robot.slide.setTargetPosition(LiftConstants.midPos);
+            robot.slide.setTargetPosition(LiftConstants.MID_POS);
         } else if (gamepad2.a) {    // High scoring preset
-            robot.slide.setTargetPosition(LiftConstants.highPos);
+            robot.slide.setTargetPosition(LiftConstants.HIGH_POS);
         } else if (gamepad2.options){     // Reset encoder
             robot.slide.resetEncoders();
         } else if (gamepad2.back) {     // Turn back PID
