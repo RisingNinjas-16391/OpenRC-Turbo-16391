@@ -8,14 +8,14 @@ import org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftSubsyst
 
 import java.util.function.DoubleSupplier;
 
-public class DrivetrainCommnad extends CommandBase {
+public class DrivetrainCommand extends CommandBase {
     @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
     private final DrivetrainSubsystem drivetrain;
     private DoubleSupplier forward;
     private DoubleSupplier strafe;
     private DoubleSupplier turn;
 
-    public DrivetrainCommnad(DrivetrainSubsystem drivetrain, DoubleSupplier forward, DoubleSupplier strafe, DoubleSupplier turn) {
+    public DrivetrainCommand(DrivetrainSubsystem drivetrain, DoubleSupplier forward, DoubleSupplier strafe, DoubleSupplier turn) {
         this.drivetrain = drivetrain;
         this.forward = forward;
         this.strafe = strafe;

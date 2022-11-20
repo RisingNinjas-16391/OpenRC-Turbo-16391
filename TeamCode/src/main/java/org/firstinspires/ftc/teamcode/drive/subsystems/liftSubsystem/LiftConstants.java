@@ -43,4 +43,6 @@ public final class LiftConstants {
     public static double kStatic = 0.05;
     public static final String name = "slide";
 
+    public static final int minHeightTurret = 1000;
+
 }
