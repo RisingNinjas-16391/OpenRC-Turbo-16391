@@ -6,8 +6,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DrivetrainSubsystem;
-import org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftSubsystem;
+import org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.RoadrunnerMecanumDrive;
 import org.firstinspires.ftc.teamcode.drive.subsystems.turretSubsystem.TurretSubsystem;
 
 import java.util.function.BooleanSupplier;
@@ -20,7 +19,7 @@ import java.util.function.BooleanSupplier;
 public class Hardware {
     private final ElapsedTime period = new ElapsedTime();
     /* Public OpMode members. */
-    public DrivetrainSubsystem drivetrain;
+    public RoadrunnerMecanumDrive drivetrain;
     public LiftSubsystem slide;
     public IntakeSubsystem intake;
     public TurretSubsystem turret;
@@ -41,7 +40,7 @@ public class Hardware {
     /** Initialize standard Hardware interfaces */
     public void init(@NonNull HardwareMap ahwMap) {
         // Save reference to Hardware map
-        drivetrain = new DrivetrainSubsystem(ahwMap);
+        drivetrain = new RoadrunnerMecanumDrive(ahwMap);
         slide = new LiftSubsystem(ahwMap);
         intake = new IntakeSubsystem(ahwMap);
         turret = new TurretSubsystem(ahwMap);
@@ -81,14 +80,7 @@ public class Hardware {
                 .addData("Back Left", drivetrain.getWheelPositions().get(1))
                 .addData("Back Right", drivetrain.getWheelPositions().get(2));
 
-        telemetry.addLine("Linear Slide ticks")
-                .addData("slide", slide.getCurrentPosition());
 
-        telemetry.addLine("Linear Slide power")
-                .addData("slide", slide.getPower());
-
-        telemetry.addLine("Turret Encoder Position")
-                .addData("Ticks: ", turret.getCurrentPosition());
 
 //        telemetry.addLine("Intake Power")
 //                .addData("intake", intake.getPower());

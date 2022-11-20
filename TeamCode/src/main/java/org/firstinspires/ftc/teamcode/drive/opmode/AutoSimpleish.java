@@ -9,7 +9,6 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.drive.subsystems.Hardware;
-import org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DrivetrainSubsystem;
 
 @RequiresApi(api = Build.VERSION_CODES.N)
 @Autonomous(name="Also Preload", group="Autonomous")
