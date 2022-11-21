@@ -80,14 +80,14 @@ public class RobotContainer {
         down.whenPressed(lift::decrementHeight);
     }
 
-    public void setDefaultCommands() {
+    private void setDefaultCommands() {
         drivetrain.setDefaultCommand(new DrivetrainCommand(drivetrain, lift::getCurrentHeight,
                 driverController::getLeftY, driverController::getLeftX,
                 driverController::getRightX));
         intake.setDefaultCommand(new InstantCommand(intake::feed));
     }
 
-    public void setAutoCommands(int chooser) {
+    private void setAutoCommands(int chooser) {
         Command Auto1 = new AutoCommand1(drivetrain, lift, intake, aprilTagDetector);
         switch (chooser) {
             case 0:
