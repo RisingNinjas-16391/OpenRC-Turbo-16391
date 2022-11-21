@@ -3,20 +3,22 @@ package org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem;
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
+import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequenceBuilder;
 
 public class DrivetrainSubsystem extends SubsystemBase {
 
     private MecanumDrive drivetrain;
 
     public DrivetrainSubsystem(HardwareMap hwMap) {
-        MecanumDrive drivetrain = new MecanumDrive(hwMap);
+        drivetrain = new MecanumDrive(hwMap);
     }
 
-    public Pose2d getPose() {
+    public Pose2d getPoseEstimate() {
         return drivetrain.getPoseEstimate();
     }
 
@@ -25,9 +27,20 @@ public class DrivetrainSubsystem extends SubsystemBase {
     }
 
     public void runTrajectory(TrajectorySequence trajectory) {
-        drivetrain.followTrajectorySequence(trajectory);
+        drivetrain.followTrajectorySequenceAsync(trajectory);
     }
 
+    public TrajectorySequenceBuilder trajectorySequenceBuilder(Pose2d startPose) {
+        return drivetrain.trajectorySequenceBuilder(startPose);
+    }
+
+    public void setPoseEstimate(Pose2d pose) {
+        drivetrain.setPoseEstimate(pose);
+    }
+
+    public void finishTrajectory() {
+        drivetrain;
+    }
     @Override
     public void periodic() {
         telemetry.addLine("Drive Encoder ticks")
