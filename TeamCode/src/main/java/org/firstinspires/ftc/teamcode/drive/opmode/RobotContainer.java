@@ -24,9 +24,14 @@ public class RobotContainer {
     private final TurretSubsystem turret;
 
     private final GamepadEx driverController;
+    private final GamepadEx operatorController;
 
     private final GamepadButton up;
     private final GamepadButton down;
+    private final GamepadButton slowMode;
+    private final GamepadButton turboMode;
+
+    private final GamepadButton dropCone;
     private final GamepadButton turretToggle;
 
 
@@ -37,12 +42,15 @@ public class RobotContainer {
         turret = new TurretSubsystem(hwMap);
 
         driverController = new GamepadEx(gamepad1);
+        operatorController = new GamepadEx(gamepad2);
 
         up = new GamepadButton(driverController, GamepadKeys.Button.DPAD_UP);
-
         down = new GamepadButton(driverController, GamepadKeys.Button.DPAD_DOWN);
+        slowMode = new GamepadButton(driverController, GamepadKeys.Button.RIGHT_BUMPER);
+        turboMode = new GamepadButton(driverController, GamepadKeys.Button.LEFT_BUMPER);
 
-        turretToggle = new GamepadButton(driverController, GamepadKeys.Button.A);
+        dropCone = new GamepadButton(operatorController, GamepadKeys.Button.RIGHT_BUMPER);
+        turretToggle = new GamepadButton(operatorController, GamepadKeys.Button.LEFT_BUMPER);
 
         setDefaultCommands();
         configureButtonBindings();
@@ -50,18 +58,23 @@ public class RobotContainer {
     }
 
     private void configureButtonBindings() {
-        up.whenPressed(new InstantCommand(lift::incrementHeight));
-        down.whenPressed(new InstantCommand(lift::decrementHeight));
+        up.whenPressed(lift::incrementHeight);
+        down.whenPressed(lift::decrementHeight);
 
+        slowMode.whenPressed(() -> drivetrain.setSpeedMultiplier(0.6));
+        turboMode.whenActive(() -> drivetrain.setSpeedMultiplier(1));
+        slowMode.negate().and(turboMode.negate()).whenActive(() -> drivetrain.setSpeedMultiplier(0.7));
+
+        dropCone.whenPressed(new InstantCommand(intake::unfeed, intake));
         turretToggle.toggleWhenPressed(new TurretCommand(turret, lift));
     }
 
     public void setDefaultCommands() {
-        drivetrain.setDefaultCommand(new DrivetrainCommand(drivetrain, lift,
+        drivetrain.setDefaultCommand(new DrivetrainCommand(drivetrain, lift::getCurrentHeight,
                 () -> gamepad1.left_stick_y, () -> gamepad1.left_stick_x,
                 () -> gamepad1.right_stick_x, () -> gamepad1.right_bumper,
                 () -> gamepad1.left_bumper));
-        intake.setDefaultCommand(new IntakeCommand(intake, () -> gamepad2.left_bumper));
+        intake.setDefaultCommand(new InstantCommand(intake::feed));
     }
 
     public void setAutoCommands() {

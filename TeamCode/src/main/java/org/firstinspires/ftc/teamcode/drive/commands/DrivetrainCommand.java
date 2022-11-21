@@ -12,18 +12,18 @@ import java.util.function.DoubleSupplier;
 public class DrivetrainCommand extends CommandBase {
     @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
     private final DrivetrainSubsystem drivetrain;
-    private final LiftSubsystem lift;
-    private DoubleSupplier forward;
-    private DoubleSupplier strafe;
-    private DoubleSupplier turn;
-    private BooleanSupplier slowMode;
-    private BooleanSupplier turbo;
+    private final DoubleSupplier liftHeight;
+    private final DoubleSupplier forward;
+    private final DoubleSupplier strafe;
+    private final DoubleSupplier turn;
+    private final BooleanSupplier slowMode;
+    private final BooleanSupplier turbo;
 
-    public DrivetrainCommand(DrivetrainSubsystem drivetrain, LiftSubsystem lift,
+    public DrivetrainCommand(DrivetrainSubsystem drivetrain, DoubleSupplier liftHeight,
                              DoubleSupplier forward, DoubleSupplier strafe, DoubleSupplier turn,
                              BooleanSupplier slowMode, BooleanSupplier turbo) {
         this.drivetrain = drivetrain;
-        this.lift = lift;
+        this.liftHeight = liftHeight;
         this.forward = forward;
         this.strafe = strafe;
         this.turn = turn;
@@ -35,17 +35,10 @@ public class DrivetrainCommand extends CommandBase {
 
     @Override
     public void execute() {
-        double driveMultiplier;
-        if (slowMode.getAsBoolean()) {
-            driveMultiplier = 0.4;
-        } else if (turbo.getAsBoolean()) {
-            driveMultiplier = 1;
-        } else {
-            driveMultiplier = 0.7;
-        }
 
-        if (lift.getCurrentHeight() > 0) {
-            double correction = 1 - (lift.getCurrentHeight() / 10);
+
+        if (liftHeight.getAsDouble() > 0) {
+            double correction = 1 - (liftHeight.getAsDouble() / 10);
             correction /= 2;
             correction += 0.5;
             driveMultiplier *= correction;
