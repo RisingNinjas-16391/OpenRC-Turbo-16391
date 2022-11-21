@@ -14,6 +14,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     private MecanumDrive drivetrain;
 
+    private double speedMultiplier = 1;
+
     public DrivetrainSubsystem(HardwareMap hwMap) {
         drivetrain = new MecanumDrive(hwMap);
     }
@@ -23,7 +25,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     }
 
     public void drive(double forward, double strafe, double turn) {
-        drivetrain.setWeightedDrivePower(new Pose2d(forward, strafe, turn));
+        drivetrain.setWeightedDrivePower(new Pose2d(forward * speedMultiplier, strafe * speedMultiplier, turn * speedMultiplier));
     }
 
     public void runTrajectory(TrajectorySequence trajectory) {
@@ -48,5 +50,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
                 .addData("Front Right", drivetrain.getWheelPositions().get(3))
                 .addData("Back Left", drivetrain.getWheelPositions().get(1))
                 .addData("Back Right", drivetrain.getWheelPositions().get(2));
+    }
+
+    public void setSpeedMultiplier(double speedMultiplier) {
+        this.speedMultiplier = speedMultiplier;
     }
 }

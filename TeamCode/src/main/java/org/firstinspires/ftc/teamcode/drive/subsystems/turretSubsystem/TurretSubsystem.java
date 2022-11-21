@@ -15,8 +15,9 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 public class TurretSubsystem extends SubsystemBase {
 
     public DcMotorEx turret;
+    private boolean toggle;
 
-    public TurretSubsystem(HardwareMap hwMap){
+    public TurretSubsystem(HardwareMap hwMap) {
         turret = hwMap.get(DcMotorEx.class, name);
         // TODO: Turn back to brake mode
         turret.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
@@ -35,11 +36,17 @@ public class TurretSubsystem extends SubsystemBase {
     }
 
     public void togglePosition(boolean toggle) {
-        if (toggle){
+        this.toggle = toggle;
+        if (toggle) {
             turret.setTargetPosition(homePos);
         } else {
             turret.setTargetPosition(otherSidePos);
         }
+    }
+
+    public void togglePosition() {
+        toggle = !toggle;
+        togglePosition(toggle);
     }
 
 }

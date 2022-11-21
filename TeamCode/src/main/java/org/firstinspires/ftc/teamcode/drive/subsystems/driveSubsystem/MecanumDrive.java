@@ -1,5 +1,17 @@
 package org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem;
 
+import static org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DriveConstants.MAX_ACCEL;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DriveConstants.MAX_ANG_ACCEL;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DriveConstants.MAX_ANG_VEL;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DriveConstants.MAX_VEL;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DriveConstants.MOTOR_VELO_PID;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DriveConstants.RUN_USING_ENCODER;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DriveConstants.TRACK_WIDTH;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DriveConstants.encoderTicksToInches;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DriveConstants.kA;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DriveConstants.kStatic;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DriveConstants.kV;
+
 import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.config.Config;
@@ -36,37 +48,20 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DriveConstants.MAX_ACCEL;
-import static org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DriveConstants.MAX_ANG_ACCEL;
-import static org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DriveConstants.MAX_ANG_VEL;
-import static org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DriveConstants.MAX_VEL;
-import static org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DriveConstants.MOTOR_VELO_PID;
-import static org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DriveConstants.RUN_USING_ENCODER;
-import static org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DriveConstants.TRACK_WIDTH;
-import static org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DriveConstants.encoderTicksToInches;
-import static org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DriveConstants.kA;
-import static org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DriveConstants.kStatic;
-import static org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DriveConstants.kV;
-
 /**
  * Mecanum drive hardware implementation for REV hardware.
  */
 @Config
 public class MecanumDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive {
+    private static final TrajectoryVelocityConstraint VEL_CONSTRAINT = getVelocityConstraint(MAX_VEL, MAX_ANG_VEL, TRACK_WIDTH);
+    private static final TrajectoryAccelerationConstraint ACCEL_CONSTRAINT = getAccelerationConstraint(MAX_ACCEL);
     public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(4, 0, 0);
     public static PIDCoefficients HEADING_PID = new PIDCoefficients(4, 0, 0);
-
     public static double LATERAL_MULTIPLIER = 1;
-
     public static double VX_WEIGHT = 1;
     public static double VY_WEIGHT = 1;
     public static double OMEGA_WEIGHT = 1;
-
     private final TrajectorySequenceRunner trajectorySequenceRunner;
-
-    private static final TrajectoryVelocityConstraint VEL_CONSTRAINT = getVelocityConstraint(MAX_VEL, MAX_ANG_VEL, TRACK_WIDTH);
-    private static final TrajectoryAccelerationConstraint ACCEL_CONSTRAINT = getAccelerationConstraint(MAX_ACCEL);
-
     private final TrajectoryFollower follower;
 
     private final DcMotorEx leftFront, leftRear, rightRear, rightFront;
@@ -74,6 +69,8 @@ public class MecanumDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive
 
     private final BNO055IMU imu;
     private final VoltageSensor batteryVoltageSensor;
+
+    private static Pose2d currentPose = new Pose2d();
 
     public MecanumDrive(@NonNull HardwareMap hardwareMap) {
         super(kV, kA, kStatic, TRACK_WIDTH, TRACK_WIDTH, LATERAL_MULTIPLIER);
@@ -127,6 +124,21 @@ public class MecanumDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive
         trajectorySequenceRunner = new TrajectorySequenceRunner(follower, HEADING_PID);
     }
 
+    @NonNull
+    @Contract("_, _, _ -> new")
+    public static TrajectoryVelocityConstraint getVelocityConstraint(double maxVel, double maxAngularVel, double trackWidth) {
+        return new MinVelocityConstraint(Arrays.asList(
+                new AngularVelocityConstraint(maxAngularVel),
+                new MecanumVelocityConstraint(maxVel, trackWidth)
+        ));
+    }
+
+    @NonNull
+    @Contract("_ -> new")
+    public static TrajectoryAccelerationConstraint getAccelerationConstraint(double maxAccel) {
+        return new ProfileAccelerationConstraint(maxAccel);
+    }
+
     public TrajectoryBuilder trajectoryBuilder(@NonNull Pose2d startPose) {
         return new TrajectoryBuilder(startPose, VEL_CONSTRAINT, ACCEL_CONSTRAINT);
     }
@@ -176,7 +188,6 @@ public class MecanumDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive
     public void followTrajectorySequenceAsync(@NonNull TrajectorySequence trajectorySequence) {
         trajectorySequenceRunner.followTrajectorySequenceAsync(trajectorySequence);
     }
-
 
     public void followTrajectorySequence(@NonNull TrajectorySequence trajectorySequence) {
         followTrajectorySequenceAsync(trajectorySequence);
@@ -283,18 +294,11 @@ public class MecanumDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive
         return (double) -imu.getAngularVelocity().xRotationRate;
     }
 
-    @NonNull
-    @Contract("_, _, _ -> new")
-    public static TrajectoryVelocityConstraint getVelocityConstraint(double maxVel, double maxAngularVel, double trackWidth) {
-        return new MinVelocityConstraint(Arrays.asList(
-                new AngularVelocityConstraint(maxAngularVel),
-                new MecanumVelocityConstraint(maxVel, trackWidth)
-        ));
+    public void saveCurrentPose() {
+        currentPose = getPoseEstimate();
     }
 
-    @NonNull
-    @Contract("_ -> new")
-    public static TrajectoryAccelerationConstraint getAccelerationConstraint(double maxAccel) {
-        return new ProfileAccelerationConstraint(maxAccel);
+    public static void saveCurrentPose(Pose2d pose) {
+        currentPose = pose;
     }
 }
