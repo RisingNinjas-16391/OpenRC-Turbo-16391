@@ -40,9 +40,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
         drivetrain.setPoseEstimate(pose);
     }
 
-    public void finishTrajectory() {
-        drivetrain;
-    }
     @Override
     public void periodic() {
         telemetry.addLine("Drive Encoder ticks")

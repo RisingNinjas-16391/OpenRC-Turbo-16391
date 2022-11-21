@@ -7,6 +7,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 public class CommandTeleOP extends CommandOpMode {
     @Override
     public void initialize() {
-        RobotContainer robot = new RobotContainer(hardwareMap);
+        RobotContainer robot = new RobotContainer(hardwareMap, false, 0);
     }
 }

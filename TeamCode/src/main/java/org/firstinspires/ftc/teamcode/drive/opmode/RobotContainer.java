@@ -3,15 +3,18 @@ package org.firstinspires.ftc.teamcode.drive.opmode;
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gamepad1;
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gamepad2;
 
+import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.teamcode.drive.commands.AutoCommand1;
 import org.firstinspires.ftc.teamcode.drive.commands.DrivetrainCommand;
 import org.firstinspires.ftc.teamcode.drive.commands.IntakeCommand;
 import org.firstinspires.ftc.teamcode.drive.commands.TurretCommand;
+import org.firstinspires.ftc.teamcode.drive.subsystems.AprilTagSubsystem;
 import org.firstinspires.ftc.teamcode.drive.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DrivetrainSubsystem;
 import org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftSubsystem;
@@ -22,6 +25,7 @@ public class RobotContainer {
     private final LiftSubsystem lift;
     private final IntakeSubsystem intake;
     private final TurretSubsystem turret;
+    private final AprilTagSubsystem aprilTagDetector;
 
     private final GamepadEx driverController;
     private final GamepadEx operatorController;
@@ -35,11 +39,12 @@ public class RobotContainer {
     private final GamepadButton turretToggle;
 
 
-    public RobotContainer(HardwareMap hwMap) {
+    public RobotContainer(HardwareMap hwMap, boolean auto, int autoNum) {
         drivetrain = new DrivetrainSubsystem(hwMap);
         lift = new LiftSubsystem(hwMap);
         intake = new IntakeSubsystem(hwMap);
         turret = new TurretSubsystem(hwMap);
+        aprilTagDetector = new AprilTagSubsystem(hwMap);
 
         driverController = new GamepadEx(gamepad1);
         operatorController = new GamepadEx(gamepad2);
@@ -52,9 +57,13 @@ public class RobotContainer {
         dropCone = new GamepadButton(operatorController, GamepadKeys.Button.RIGHT_BUMPER);
         turretToggle = new GamepadButton(operatorController, GamepadKeys.Button.LEFT_BUMPER);
 
-        setDefaultCommands();
-        configureButtonBindings();
-        setAutoCommands();
+        if (auto) {
+            setAutoCommands(autoNum);
+        } else {
+            setDefaultCommands();
+            configureButtonBindings();
+        }
+
     }
 
     private void configureButtonBindings() {
@@ -77,7 +86,13 @@ public class RobotContainer {
         intake.setDefaultCommand(new InstantCommand(intake::feed));
     }
 
-    public void setAutoCommands() {
+    public void setAutoCommands(int chooser) {
+        Command Auto1 = new AutoCommand1(drivetrain, lift, intake, aprilTagDetector);
+        switch (chooser) {
+            case 0:
+                Auto1.schedule();
+                break;
+        }
 
     }
 }

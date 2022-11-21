@@ -56,7 +56,8 @@ public class AutoCommand1 extends SequentialCommandGroup {
                 new LiftCommand(lift, () -> 0).withTimeout(1000),
                 new LiftCommand(lift, () -> 1).withTimeout(1000)
         );
-        final TrajectorySequence parkTrajectory;
+        TrajectorySequence parkTrajectory = drivetrain.trajectorySequenceBuilder(drivetrain.getPoseEstimate())
+                .build();
         switch (aprilTagDetector.getParkLocation()) {
             case 0:
 
@@ -71,6 +72,7 @@ public class AutoCommand1 extends SequentialCommandGroup {
                 break;
 
         }
+        TrajectorySequence finalParkTrajectory = parkTrajectory;
         addCommands(
                 new ParallelCommandGroup(
                         new InstantCommand(() -> drivetrain.setPoseEstimate(new Pose2d(-35, -60, Math.toRadians(90)))),
@@ -82,8 +84,7 @@ public class AutoCommand1 extends SequentialCommandGroup {
                 stackToHigh,
                 highToStack,
                 stackToHigh,
-                highToStack,
-                new InstantCommand(() -> drivetrain.runTrajectory(parkTrajectory))
+                new InstantCommand(() -> drivetrain.runTrajectory(finalParkTrajectory))
         );
     }
 }
