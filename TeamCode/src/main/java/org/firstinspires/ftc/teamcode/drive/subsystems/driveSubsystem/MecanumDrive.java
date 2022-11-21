@@ -41,6 +41,8 @@ import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigu
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequenceBuilder;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequenceRunner;
+import org.firstinspires.ftc.teamcode.util.AxisDirection;
+import org.firstinspires.ftc.teamcode.util.BNO055IMUUtil;
 import org.firstinspires.ftc.teamcode.util.LynxModuleUtil;
 import org.jetbrains.annotations.Contract;
 
@@ -61,16 +63,13 @@ public class MecanumDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive
     public static double VX_WEIGHT = 1;
     public static double VY_WEIGHT = 1;
     public static double OMEGA_WEIGHT = 1;
+    private static Pose2d currentPose = new Pose2d();
     private final TrajectorySequenceRunner trajectorySequenceRunner;
     private final TrajectoryFollower follower;
-
     private final DcMotorEx leftFront, leftRear, rightRear, rightFront;
     private final List<DcMotorEx> motors;
-
     private final BNO055IMU imu;
     private final VoltageSensor batteryVoltageSensor;
-
-    private static Pose2d currentPose = new Pose2d();
 
     public MecanumDrive(@NonNull HardwareMap hardwareMap) {
         super(kV, kA, kStatic, TRACK_WIDTH, TRACK_WIDTH, LATERAL_MULTIPLIER);
@@ -91,7 +90,7 @@ public class MecanumDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive
         parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS;
         imu.initialize(parameters);
 
-        // BNO055IMUUtil.remapZAxis(imu, AxisDirection.NEG_Y);
+        BNO055IMUUtil.remapZAxis(imu, AxisDirection.NEG_X);
 
         leftFront = hardwareMap.get(DcMotorEx.class, "left front");
         leftRear = hardwareMap.get(DcMotorEx.class, "left rear");
@@ -137,6 +136,10 @@ public class MecanumDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive
     @Contract("_ -> new")
     public static TrajectoryAccelerationConstraint getAccelerationConstraint(double maxAccel) {
         return new ProfileAccelerationConstraint(maxAccel);
+    }
+
+    public static void saveCurrentPose(Pose2d pose) {
+        currentPose = pose;
     }
 
     public TrajectoryBuilder trajectoryBuilder(@NonNull Pose2d startPose) {
@@ -291,14 +294,10 @@ public class MecanumDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive
 
     @Override
     public Double getExternalHeadingVelocity() {
-        return (double) -imu.getAngularVelocity().xRotationRate;
+        return (double) -imu.getAngularVelocity().zRotationRate;
     }
 
     public void saveCurrentPose() {
         currentPose = getPoseEstimate();
-    }
-
-    public static void saveCurrentPose(Pose2d pose) {
-        currentPose = pose;
     }
 }

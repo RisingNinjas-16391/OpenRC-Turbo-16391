@@ -68,6 +68,7 @@ public class LiftSubsystem extends SubsystemBase {
         offset = lift.getCurrentPosition();
 
         heightIndex = 0;
+        setHeight(0);
     }
 
     private static double encoderTicksToInches(int ticks) {
@@ -84,18 +85,18 @@ public class LiftSubsystem extends SubsystemBase {
         double currentHeight = getCurrentHeight();
 
 
-//        if (isBusy()) {
-//            // following a profile
-//            double time = clock.seconds() - profileStartTime;
-//            MotionState state = profile.get(time);
-//            controller.setTargetPosition(state.getX());
-//            power = controller.update(currentHeight, state.getV()) + feedforward.calculate(state.getV(), state.getA());
-//        } else {
-//            // just hold the position
-//            controller.setTargetPosition(desiredHeight);
-//            power = controller.update(currentHeight);
-//        }
-//        lift.setPower(power);
+        if (isBusy()) {
+            // following a profile
+            double time = clock.seconds() - profileStartTime;
+            MotionState state = profile.get(time);
+            controller.setTargetPosition(state.getX());
+            power = controller.update(currentHeight, state.getV()) + feedforward.calculate(state.getV(), state.getA());
+        } else {
+            // just hold the position
+            controller.setTargetPosition(desiredHeight);
+            power = controller.update(currentHeight);
+        }
+        lift.setPower(power);
 
         telemetry.addLine("Linear Slide ticks")
                 .addData("slide", lift.getCurrentPosition());

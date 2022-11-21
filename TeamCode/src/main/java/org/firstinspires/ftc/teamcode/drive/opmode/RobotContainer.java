@@ -1,12 +1,8 @@
 package org.firstinspires.ftc.teamcode.drive.opmode;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gamepad1;
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gamepad2;
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
 
 import com.arcrobotics.ftclib.command.Command;
-import com.arcrobotics.ftclib.command.CommandScheduler;
-import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
@@ -54,21 +50,15 @@ public class RobotContainer {
         aprilTagDetector = new AprilTagSubsystem(hwMap, telemetry);
 
         driverController = new GamepadEx(gamepad1);
-
         operatorController = new GamepadEx(gamepad2);
 
         up = new GamepadButton(driverController, GamepadKeys.Button.DPAD_UP);
-
         down = new GamepadButton(driverController, GamepadKeys.Button.DPAD_DOWN);
-
         slowMode = new GamepadButton(driverController, GamepadKeys.Button.RIGHT_BUMPER);
-
         turboMode = new GamepadButton(driverController, GamepadKeys.Button.LEFT_BUMPER);
-
         lockRotation = new GamepadButton(driverController, GamepadKeys.Button.RIGHT_STICK_BUTTON);
 
         dropCone = new GamepadButton(operatorController, GamepadKeys.Button.RIGHT_BUMPER);
-
         turretToggle = new GamepadButton(operatorController, GamepadKeys.Button.LEFT_BUMPER);
 
         setDefaultCommands();
@@ -86,24 +76,17 @@ public class RobotContainer {
         turret = new TurretSubsystem(hwMap, telemetry);
         aprilTagDetector = new AprilTagSubsystem(hwMap, telemetry);
 
-        driverController = new GamepadEx(gamepad1);
+        driverController = null;
+        operatorController = null;
 
-        operatorController = new GamepadEx(gamepad2);
+        up = null;
+        down = null;
+        slowMode = null;
+        turboMode = null;
+        lockRotation = null;
 
-        up = new GamepadButton(driverController, GamepadKeys.Button.DPAD_UP);
-
-        down = new GamepadButton(driverController, GamepadKeys.Button.DPAD_DOWN);
-
-        slowMode = new GamepadButton(driverController, GamepadKeys.Button.RIGHT_BUMPER);
-
-        turboMode = new GamepadButton(driverController, GamepadKeys.Button.LEFT_BUMPER);
-
-        lockRotation = new GamepadButton(driverController, GamepadKeys.Button.RIGHT_STICK_BUTTON);
-
-        dropCone = new GamepadButton(operatorController, GamepadKeys.Button.RIGHT_BUMPER);
-
-        turretToggle = new GamepadButton(operatorController, GamepadKeys.Button.LEFT_BUMPER);
-
+        dropCone = null;
+        turretToggle = null;
 
         setAutoCommands(autoNum);
     }
@@ -117,7 +100,6 @@ public class RobotContainer {
 
         // Operator bindings
         dropCone.whileActiveOnce(new IntakeCommand(intake, false));
-        //dropCone.whenPressed(new InstantCommand(intake::unfeed, intake));
         turretToggle.whenPressed(new TurretCommand(turret, lift::getCurrentHeight));
         up.whenPressed(lift::incrementHeight);
         down.whenPressed(lift::decrementHeight);

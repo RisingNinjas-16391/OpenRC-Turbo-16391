@@ -7,6 +7,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 public class CommandAuto extends CommandOpMode {
     @Override
     public void initialize() {
-        RobotContainer robot = new RobotContainer(hardwareMap, 0);
+        new RobotContainer(hardwareMap, 0);
     }
 }

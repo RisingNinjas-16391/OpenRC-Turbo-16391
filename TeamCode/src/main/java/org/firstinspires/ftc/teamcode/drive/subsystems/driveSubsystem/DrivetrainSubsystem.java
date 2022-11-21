@@ -10,8 +10,8 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequenceBuild
 
 public class DrivetrainSubsystem extends SubsystemBase {
 
-    private MecanumDrive drivetrain;
-    private Telemetry telemetry;
+    private final MecanumDrive drivetrain;
+    private final Telemetry telemetry;
 
     private double speedMultiplier = 1;
 
@@ -24,6 +24,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
         return drivetrain.getPoseEstimate();
     }
 
+    public void setPoseEstimate(Pose2d pose) {
+        drivetrain.setPoseEstimate(pose);
+    }
+
     public void drive(double forward, double strafe, double turn) {
         drivetrain.setWeightedDrivePower(new Pose2d(forward * speedMultiplier, strafe * speedMultiplier, turn * speedMultiplier));
     }
@@ -34,10 +38,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     public TrajectorySequenceBuilder trajectorySequenceBuilder(Pose2d startPose) {
         return drivetrain.trajectorySequenceBuilder(startPose);
-    }
-
-    public void setPoseEstimate(Pose2d pose) {
-        drivetrain.setPoseEstimate(pose);
     }
 
     @Override
