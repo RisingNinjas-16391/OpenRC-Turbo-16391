@@ -1,23 +1,23 @@
 package org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
-
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequenceBuilder;
 
 public class DrivetrainSubsystem extends SubsystemBase {
 
     private MecanumDrive drivetrain;
+    private Telemetry telemetry;
 
     private double speedMultiplier = 1;
 
-    public DrivetrainSubsystem(HardwareMap hwMap) {
-        drivetrain = new MecanumDrive(hwMap);
+    public DrivetrainSubsystem(HardwareMap hwMap, Telemetry telemetry) {
+        this.drivetrain = new MecanumDrive(hwMap);
+        this.telemetry = telemetry;
     }
 
     public Pose2d getPoseEstimate() {

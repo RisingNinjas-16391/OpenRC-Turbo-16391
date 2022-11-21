@@ -8,20 +8,26 @@ import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 public class IntakeSubsystem extends SubsystemBase {
 
     private final CRServo intake;
+    private final Telemetry telemetry;
 
-    public IntakeSubsystem(@NonNull HardwareMap hwMap) {
+    public IntakeSubsystem(@NonNull HardwareMap hwMap, Telemetry telemetry) {
         intake = hwMap.get(CRServo.class, "intake");
         intake.setDirection(CRServo.Direction.FORWARD);
         intake.setPower(0);
+
+        this.telemetry = telemetry;
     }
 
     @Override
     public void periodic() {
         telemetry.addLine("Intake Power")
                 .addData("intake", intake.getPower());
+        telemetry.update();
     }
 
     public void feed() {

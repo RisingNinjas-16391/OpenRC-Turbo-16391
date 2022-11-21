@@ -12,12 +12,15 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 public class TurretSubsystem extends SubsystemBase {
 
     public DcMotorEx turret;
+    private Telemetry telemetry;
     private boolean toggle;
 
-    public TurretSubsystem(HardwareMap hwMap) {
+    public TurretSubsystem(HardwareMap hwMap, Telemetry telemetry) {
         turret = hwMap.get(DcMotorEx.class, name);
         // TODO: Turn back to brake mode
         turret.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
@@ -27,6 +30,8 @@ public class TurretSubsystem extends SubsystemBase {
         turret.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         turret.setPower(0);
         turret.setPIDFCoefficients(DcMotor.RunMode.RUN_TO_POSITION, kPosPID);
+
+        this.telemetry = telemetry;
     }
 
     @Override

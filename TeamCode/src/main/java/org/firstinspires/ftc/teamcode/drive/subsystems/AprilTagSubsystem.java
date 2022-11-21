@@ -12,7 +12,7 @@ import android.util.Log;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.checkerframework.checker.units.qual.A;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.drive.opmode.aprilTagDetector.AprilTagDetector;
 import org.openftc.apriltag.AprilTagDetection;
 
@@ -20,9 +20,11 @@ import java.util.ArrayList;
 
 public class AprilTagSubsystem extends SubsystemBase {
     private AprilTagDetector aprilTagDetector;
+    private Telemetry telemetry;
 
-    public AprilTagSubsystem(HardwareMap hwMap) {
+    public AprilTagSubsystem(HardwareMap hwMap, Telemetry telemetry) {
         aprilTagDetector = new AprilTagDetector(hwMap);
+        this.telemetry = telemetry;
 
     }
 

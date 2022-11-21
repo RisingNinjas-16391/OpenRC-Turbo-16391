@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
 import static org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DriveConstants.GEAR_RATIO;
 import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.BOTTOM_POS;
 import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.DIRECTION;
@@ -24,6 +23,7 @@ import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.Lift
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.control.PIDFController;
 import com.acmerobotics.roadrunner.profile.MotionProfile;
+import com.acmerobotics.roadrunner.profile.MotionProfileBuilder;
 import com.acmerobotics.roadrunner.profile.MotionProfileGenerator;
 import com.acmerobotics.roadrunner.profile.MotionState;
 import com.acmerobotics.roadrunner.util.NanoClock;
@@ -32,6 +32,8 @@ import com.arcrobotics.ftclib.controller.wpilibcontroller.ElevatorFeedforward;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 /*
  * Hardware class for an elevator or linear lift driven by a pulley system.
@@ -44,13 +46,16 @@ public class LiftSubsystem extends SubsystemBase {
     );
     private final DcMotorEx lift;
     private final PIDFController controller;
+    private final Telemetry telemetry;
     private MotionProfile profile;
     private final NanoClock clock = NanoClock.system();
     private double profileStartTime, desiredHeight = 0;
     private final int offset;
     private int heightIndex;
 
-    public LiftSubsystem(HardwareMap hardwareMap) {
+    public LiftSubsystem(HardwareMap hardwareMap, Telemetry telemetry) {
+        this.telemetry = telemetry;
+
         lift = hardwareMap.get(DcMotorEx.class, name);
         lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
@@ -77,18 +82,20 @@ public class LiftSubsystem extends SubsystemBase {
     public void periodic() {
         double power;
         double currentHeight = getCurrentHeight();
-        if (isBusy()) {
-            // following a profile
-            double time = clock.seconds() - profileStartTime;
-            MotionState state = profile.get(time);
-            controller.setTargetPosition(state.getX());
-            power = controller.update(currentHeight, state.getV()) + feedforward.calculate(state.getV(), state.getA());
-        } else {
-            // just hold the position
-            controller.setTargetPosition(desiredHeight);
-            power = controller.update(currentHeight);
-        }
-        lift.setPower(power);
+
+
+//        if (isBusy()) {
+//            // following a profile
+//            double time = clock.seconds() - profileStartTime;
+//            MotionState state = profile.get(time);
+//            controller.setTargetPosition(state.getX());
+//            power = controller.update(currentHeight, state.getV()) + feedforward.calculate(state.getV(), state.getA());
+//        } else {
+//            // just hold the position
+//            controller.setTargetPosition(desiredHeight);
+//            power = controller.update(currentHeight);
+//        }
+//        lift.setPower(power);
 
         telemetry.addLine("Linear Slide ticks")
                 .addData("slide", lift.getCurrentPosition());
@@ -99,7 +106,7 @@ public class LiftSubsystem extends SubsystemBase {
         telemetry.addLine("Turret Encoder Position")
                 .addData("Ticks: ", lift.getCurrentPosition());
 
-        indexToHeight();
+        //indexToHeight();
     }
 
     public boolean isBusy() {
@@ -126,10 +133,12 @@ public class LiftSubsystem extends SubsystemBase {
 
     public void incrementHeight() {
         heightIndex++;
+        periodic();
     }
 
     public void decrementHeight() {
         heightIndex--;
+        periodic();
     }
 
     private void indexToHeight() {
