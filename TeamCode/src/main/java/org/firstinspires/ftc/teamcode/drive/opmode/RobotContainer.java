@@ -67,21 +67,23 @@ public class RobotContainer {
     }
 
     private void configureButtonBindings() {
-        up.whenPressed(lift::incrementHeight);
-        down.whenPressed(lift::decrementHeight);
-
+        // Driver bindings
+        // Speed mode button binding
         slowMode.whenPressed(() -> drivetrain.setSpeedMultiplier(0.6));
         turboMode.whenActive(() -> drivetrain.setSpeedMultiplier(1));
         slowMode.negate().and(turboMode.negate()).whenActive(() -> drivetrain.setSpeedMultiplier(0.7));
 
+        // Operator bindings
         dropCone.whenPressed(new InstantCommand(intake::unfeed, intake));
         turretToggle.whenPressed(new TurretCommand(turret, lift::getCurrentHeight));
+        up.whenPressed(lift::incrementHeight);
+        down.whenPressed(lift::decrementHeight);
     }
 
     public void setDefaultCommands() {
         drivetrain.setDefaultCommand(new DrivetrainCommand(drivetrain, lift::getCurrentHeight,
-                () -> gamepad1.left_stick_y, () -> gamepad1.left_stick_x,
-                () -> gamepad1.right_stick_x));
+                driverController::getLeftY, driverController::getLeftX,
+                driverController::getRightX));
         intake.setDefaultCommand(new InstantCommand(intake::feed));
     }
 
