@@ -132,7 +132,7 @@ public class LiftSubsystem extends SubsystemBase {
         heightIndex--;
     }
 
-    public void indexToHeight() {
+    private void indexToHeight() {
         switch (heightIndex) {
             case 0:
                 this.setHeight(BOTTOM_POS);
@@ -149,5 +149,8 @@ public class LiftSubsystem extends SubsystemBase {
             case 4:
                 this.setHeight(HIGH_POS);
         }
+    }
+    public void indexToHeight(int index) {
+        indexToHeight();
     }
 }
