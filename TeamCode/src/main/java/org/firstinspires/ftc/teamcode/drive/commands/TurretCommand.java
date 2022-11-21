@@ -13,19 +13,22 @@ public class TurretCommand extends CommandBase {
     @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
     private final TurretSubsystem turret;
     private final LiftSubsystem lift;
-    private BooleanSupplier toggle;
+    private boolean toggle;
 
-    public TurretCommand(TurretSubsystem turret, LiftSubsystem lift, BooleanSupplier toggle) {
+    public TurretCommand(TurretSubsystem turret, LiftSubsystem lift) {
         this.turret = turret;
         this.lift = lift;
-        this.toggle = toggle;
+        toggle = true;
+
+        addRequirements(turret);
     }
 
     @Override
     public void execute() {
         if (lift.getCurrentHeight() > minHeightTurret) {
-            turret.togglePosition(toggle.getAsBoolean());
+            turret.togglePosition(toggle);
         }
 
+        toggle = !toggle;
     }
 }

@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
-/** Class containing constants used for {@link RoadrunnerMecanumDrive}*/
+/** Class containing constants used for {@link MecanumDrive}*/
 @Config
 public final class DriveConstants {
 

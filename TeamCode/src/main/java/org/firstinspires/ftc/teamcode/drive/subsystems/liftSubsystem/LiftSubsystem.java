@@ -2,11 +2,16 @@ package org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem;
 
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
 import static org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DriveConstants.GEAR_RATIO;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.BOTTOM_POS;
 import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.DIRECTION;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.FEED_POS;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.HIGH_POS;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.LOW_POS;
 import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.MAX_ACCEL;
 import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.MAX_HEIGHT;
 import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.MAX_JERK;
 import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.MAX_VEL;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.MID_POS;
 import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.MOTOR_CONFIG;
 import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.SPOOL_RADIUS;
 import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.kA;
@@ -43,6 +48,7 @@ public class LiftSubsystem extends SubsystemBase {
     private NanoClock clock = NanoClock.system();
     private double profileStartTime, desiredHeight = 0;
     private int offset;
+    private int heightIndex;
 
     public LiftSubsystem(HardwareMap hardwareMap) {
         lift = hardwareMap.get(DcMotorEx.class, name);
@@ -55,6 +61,8 @@ public class LiftSubsystem extends SubsystemBase {
         // Create a new ElevatorFeedforward with gains kS, kG, kV, and kA
 
         offset = lift.getCurrentPosition();
+
+        heightIndex = 0;
     }
 
     @Override
@@ -82,7 +90,9 @@ public class LiftSubsystem extends SubsystemBase {
 
         telemetry.addLine("Turret Encoder Position")
                 .addData("Ticks: ", lift.getCurrentPosition());
-    }
+
+        indexToHeight();
+        }
 
     public boolean isBusy() {
         return profile != null && (clock.seconds() - profileStartTime) <= profile.duration();
@@ -112,5 +122,32 @@ public class LiftSubsystem extends SubsystemBase {
 
     public static double rpmToVelocity(double rpm) {
         return rpm * GEAR_RATIO * 2 * Math.PI * SPOOL_RADIUS / 60.0;
+    }
+
+    public void incrementHeight() {
+        heightIndex++;
+    }
+
+    public void decrementHeight() {
+        heightIndex--;
+    }
+
+    public void indexToHeight() {
+        switch (heightIndex) {
+            case 0:
+                this.setHeight(BOTTOM_POS);
+                break;
+            case 1:
+                this.setHeight(FEED_POS);
+                break;
+            case 2:
+                this.setHeight(LOW_POS);
+                break;
+            case 3:
+                this.setHeight(MID_POS);
+                break;
+            case 4:
+                this.setHeight(HIGH_POS);
+        }
     }
 }

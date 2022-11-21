@@ -10,10 +10,10 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 public class DrivetrainSubsystem extends SubsystemBase {
 
-    private RoadrunnerMecanumDrive drivetrain;
+    private MecanumDrive drivetrain;
 
     public DrivetrainSubsystem(HardwareMap hwMap) {
-        RoadrunnerMecanumDrive drivetrain = new RoadrunnerMecanumDrive(hwMap);
+        MecanumDrive drivetrain = new MecanumDrive(hwMap);
     }
 
     public Pose2d getPose() {

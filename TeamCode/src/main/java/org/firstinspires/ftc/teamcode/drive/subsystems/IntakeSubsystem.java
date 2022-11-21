@@ -1,14 +1,17 @@
 package org.firstinspires.ftc.teamcode.drive.subsystems;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
+
 import androidx.annotation.NonNull;
 
+import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.HardwareDevice;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-public class IntakeSubsystem {
+public class IntakeSubsystem extends SubsystemBase {
 
-    public CRServo intake;
+    private CRServo intake;
 
     public IntakeSubsystem(@NonNull HardwareMap hwMap) {
         intake = hwMap.get(CRServo.class, "intake");
@@ -16,13 +19,18 @@ public class IntakeSubsystem {
         intake.setPower(0);
     }
 
-    public void setPower(double power) {
-        intake.setPower(power);
+    @Override
+    public void periodic() {
+        telemetry.addLine("Intake Power")
+                .addData("intake", intake.getPower());
     }
 
-    public double getPower() {
-        return intake.getPower();
+    public void feed() {
+        intake.setPower(-1);
     }
 
+    public void unfeed() {
+        intake.setPower(1);
+    }
 }
 

@@ -8,8 +8,6 @@ import androidx.annotation.RequiresApi;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.firstinspires.ftc.teamcode.drive.subsystems.Hardware;
-
 @RequiresApi(api = Build.VERSION_CODES.N)
 @Autonomous(name="Also Preload", group="Autonomous")
 //@Disabled

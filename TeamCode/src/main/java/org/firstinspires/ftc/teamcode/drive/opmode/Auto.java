@@ -8,7 +8,6 @@ import androidx.annotation.RequiresApi;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.firstinspires.ftc.teamcode.drive.subsystems.Hardware;
 import org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
