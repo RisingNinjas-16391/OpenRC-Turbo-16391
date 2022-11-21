@@ -42,7 +42,7 @@ public class FieldCentricDrivetrainCommand extends CommandBase {
         }
 
         // Read pose
-        Pose2d poseEstimate = drivetrain.getPose();
+        Pose2d poseEstimate = drivetrain.getPoseEstimate();
 
         // Create a vector from the gamepad x/y inputs
         // Then, rotate that vector by the inverse of that heading

@@ -60,7 +60,7 @@ public class AutoCommand1 extends SequentialCommandGroup {
                 .build();
         switch (aprilTagDetector.getParkLocation()) {
             case 0:
-
+                break;
             case 1:
                 parkTrajectory = parkLeft;
                 break;
