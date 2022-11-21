@@ -39,7 +39,7 @@ public class RobotContainer {
     private final GamepadButton turretToggle;
 
 
-    public RobotContainer(HardwareMap hwMap, boolean auto, int autoNum) {
+    public RobotContainer(HardwareMap hwMap) {
         drivetrain = new DrivetrainSubsystem(hwMap);
         lift = new LiftSubsystem(hwMap);
         intake = new IntakeSubsystem(hwMap);
@@ -57,13 +57,30 @@ public class RobotContainer {
         dropCone = new GamepadButton(operatorController, GamepadKeys.Button.RIGHT_BUMPER);
         turretToggle = new GamepadButton(operatorController, GamepadKeys.Button.LEFT_BUMPER);
 
-        if (auto) {
-            setAutoCommands(autoNum);
-        } else {
-            setDefaultCommands();
-            configureButtonBindings();
-        }
+        setDefaultCommands();
+        configureButtonBindings();
 
+    }
+
+    public RobotContainer(HardwareMap hwMap, int autoNum) {
+        drivetrain = new DrivetrainSubsystem(hwMap);
+        lift = new LiftSubsystem(hwMap);
+        intake = new IntakeSubsystem(hwMap);
+        turret = new TurretSubsystem(hwMap);
+        aprilTagDetector = new AprilTagSubsystem(hwMap);
+
+        driverController = new GamepadEx(gamepad1);
+        operatorController = new GamepadEx(gamepad2);
+
+        up = new GamepadButton(driverController, GamepadKeys.Button.DPAD_UP);
+        down = new GamepadButton(driverController, GamepadKeys.Button.DPAD_DOWN);
+        slowMode = new GamepadButton(driverController, GamepadKeys.Button.RIGHT_BUMPER);
+        turboMode = new GamepadButton(driverController, GamepadKeys.Button.LEFT_BUMPER);
+
+        dropCone = new GamepadButton(operatorController, GamepadKeys.Button.RIGHT_BUMPER);
+        turretToggle = new GamepadButton(operatorController, GamepadKeys.Button.LEFT_BUMPER);
+
+        setAutoCommands(autoNum);
     }
 
     private void configureButtonBindings() {
@@ -91,6 +108,8 @@ public class RobotContainer {
         switch (chooser) {
             case 0:
                 Auto1.schedule();
+                break;
+            case 1:
                 break;
         }
 
