@@ -39,15 +39,15 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 @Config
 public class LiftSubsystem extends SubsystemBase {
 
-    private DcMotorEx lift;
-    private PIDFController controller;
     ElevatorFeedforward feedforward = new ElevatorFeedforward(
             kStatic, kG, kV, kA
     );
+    private final DcMotorEx lift;
+    private final PIDFController controller;
     private MotionProfile profile;
-    private NanoClock clock = NanoClock.system();
+    private final NanoClock clock = NanoClock.system();
     private double profileStartTime, desiredHeight = 0;
-    private int offset;
+    private final int offset;
     private int heightIndex;
 
     public LiftSubsystem(HardwareMap hardwareMap) {
@@ -63,6 +63,14 @@ public class LiftSubsystem extends SubsystemBase {
         offset = lift.getCurrentPosition();
 
         heightIndex = 0;
+    }
+
+    private static double encoderTicksToInches(int ticks) {
+        return SPOOL_RADIUS * 2 * Math.PI * GEAR_RATIO * ticks / MOTOR_CONFIG.getTicksPerRev();
+    }
+
+    public static double rpmToVelocity(double rpm) {
+        return rpm * GEAR_RATIO * 2 * Math.PI * SPOOL_RADIUS / 60.0;
     }
 
     @Override
@@ -92,7 +100,7 @@ public class LiftSubsystem extends SubsystemBase {
                 .addData("Ticks: ", lift.getCurrentPosition());
 
         indexToHeight();
-        }
+    }
 
     public boolean isBusy() {
         return profile != null && (clock.seconds() - profileStartTime) <= profile.duration();
@@ -114,14 +122,6 @@ public class LiftSubsystem extends SubsystemBase {
 
     public double getCurrentHeight() {
         return encoderTicksToInches(lift.getCurrentPosition() - offset);
-    }
-
-    private static double encoderTicksToInches(int ticks) {
-        return SPOOL_RADIUS * 2 * Math.PI * GEAR_RATIO * ticks / MOTOR_CONFIG.getTicksPerRev();
-    }
-
-    public static double rpmToVelocity(double rpm) {
-        return rpm * GEAR_RATIO * 2 * Math.PI * SPOOL_RADIUS / 60.0;
     }
 
     public void incrementHeight() {
@@ -150,6 +150,7 @@ public class LiftSubsystem extends SubsystemBase {
                 this.setHeight(HIGH_POS);
         }
     }
+
     public void indexToHeight(int index) {
         indexToHeight();
     }

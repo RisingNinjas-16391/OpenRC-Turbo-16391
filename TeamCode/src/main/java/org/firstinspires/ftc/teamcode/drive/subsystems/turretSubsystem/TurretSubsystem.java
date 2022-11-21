@@ -16,7 +16,7 @@ public class TurretSubsystem extends SubsystemBase {
 
     public DcMotorEx turret;
 
-    public TurretSubsystem(HardwareMap hwMap){
+    public TurretSubsystem(HardwareMap hwMap) {
         turret = hwMap.get(DcMotorEx.class, name);
         // TODO: Turn back to brake mode
         turret.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
@@ -35,7 +35,7 @@ public class TurretSubsystem extends SubsystemBase {
     }
 
     public void togglePosition(boolean toggle) {
-        if (toggle){
+        if (toggle) {
             turret.setTargetPosition(homePos);
         } else {
             turret.setTargetPosition(otherSidePos);

@@ -6,12 +6,11 @@ import androidx.annotation.NonNull;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.HardwareDevice;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class IntakeSubsystem extends SubsystemBase {
 
-    private CRServo intake;
+    private final CRServo intake;
 
     public IntakeSubsystem(@NonNull HardwareMap hwMap) {
         intake = hwMap.get(CRServo.class, "intake");
