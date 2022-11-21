@@ -17,39 +17,28 @@ public class FieldCentricDrivetrainCommand extends CommandBase {
     private DoubleSupplier forward;
     private DoubleSupplier strafe;
     private DoubleSupplier turn;
-    private BooleanSupplier slowMode;
-    private BooleanSupplier turbo;
 
     public FieldCentricDrivetrainCommand(DrivetrainSubsystem drivetrain, DoubleSupplier liftHeight,
-                                         DoubleSupplier forward, DoubleSupplier strafe, DoubleSupplier turn,
-                                         BooleanSupplier slowMode, BooleanSupplier turbo) {
+                                         DoubleSupplier forward, DoubleSupplier strafe, DoubleSupplier turn) {
         this.drivetrain = drivetrain;
         this.liftHeight = liftHeight;
         this.forward = forward;
         this.strafe = strafe;
         this.turn = turn;
-        this.slowMode = slowMode;
-        this.turbo = turbo;
 
         addRequirements(drivetrain);
     }
 
     @Override
     public void execute() {
-        double driveMultiplier;
-        if (slowMode.getAsBoolean()) {
-            driveMultiplier = 0.4;
-        } else if (turbo.getAsBoolean()) {
-            driveMultiplier = 1;
-        } else {
-            driveMultiplier = 0.7;
-        }
+        double correction;
 
         if (liftHeight.getAsDouble() > 0) {
-            double correction = 1 - (liftHeight.getAsDouble() / 10);
+            correction = 1 - (liftHeight.getAsDouble() / 10);
             correction /= 2;
-            correction += 0.5;
-            driveMultiplier *= correction;
+            correction += 0.5;;
+        } else {
+            correction = 1;
         }
 
         // Read pose
@@ -58,8 +47,8 @@ public class FieldCentricDrivetrainCommand extends CommandBase {
         // Create a vector from the gamepad x/y inputs
         // Then, rotate that vector by the inverse of that heading
         Vector2d input = new Vector2d(
-                -forward.getAsDouble() * driveMultiplier,
-                -strafe.getAsDouble() * driveMultiplier
+                -forward.getAsDouble() * correction,
+                -strafe.getAsDouble() * correction
         ).rotated(-poseEstimate.getHeading());
 
         // Pass in the rotated input + right stick value for rotation

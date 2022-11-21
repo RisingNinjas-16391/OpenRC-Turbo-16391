@@ -4,31 +4,26 @@ import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.Lift
 
 import com.arcrobotics.ftclib.command.CommandBase;
 
-import org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftSubsystem;
 import org.firstinspires.ftc.teamcode.drive.subsystems.turretSubsystem.TurretSubsystem;
 
-import java.util.function.BooleanSupplier;
+import java.util.function.DoubleSupplier;
 
 public class TurretCommand extends CommandBase {
     @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
     private final TurretSubsystem turret;
-    private final LiftSubsystem lift;
-    private boolean toggle;
+    private final DoubleSupplier liftHeight;
 
-    public TurretCommand(TurretSubsystem turret, LiftSubsystem lift) {
+    public TurretCommand(TurretSubsystem turret, DoubleSupplier liftHeight) {
         this.turret = turret;
-        this.lift = lift;
-        toggle = true;
+        this.liftHeight = liftHeight;
 
         addRequirements(turret);
     }
 
     @Override
     public void execute() {
-        if (lift.getCurrentHeight() > minHeightTurret) {
-            turret.togglePosition(toggle);
+        if (liftHeight.getAsDouble() > minHeightTurret) {
+            turret.togglePosition();
         }
-
-        toggle = !toggle;
     }
 }

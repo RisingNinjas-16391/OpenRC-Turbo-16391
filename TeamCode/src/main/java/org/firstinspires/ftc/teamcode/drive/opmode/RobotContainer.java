@@ -66,7 +66,7 @@ public class RobotContainer {
         slowMode.negate().and(turboMode.negate()).whenActive(() -> drivetrain.setSpeedMultiplier(0.7));
 
         dropCone.whenPressed(new InstantCommand(intake::unfeed, intake));
-        turretToggle.toggleWhenPressed(new TurretCommand(turret, lift));
+        turretToggle.whenPressed(new TurretCommand(turret, lift::getCurrentHeight));
     }
 
     public void setDefaultCommands() {

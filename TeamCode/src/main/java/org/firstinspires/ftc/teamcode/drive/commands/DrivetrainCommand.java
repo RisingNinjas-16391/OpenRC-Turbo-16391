@@ -35,16 +35,17 @@ public class DrivetrainCommand extends CommandBase {
 
     @Override
     public void execute() {
-
+        double correction;
 
         if (liftHeight.getAsDouble() > 0) {
-            double correction = 1 - (liftHeight.getAsDouble() / 10);
+            correction = 1 - (liftHeight.getAsDouble() / 10);
             correction /= 2;
-            correction += 0.5;
-            driveMultiplier *= correction;
+            correction += 0.5;;
+        } else {
+            correction = 1;
         }
 
-        drivetrain.drive(forward.getAsDouble() * driveMultiplier,
-                strafe.getAsDouble() * driveMultiplier, turn.getAsDouble() * driveMultiplier);
+        drivetrain.drive(forward.getAsDouble() * correction,
+                strafe.getAsDouble() * correction, turn.getAsDouble() * correction);
     }
 }
