@@ -12,7 +12,6 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.drive.commands.AutoCommand1;
 import org.firstinspires.ftc.teamcode.drive.commands.DrivetrainCommand;
-import org.firstinspires.ftc.teamcode.drive.commands.IntakeCommand;
 import org.firstinspires.ftc.teamcode.drive.commands.TurretCommand;
 import org.firstinspires.ftc.teamcode.drive.subsystems.AprilTagSubsystem;
 import org.firstinspires.ftc.teamcode.drive.subsystems.IntakeSubsystem;
@@ -27,18 +26,21 @@ public class RobotContainer {
     private final TurretSubsystem turret;
     private final AprilTagSubsystem aprilTagDetector;
 
-    private final GamepadEx driverController;
-    private final GamepadEx operatorController;
+    private final GamepadEx driverController = new GamepadEx(gamepad1);
+    private final GamepadEx operatorController = new GamepadEx(gamepad2);
 
-    private final GamepadButton up;
-    private final GamepadButton down;
-    private final GamepadButton slowMode;
-    private final GamepadButton turboMode;
+    private final GamepadButton up = new GamepadButton(driverController, GamepadKeys.Button.DPAD_UP);
+    private final GamepadButton down = new GamepadButton(driverController, GamepadKeys.Button.DPAD_DOWN);
+    private final GamepadButton slowMode = new GamepadButton(driverController, GamepadKeys.Button.RIGHT_BUMPER);
+    private final GamepadButton turboMode = new GamepadButton(driverController, GamepadKeys.Button.LEFT_BUMPER);
+    private final GamepadButton lockRotation = new GamepadButton(driverController, GamepadKeys.Button.RIGHT_STICK_BUTTON);
 
-    private final GamepadButton dropCone;
-    private final GamepadButton turretToggle;
+    private final GamepadButton dropCone = new GamepadButton(operatorController, GamepadKeys.Button.RIGHT_BUMPER);
+    private final GamepadButton turretToggle = new GamepadButton(operatorController, GamepadKeys.Button.LEFT_BUMPER);
 
-
+    /**
+     * Teleop Constructor
+     */
     public RobotContainer(HardwareMap hwMap) {
         drivetrain = new DrivetrainSubsystem(hwMap);
         lift = new LiftSubsystem(hwMap);
@@ -46,39 +48,20 @@ public class RobotContainer {
         turret = new TurretSubsystem(hwMap);
         aprilTagDetector = new AprilTagSubsystem(hwMap);
 
-        driverController = new GamepadEx(gamepad1);
-        operatorController = new GamepadEx(gamepad2);
-
-        up = new GamepadButton(driverController, GamepadKeys.Button.DPAD_UP);
-        down = new GamepadButton(driverController, GamepadKeys.Button.DPAD_DOWN);
-        slowMode = new GamepadButton(driverController, GamepadKeys.Button.RIGHT_BUMPER);
-        turboMode = new GamepadButton(driverController, GamepadKeys.Button.LEFT_BUMPER);
-
-        dropCone = new GamepadButton(operatorController, GamepadKeys.Button.RIGHT_BUMPER);
-        turretToggle = new GamepadButton(operatorController, GamepadKeys.Button.LEFT_BUMPER);
-
         setDefaultCommands();
         configureButtonBindings();
 
     }
 
+    /**
+     * Autonomous Constructor
+     */
     public RobotContainer(HardwareMap hwMap, int autoNum) {
         drivetrain = new DrivetrainSubsystem(hwMap);
         lift = new LiftSubsystem(hwMap);
         intake = new IntakeSubsystem(hwMap);
         turret = new TurretSubsystem(hwMap);
         aprilTagDetector = new AprilTagSubsystem(hwMap);
-
-        driverController = new GamepadEx(gamepad1);
-        operatorController = new GamepadEx(gamepad2);
-
-        up = new GamepadButton(driverController, GamepadKeys.Button.DPAD_UP);
-        down = new GamepadButton(driverController, GamepadKeys.Button.DPAD_DOWN);
-        slowMode = new GamepadButton(driverController, GamepadKeys.Button.RIGHT_BUMPER);
-        turboMode = new GamepadButton(driverController, GamepadKeys.Button.LEFT_BUMPER);
-
-        dropCone = new GamepadButton(operatorController, GamepadKeys.Button.RIGHT_BUMPER);
-        turretToggle = new GamepadButton(operatorController, GamepadKeys.Button.LEFT_BUMPER);
 
         setAutoCommands(autoNum);
     }
@@ -98,8 +81,7 @@ public class RobotContainer {
     public void setDefaultCommands() {
         drivetrain.setDefaultCommand(new DrivetrainCommand(drivetrain, lift::getCurrentHeight,
                 () -> gamepad1.left_stick_y, () -> gamepad1.left_stick_x,
-                () -> gamepad1.right_stick_x, () -> gamepad1.right_bumper,
-                () -> gamepad1.left_bumper));
+                () -> gamepad1.right_stick_x));
         intake.setDefaultCommand(new InstantCommand(intake::feed));
     }
 

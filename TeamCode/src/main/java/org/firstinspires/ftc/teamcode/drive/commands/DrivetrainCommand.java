@@ -16,19 +16,14 @@ public class DrivetrainCommand extends CommandBase {
     private final DoubleSupplier forward;
     private final DoubleSupplier strafe;
     private final DoubleSupplier turn;
-    private final BooleanSupplier slowMode;
-    private final BooleanSupplier turbo;
 
     public DrivetrainCommand(DrivetrainSubsystem drivetrain, DoubleSupplier liftHeight,
-                             DoubleSupplier forward, DoubleSupplier strafe, DoubleSupplier turn,
-                             BooleanSupplier slowMode, BooleanSupplier turbo) {
+                             DoubleSupplier forward, DoubleSupplier strafe, DoubleSupplier turn) {
         this.drivetrain = drivetrain;
         this.liftHeight = liftHeight;
         this.forward = forward;
         this.strafe = strafe;
         this.turn = turn;
-        this.slowMode = slowMode;
-        this.turbo = turbo;
 
         addRequirements(drivetrain);
     }
