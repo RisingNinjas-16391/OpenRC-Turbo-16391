@@ -70,6 +70,8 @@ public class MecanumDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive
     private final BNO055IMU imu;
     private final VoltageSensor batteryVoltageSensor;
 
+    private static Pose2d currentPose = new Pose2d();
+
     public MecanumDrive(@NonNull HardwareMap hardwareMap) {
         super(kV, kA, kStatic, TRACK_WIDTH, TRACK_WIDTH, LATERAL_MULTIPLIER);
 
@@ -290,5 +292,13 @@ public class MecanumDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive
     @Override
     public Double getExternalHeadingVelocity() {
         return (double) -imu.getAngularVelocity().xRotationRate;
+    }
+
+    public void saveCurrentPose() {
+        currentPose = getPoseEstimate();
+    }
+
+    public static void saveCurrentPose(Pose2d pose) {
+        currentPose = pose;
     }
 }
