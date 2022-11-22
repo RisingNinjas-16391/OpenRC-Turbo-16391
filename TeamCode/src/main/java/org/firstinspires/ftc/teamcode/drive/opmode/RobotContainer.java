@@ -13,6 +13,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.drive.commands.AutoCommand1;
 import org.firstinspires.ftc.teamcode.drive.commands.DrivetrainCommand;
 import org.firstinspires.ftc.teamcode.drive.commands.IntakeCommand;
+import org.firstinspires.ftc.teamcode.drive.commands.LiftCommand;
 import org.firstinspires.ftc.teamcode.drive.commands.TurretCommand;
 import org.firstinspires.ftc.teamcode.drive.subsystems.AprilTagSubsystem;
 import org.firstinspires.ftc.teamcode.drive.subsystems.IntakeSubsystem;
@@ -38,6 +39,8 @@ public class RobotContainer {
 
     private final GamepadButton dropCone;
     private final GamepadButton turretToggle;
+
+    private int liftIndex = 0;
 
     /**
      * Teleop Constructor

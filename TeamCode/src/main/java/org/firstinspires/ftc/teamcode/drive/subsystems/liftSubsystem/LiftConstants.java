@@ -20,25 +20,25 @@ public final class LiftConstants {
     /**
      * Ticks for lift presets
      */
-    public static final int BOTTOM_POS = 0;
-    public static final int FEED_POS = 1000;
-    public static final int LOW_POS = 1800;
-    public static final int MID_POS = 3000;
-    public static final int HIGH_POS = 4020;
+    public static final double BOTTOM_POS = 0;
+    public static final double FEED_POS = 5;
+    public static final double LOW_POS = 10;
+    public static final double MID_POS = 30;
+    public static final double HIGH_POS = 35;
 
     public static final MotorConfigurationType MOTOR_CONFIG =
             MotorConfigurationType.getMotorType(GoBILDA5202Series.class);
     public static final double TICKS_PER_REV = MOTOR_CONFIG.getTicksPerRev();
     public static final String name = "slide";
-    public static final int minHeightTurret = 1000;
-    public static double SPOOL_RADIUS = 1; // in
-    public static double GEAR_RATIO = 1; // output (spool) speed / input (motor) speed
+    public static final int minHeightTurret = 5;
+    public static double SPOOL_RADIUS = 0.75; // in
+    public static double GEAR_RATIO = 5; // output (spool) speed / input (motor) speed
     // the operating range of the elevator is restricted to [0, MAX_HEIGHT]
-    public static double MAX_HEIGHT = 10; // in
+    public static double MAX_HEIGHT = 35; // inches
     public static double MAX_VEL = 10; // in/s
     public static double MAX_ACCEL = 10; // in/s^2
     public static double MAX_JERK = 20; // in/s^3
-    public static PIDCoefficients kPID = new PIDCoefficients(0.005, 0, 0);
+    public static PIDCoefficients kPID = new PIDCoefficients(1, 0, 0);
     public static double kV = 0;
     public static double kA = 0;
     public static double kG = 0.05;

@@ -1,9 +1,9 @@
 package org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem;
 
-import static org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DriveConstants.GEAR_RATIO;
 import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.BOTTOM_POS;
 import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.DIRECTION;
 import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.FEED_POS;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.GEAR_RATIO;
 import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.HIGH_POS;
 import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.LOW_POS;
 import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.MAX_ACCEL;
@@ -104,8 +104,11 @@ public class LiftSubsystem extends SubsystemBase {
         telemetry.addLine("Linear Slide power")
                 .addData("slide", lift.getPower());
 
-        telemetry.addLine("Turret Encoder Position")
-                .addData("Ticks: ", lift.getCurrentPosition());
+        telemetry.addLine("Linear Slide Level")
+                .addData("slide", heightIndex);
+
+//        telemetry.addLine("Turret Encoder Position")
+//                .addData("Ticks: ", lift.getCurrentPosition());
 
         //indexToHeight();
     }
@@ -134,49 +137,36 @@ public class LiftSubsystem extends SubsystemBase {
 
     public void incrementHeight() {
         heightIndex++;
-        periodic();
+        indexToHeight();
     }
 
     public void decrementHeight() {
         heightIndex--;
-        periodic();
+        indexToHeight();
     }
 
     private void indexToHeight() {
-        switch (heightIndex) {
-            case 0:
-                this.setHeight(BOTTOM_POS);
-                break;
-            case 1:
-                this.setHeight(FEED_POS);
-                break;
-            case 2:
-                this.setHeight(LOW_POS);
-                break;
-            case 3:
-                this.setHeight(MID_POS);
-                break;
-            case 4:
-                this.setHeight(HIGH_POS);
-        }
+        indexToHeight(heightIndex);
     }
 
     public void indexToHeight(int height) {
         switch (height) {
             case 0:
-                this.setHeight(BOTTOM_POS);
+                setHeight(BOTTOM_POS);
                 break;
             case 1:
-                this.setHeight(FEED_POS);
+                setHeight(FEED_POS);
                 break;
             case 2:
-                this.setHeight(LOW_POS);
+                setHeight(LOW_POS);
                 break;
             case 3:
-                this.setHeight(MID_POS);
+                setHeight(MID_POS);
                 break;
             case 4:
-                this.setHeight(HIGH_POS);
+                setHeight(HIGH_POS);
+                break;
         }
+        heightIndex = height;
     }
 }

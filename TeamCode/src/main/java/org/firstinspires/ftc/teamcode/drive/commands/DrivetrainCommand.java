@@ -41,6 +41,6 @@ public class DrivetrainCommand extends CommandBase {
         }
 
         drivetrain.drive(forward.getAsDouble() * correction,
-                strafe.getAsDouble() * correction, turn.getAsDouble() * correction);
+                -strafe.getAsDouble() * correction, -turn.getAsDouble() * correction);
     }
 }

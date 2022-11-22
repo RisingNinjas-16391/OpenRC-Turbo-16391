@@ -10,9 +10,8 @@ import java.util.function.DoubleSupplier;
 import java.util.function.IntSupplier;
 
 public class LiftCommand extends CommandBase {
-    @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
     private final LiftSubsystem lift;
-    private IntSupplier heightIndex;
+    private final IntSupplier heightIndex;
 
     public LiftCommand(LiftSubsystem lift, IntSupplier heightIndex) {
         this.lift = lift;
@@ -22,8 +21,13 @@ public class LiftCommand extends CommandBase {
     }
 
     @Override
-    public void execute() {
+    public void initialize() {
         lift.indexToHeight(heightIndex.getAsInt());
+    }
+
+    @Override
+    public boolean isFinished() {
+        return true;
     }
 }
 
