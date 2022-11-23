@@ -33,7 +33,7 @@ import static org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.Dri
  *      regression.
  */
 // @Disabled
-@Config
+// @Config
 @Autonomous(group = "drive")
 public class AutomaticFeedforwardTuner extends LinearOpMode {
     public static double MAX_POWER = 0.7;

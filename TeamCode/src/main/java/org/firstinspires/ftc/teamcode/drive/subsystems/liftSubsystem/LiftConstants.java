@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigu
 /**
  * Class containing constants used for {@link LiftSubsystem}
  */
-@Config
+// @Config
 public final class LiftConstants {
     // if necessary, reverse the motor so "up" is positive
     public static final DcMotorSimple.Direction DIRECTION = DcMotorSimple.Direction.REVERSE;

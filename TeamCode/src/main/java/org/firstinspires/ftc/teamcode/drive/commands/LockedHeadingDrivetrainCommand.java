@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.drive.commands;
 
-import static org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.MecanumDrive.HEADING_PID;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DriveConstants.HEADING_PID;
 
 import com.acmerobotics.roadrunner.control.PIDFController;
 import com.acmerobotics.roadrunner.geometry.Pose2d;

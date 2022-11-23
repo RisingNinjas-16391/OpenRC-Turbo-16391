@@ -1,16 +1,6 @@
 package org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem;
 
-import static org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DriveConstants.MAX_ACCEL;
-import static org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DriveConstants.MAX_ANG_ACCEL;
-import static org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DriveConstants.MAX_ANG_VEL;
-import static org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DriveConstants.MAX_VEL;
-import static org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DriveConstants.MOTOR_VELO_PID;
-import static org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DriveConstants.RUN_USING_ENCODER;
-import static org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DriveConstants.TRACK_WIDTH;
-import static org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DriveConstants.encoderTicksToInches;
-import static org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DriveConstants.kA;
-import static org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DriveConstants.kStatic;
-import static org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DriveConstants.kV;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DriveConstants.*;
 
 import androidx.annotation.NonNull;
 
@@ -53,16 +43,9 @@ import java.util.List;
 /**
  * Mecanum drive hardware implementation for REV hardware.
  */
-@Config
+// @Config
 public class MecanumDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive {
-    private static final TrajectoryVelocityConstraint VEL_CONSTRAINT = getVelocityConstraint(MAX_VEL, MAX_ANG_VEL, TRACK_WIDTH);
-    private static final TrajectoryAccelerationConstraint ACCEL_CONSTRAINT = getAccelerationConstraint(MAX_ACCEL);
-    public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(4, 0, 0);
-    public static PIDCoefficients HEADING_PID = new PIDCoefficients(4, 0, 0);
-    public static double LATERAL_MULTIPLIER = 1;
-    public static double VX_WEIGHT = 1;
-    public static double VY_WEIGHT = 1;
-    public static double OMEGA_WEIGHT = 1;
+
     private static Pose2d currentPose = new Pose2d();
     private final TrajectorySequenceRunner trajectorySequenceRunner;
     private final TrajectoryFollower follower;

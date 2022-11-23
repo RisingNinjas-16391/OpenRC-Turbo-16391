@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigu
 /**
  * Class containing constants used for {@link TurretSubsystem}
  */
-@Config
+// @Config
 public final class TurretConstants {
     public static final MotorConfigurationType MOTOR_CONFIG =
             MotorConfigurationType.getMotorType(RevRoboticsCoreHexMotor.class);
