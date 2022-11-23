@@ -5,23 +5,21 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.arcrobotics.ftclib.command.CommandBase;
 
 import org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DrivetrainSubsystem;
-import org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftSubsystem;
 
-import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 public class FieldCentricDrivetrainCommand extends CommandBase {
     @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
     private final DrivetrainSubsystem drivetrain;
-    private final DoubleSupplier liftHeight;
+    private final DoubleSupplier multiplier;
     private final DoubleSupplier forward;
     private final DoubleSupplier strafe;
     private final DoubleSupplier turn;
 
-    public FieldCentricDrivetrainCommand(DrivetrainSubsystem drivetrain, DoubleSupplier liftHeight,
+    public FieldCentricDrivetrainCommand(DrivetrainSubsystem drivetrain, DoubleSupplier multiplier,
                                          DoubleSupplier forward, DoubleSupplier strafe, DoubleSupplier turn) {
         this.drivetrain = drivetrain;
-        this.liftHeight = liftHeight;
+        this.multiplier = multiplier;
         this.forward = forward;
         this.strafe = strafe;
         this.turn = turn;
@@ -31,15 +29,6 @@ public class FieldCentricDrivetrainCommand extends CommandBase {
 
     @Override
     public void execute() {
-        double correction;
-
-        if (liftHeight.getAsDouble() > 0) {
-            correction = 1 - (liftHeight.getAsDouble() / 10);
-            correction /= 2;
-            correction += 0.5;;
-        } else {
-            correction = 1;
-        }
 
         // Read pose
         Pose2d poseEstimate = drivetrain.getPoseEstimate();
@@ -47,12 +36,16 @@ public class FieldCentricDrivetrainCommand extends CommandBase {
         // Create a vector from the gamepad x/y inputs
         // Then, rotate that vector by the inverse of that heading
         Vector2d input = new Vector2d(
-                -forward.getAsDouble() * correction,
-                -strafe.getAsDouble() * correction
+                forward.getAsDouble(),
+                -strafe.getAsDouble()
         ).rotated(-poseEstimate.getHeading());
 
         // Pass in the rotated input + right stick value for rotation
         // Rotation is not part of the rotated input thus must be passed in separately
-        drivetrain.drive(input.getX(), input.getY(), -turn.getAsDouble());
+        drivetrain.driveMultiplied(
+                input.getX(),
+                input.getY(),
+                -turn.getAsDouble(),
+                multiplier.getAsDouble());
     }
 }

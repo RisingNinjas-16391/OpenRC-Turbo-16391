@@ -9,6 +9,7 @@ import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.controller.PIDController;
 
 import org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DrivetrainSubsystem;
+import org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants;
 
 import java.util.function.DoubleSupplier;
 
@@ -32,23 +33,14 @@ public class LockedHeadingDrivetrainCommand extends CommandBase {
 
     @Override
     public void execute() {
-        double correction;
-        if (liftHeight.getAsDouble() > 0) {
-            correction = 1 - (liftHeight.getAsDouble() / 10);
-            correction /= 2;
-            correction += 0.5;;
-        } else {
-            correction = 1;
-        }
-
         // Read pose
         Pose2d poseEstimate = drivetrain.getPoseEstimate();
 
         // Create a vector from the gamepad x/y inputs
         // Then, rotate that vector by the inverse of that heading
         Vector2d input = new Vector2d(
-                -forward.getAsDouble() * correction,
-                -strafe.getAsDouble() * correction
+                forward.getAsDouble(),
+                -strafe.getAsDouble()
         ).rotated(-poseEstimate.getHeading());
 
         // Pass in the rotated input + right stick value for rotation

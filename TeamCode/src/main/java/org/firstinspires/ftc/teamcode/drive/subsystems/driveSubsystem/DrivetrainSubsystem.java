@@ -32,6 +32,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
         drivetrain.setWeightedDrivePower(new Pose2d(forward * speedMultiplier, strafe * speedMultiplier, turn * speedMultiplier));
     }
 
+    public void driveMultiplied(double forward, double strafe, double turn, double multi) {
+        drive(forward * multi, strafe * multi, turn);
+    }
+
     public void runTrajectory(TrajectorySequence trajectory) {
         drivetrain.followTrajectorySequenceAsync(trajectory);
     }
@@ -42,11 +46,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        telemetry.addLine("Drive Encoder ticks")
-                .addData("Front Left", drivetrain.getWheelPositions().get(0))
-                .addData("Front Right", drivetrain.getWheelPositions().get(3))
-                .addData("Back Left", drivetrain.getWheelPositions().get(1))
-                .addData("Back Right", drivetrain.getWheelPositions().get(2));
+        drivetrain.update();
+        telemetry.addData("Drive heading", drivetrain.getPoseEstimate().getHeading());
     }
 
     public void setSpeedMultiplier(double speedMultiplier) {

@@ -1,29 +1,10 @@
 package org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem;
 
-import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.BOTTOM_POS;
-import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.DIRECTION;
-import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.FEED_POS;
-import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.GEAR_RATIO;
-import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.HIGH_POS;
-import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.LOW_POS;
-import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.MAX_ACCEL;
-import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.MAX_HEIGHT;
-import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.MAX_JERK;
-import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.MAX_VEL;
-import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.MID_POS;
-import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.MOTOR_CONFIG;
-import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.SPOOL_RADIUS;
-import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.kA;
-import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.kG;
-import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.kPID;
-import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.kStatic;
-import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.kV;
-import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.name;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.*;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.control.PIDFController;
 import com.acmerobotics.roadrunner.profile.MotionProfile;
-import com.acmerobotics.roadrunner.profile.MotionProfileBuilder;
 import com.acmerobotics.roadrunner.profile.MotionProfileGenerator;
 import com.acmerobotics.roadrunner.profile.MotionState;
 import com.acmerobotics.roadrunner.util.NanoClock;
@@ -38,34 +19,36 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 /*
  * Hardware class for an elevator or linear lift driven by a pulley system.
  */
-@Config
 public class LiftSubsystem extends SubsystemBase {
 
+    private final DcMotorEx motor;
+    private final PIDFController controller;
+    private final Telemetry telemetry;
+    private final NanoClock clock = NanoClock.system();
+    private final int offset;
     ElevatorFeedforward feedforward = new ElevatorFeedforward(
             kStatic, kG, kV, kA
     );
-    private final DcMotorEx lift;
-    private final PIDFController controller;
-    private final Telemetry telemetry;
     private MotionProfile profile;
-    private final NanoClock clock = NanoClock.system();
-    private double profileStartTime, desiredHeight = 0;
-    private final int offset;
+    private double profileStartTime = 0;
+    private double targetHeight = 0;
     private int heightIndex;
+    private DcMotor.RunMode mode;
 
     public LiftSubsystem(HardwareMap hardwareMap, Telemetry telemetry) {
         this.telemetry = telemetry;
 
-        lift = hardwareMap.get(DcMotorEx.class, name);
-        lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        motor = hardwareMap.get(DcMotorEx.class, name);
+        motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        lift.setDirection(DIRECTION);
+        motor.setDirection(DIRECTION);
 
         controller = new PIDFController(kPID);
+        mode = DcMotor.RunMode.RUN_TO_POSITION;
 
         // Create a new ElevatorFeedforward with gains kS, kG, kV, and kA
 
-        offset = lift.getCurrentPosition();
+        offset = motor.getCurrentPosition();
 
         heightIndex = 0;
         setHeight(0);
@@ -90,27 +73,29 @@ public class LiftSubsystem extends SubsystemBase {
             double time = clock.seconds() - profileStartTime;
             MotionState state = profile.get(time);
             controller.setTargetPosition(state.getX());
-            power = controller.update(currentHeight, state.getV()) + feedforward.calculate(state.getV(), state.getA());
+            controller.setTargetVelocity(state.getV());
+            controller.setTargetAcceleration(state.getV());
+            power = controller.update(currentHeight, motor.getVelocity()) + feedforward.calculate(state.getV(), state.getA());
         } else {
             // just hold the position
-            controller.setTargetPosition(desiredHeight);
+            controller.setTargetPosition(targetHeight);
             power = controller.update(currentHeight);
+            if (Math.abs(controller.getLastError()) > 5) {
+                power += feedforward.ks * Math.signum(power);
+            }
         }
-        lift.setPower(power);
+        if (mode == DcMotor.RunMode.RUN_TO_POSITION) {
+            motor.setPower(power);
+        }
 
         telemetry.addLine("Linear Slide ticks")
-                .addData("slide", lift.getCurrentPosition());
+                .addData("slide", motor.getCurrentPosition());
 
         telemetry.addLine("Linear Slide power")
-                .addData("slide", lift.getPower());
+                .addData("slide", motor.getPower());
 
         telemetry.addLine("Linear Slide Level")
                 .addData("slide", heightIndex);
-
-//        telemetry.addLine("Turret Encoder Position")
-//                .addData("Ticks: ", lift.getCurrentPosition());
-
-        //indexToHeight();
     }
 
     public boolean isBusy() {
@@ -118,21 +103,17 @@ public class LiftSubsystem extends SubsystemBase {
     }
 
     public void setHeight(double height) {
-        height = Math.min(Math.max(0, height), MAX_HEIGHT);
-
-        double time = clock.seconds() - profileStartTime;
-        MotionState start = isBusy() ? profile.get(time) : new MotionState(desiredHeight, 0, 0, 0);
-        MotionState goal = new MotionState(height, 0, 0, 0);
+        MotionState start = new MotionState(getCurrentHeight(), 0, 0, 0);
+        targetHeight = Math.min(Math.max(0, height), MAX_HEIGHT);
+        MotionState goal = new MotionState(targetHeight, 0, 0, 0);
         profile = MotionProfileGenerator.generateSimpleMotionProfile(
                 start, goal, MAX_VEL, MAX_ACCEL, MAX_JERK
         );
         profileStartTime = clock.seconds();
-
-        this.desiredHeight = height;
     }
 
     public double getCurrentHeight() {
-        return encoderTicksToInches(lift.getCurrentPosition() - offset);
+        return encoderTicksToInches(motor.getCurrentPosition() - offset);
     }
 
     public void incrementHeight() {
@@ -145,7 +126,41 @@ public class LiftSubsystem extends SubsystemBase {
         indexToHeight();
     }
 
-    private void indexToHeight() {
+    public void scoreHeight() {
+        if (heightIndex > 1) {
+            setHeight(targetHeight - SCORE_ADJ);
+        }
+    }
+
+    public double getDriveMultiplier() {
+        double currentHeight = getCurrentHeight();
+        double correction = 1;
+        if (currentHeight > 0) {
+            correction = 1 - (currentHeight / LiftConstants.MAX_HEIGHT);
+            correction /= 2;
+            correction += 0.5;
+        }
+        return correction;
+    }
+
+    public void setMode(DcMotor.RunMode mode) {
+        this.mode = mode;
+        if (mode == DcMotor.RunMode.STOP_AND_RESET_ENCODER) {
+            motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        }
+    }
+
+    public void setPower(double power) {
+        motor.setPower(power);
+    }
+
+    public void indexToHeight() {
+        if (heightIndex > 4) {
+            heightIndex = 4;
+        } else if (heightIndex < 0) {
+            heightIndex = 0;
+        }
         indexToHeight(heightIndex);
     }
 

@@ -12,8 +12,9 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.drive.commands.AutoCommand1;
 import org.firstinspires.ftc.teamcode.drive.commands.DrivetrainCommand;
+import org.firstinspires.ftc.teamcode.drive.commands.FieldCentricDrivetrainCommand;
 import org.firstinspires.ftc.teamcode.drive.commands.IntakeCommand;
-import org.firstinspires.ftc.teamcode.drive.commands.LiftCommand;
+import org.firstinspires.ftc.teamcode.drive.commands.LockedHeadingDrivetrainCommand;
 import org.firstinspires.ftc.teamcode.drive.commands.TurretCommand;
 import org.firstinspires.ftc.teamcode.drive.subsystems.AprilTagSubsystem;
 import org.firstinspires.ftc.teamcode.drive.subsystems.IntakeSubsystem;
@@ -39,8 +40,7 @@ public class RobotContainer {
 
     private final GamepadButton dropCone;
     private final GamepadButton turretToggle;
-
-    private int liftIndex = 0;
+    private final GamepadButton scoringHeight;
 
     /**
      * Teleop Constructor
@@ -55,14 +55,16 @@ public class RobotContainer {
         driverController = new GamepadEx(gamepad1);
         operatorController = new GamepadEx(gamepad2);
 
-        up = new GamepadButton(driverController, GamepadKeys.Button.DPAD_UP);
-        down = new GamepadButton(driverController, GamepadKeys.Button.DPAD_DOWN);
+
         slowMode = new GamepadButton(driverController, GamepadKeys.Button.RIGHT_BUMPER);
         turboMode = new GamepadButton(driverController, GamepadKeys.Button.LEFT_BUMPER);
         lockRotation = new GamepadButton(driverController, GamepadKeys.Button.RIGHT_STICK_BUTTON);
 
         dropCone = new GamepadButton(operatorController, GamepadKeys.Button.RIGHT_BUMPER);
         turretToggle = new GamepadButton(operatorController, GamepadKeys.Button.LEFT_BUMPER);
+        up = new GamepadButton(operatorController, GamepadKeys.Button.DPAD_UP);
+        down = new GamepadButton(operatorController, GamepadKeys.Button.DPAD_DOWN);
+        scoringHeight = new GamepadButton(operatorController, GamepadKeys.Button.DPAD_LEFT);
 
         setDefaultCommands();
         configureButtonBindings();
@@ -82,14 +84,15 @@ public class RobotContainer {
         driverController = null;
         operatorController = null;
 
-        up = null;
-        down = null;
         slowMode = null;
         turboMode = null;
         lockRotation = null;
 
+        up = null;
+        down = null;
         dropCone = null;
         turretToggle = null;
+        scoringHeight = null;
 
         setAutoCommands(autoNum);
     }
@@ -100,16 +103,20 @@ public class RobotContainer {
         slowMode.whenPressed(() -> drivetrain.setSpeedMultiplier(0.6));
         turboMode.whenActive(() -> drivetrain.setSpeedMultiplier(1));
         slowMode.negate().and(turboMode.negate()).whenActive(() -> drivetrain.setSpeedMultiplier(0.7));
+        lockRotation.toggleWhenPressed(new LockedHeadingDrivetrainCommand(drivetrain, lift::getDriveMultiplier, driverController::getLeftY, driverController::getLeftX, drivetrain.getPoseEstimate().getHeading()));
 
         // Operator bindings
         dropCone.whileActiveOnce(new IntakeCommand(intake, false));
         turretToggle.whenPressed(new TurretCommand(turret, lift::getCurrentHeight));
         up.whenPressed(lift::incrementHeight);
         down.whenPressed(lift::decrementHeight);
+        scoringHeight.whenPressed(lift::scoreHeight);
+        scoringHeight.whenReleased(() -> lift.indexToHeight());
+
     }
 
     private void setDefaultCommands() {
-        drivetrain.setDefaultCommand(new DrivetrainCommand(drivetrain, lift::getCurrentHeight,
+        drivetrain.setDefaultCommand(new FieldCentricDrivetrainCommand(drivetrain, lift::getDriveMultiplier,
                 driverController::getLeftY, driverController::getLeftX,
                 driverController::getRightX));
 
