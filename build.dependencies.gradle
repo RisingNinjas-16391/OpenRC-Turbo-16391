@@ -1,9 +1,0 @@
-repositories {
-    maven { url = 'https://maven.brott.dev/' }
-}
-
-dependencies {
-    implementation('com.acmerobotics.dashboard:dashboard:0.4.4') {
-        exclude group: 'org.firstinspires.ftc'
-    }
-}

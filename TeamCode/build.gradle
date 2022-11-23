@@ -10,12 +10,21 @@
 // Custom definitions may go here
 // Include common definitions from above.
 apply from: '../build.common.gradle'
-apply from: '../build.dependencies.gradle'
+
+repositories {
+    maven { url = 'https://maven.brott.dev/' }
+}
 dependencies {
     /*
      * Other Modules
      */
     implementation project(':FtcRobotController')
+
+    //implementation 'com.acmerobotics.dashboard:dashboard:0.4.6'
+
+    implementation('com.acmerobotics.dashboard:dashboard:0.4.6') {
+        exclude group: 'org.firstinspires.ftc'
+    }
 
     implementation 'org.apache.commons:commons-math3:3.6.1'
     implementation 'com.acmerobotics.roadrunner:core:0.5.5'
