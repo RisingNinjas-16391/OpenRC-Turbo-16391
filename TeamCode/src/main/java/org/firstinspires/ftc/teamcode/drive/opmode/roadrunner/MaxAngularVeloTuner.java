@@ -1,16 +1,14 @@
 package org.firstinspires.ftc.teamcode.drive.opmode.roadrunner;
 
 import com.acmerobotics.dashboard.FtcDashboard;
-import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.MecanumDrive;
+import org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.MecanumDriveR;
 
 import java.util.Objects;
 
@@ -28,11 +26,11 @@ public class MaxAngularVeloTuner extends LinearOpMode {
     public static double RUNTIME = 4.0;
 
     private ElapsedTime timer;
-    private double maxAngVelocity = 0.0;
+    private double maxAngVelocity;
 
     @Override
     public void runOpMode() throws InterruptedException {
-        MecanumDrive drive = new MecanumDrive(hardwareMap);
+        MecanumDriveR drive = new MecanumDriveR(hardwareMap);
 
         drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
@@ -58,13 +56,13 @@ public class MaxAngularVeloTuner extends LinearOpMode {
             Pose2d poseVelo = Objects.requireNonNull(drive.getPoseVelocity(), "poseVelocity() must not be null. Ensure that the getWheelVelocities() method has been overridden in your localizer.");
 
             maxAngVelocity = Math.max(poseVelo.getHeading(), maxAngVelocity);
+
+            telemetry.addData("Max Angular Velocity (rad)", maxAngVelocity);
+            telemetry.addData("Max Angular Velocity (deg)", Math.toDegrees(maxAngVelocity));
+            telemetry.update();
         }
 
         drive.setDrivePower(new Pose2d());
-
-        telemetry.addData("Max Angular Velocity (rad)", maxAngVelocity);
-        telemetry.addData("Max Angular Velocity (deg)", Math.toDegrees(maxAngVelocity));
-        telemetry.update();
 
         while (!isStopRequested()) idle();
     }

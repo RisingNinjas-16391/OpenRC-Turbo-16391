@@ -4,8 +4,6 @@ import static org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.Dri
 
 import androidx.annotation.NonNull;
 
-import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.roadrunner.control.PIDCoefficients;
 import com.acmerobotics.roadrunner.drive.DriveSignal;
 import com.acmerobotics.roadrunner.followers.HolonomicPIDVAFollower;
 import com.acmerobotics.roadrunner.followers.TrajectoryFollower;
@@ -44,7 +42,7 @@ import java.util.List;
  * Mecanum drive hardware implementation for REV hardware.
  */
 // @Config
-public class MecanumDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive {
+public class MecanumDriveR extends com.acmerobotics.roadrunner.drive.MecanumDrive {
 
     private static Pose2d currentPose = new Pose2d();
     private final TrajectorySequenceRunner trajectorySequenceRunner;
@@ -54,7 +52,7 @@ public class MecanumDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive
     private final BNO055IMU imu;
     private final VoltageSensor batteryVoltageSensor;
 
-    public MecanumDrive(@NonNull HardwareMap hardwareMap) {
+    public MecanumDriveR(@NonNull HardwareMap hardwareMap) {
         super(kV, kA, kStatic, TRACK_WIDTH, TRACK_WIDTH, LATERAL_MULTIPLIER);
 
         follower = new HolonomicPIDVAFollower(TRANSLATIONAL_PID, TRANSLATIONAL_PID, HEADING_PID,
@@ -279,6 +277,7 @@ public class MecanumDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive
     public Double getExternalHeadingVelocity() {
         return (double) -imu.getAngularVelocity().zRotationRate;
     }
+
 
     public void saveCurrentPose() {
         currentPose = getPoseEstimate();

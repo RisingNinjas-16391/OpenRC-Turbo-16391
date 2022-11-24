@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.drive.opmode.roadrunner;
 
 import com.acmerobotics.dashboard.FtcDashboard;
-import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.kinematics.Kinematics;
@@ -10,11 +9,10 @@ import com.acmerobotics.roadrunner.profile.MotionProfileGenerator;
 import com.acmerobotics.roadrunner.profile.MotionState;
 import com.acmerobotics.roadrunner.util.NanoClock;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.RobotLog;
 
-import org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.MecanumDrive;
+import org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.MecanumDriveR;
 
 import java.util.Objects;
 
@@ -48,7 +46,7 @@ public class ManualFeedforwardTuner extends LinearOpMode {
 
     private FtcDashboard dashboard = FtcDashboard.getInstance();
 
-    private MecanumDrive drive;
+    private MecanumDriveR drive;
 
     enum Mode {
         DRIVER_MODE,
@@ -72,7 +70,7 @@ public class ManualFeedforwardTuner extends LinearOpMode {
 
         telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
 
-        drive = new MecanumDrive(hardwareMap);
+        drive = new MecanumDriveR(hardwareMap);
 
         mode = Mode.TUNING_MODE;
 

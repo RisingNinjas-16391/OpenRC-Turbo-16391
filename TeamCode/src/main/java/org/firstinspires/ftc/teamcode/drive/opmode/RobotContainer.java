@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.drive.opmode;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
-
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
@@ -74,7 +72,7 @@ public class RobotContainer {
     /**
      * Autonomous Constructor
      */
-    public RobotContainer(HardwareMap hwMap, int autoNum) {
+    public RobotContainer(HardwareMap hwMap, int autoNum, Telemetry telemetry) {
         drivetrain = new DrivetrainSubsystem(hwMap, telemetry);
         lift = new LiftSubsystem(hwMap, telemetry);
         intake = new IntakeSubsystem(hwMap, telemetry);
@@ -125,6 +123,7 @@ public class RobotContainer {
 
     private void setAutoCommands(int chooser) {
         Command Auto1 = new AutoCommand1(drivetrain, lift, intake, aprilTagDetector);
+
         switch (chooser) {
             case 0:
                 Auto1.schedule();

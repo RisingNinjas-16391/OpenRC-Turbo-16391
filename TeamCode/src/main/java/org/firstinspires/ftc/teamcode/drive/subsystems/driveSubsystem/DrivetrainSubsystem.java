@@ -10,13 +10,13 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequenceBuild
 
 public class DrivetrainSubsystem extends SubsystemBase {
 
-    private final MecanumDrive drivetrain;
+    private final MecanumDriveR drivetrain;
     private final Telemetry telemetry;
 
     private double speedMultiplier = 1;
 
     public DrivetrainSubsystem(HardwareMap hwMap, Telemetry telemetry) {
-        this.drivetrain = new MecanumDrive(hwMap);
+        this.drivetrain = new MecanumDriveR(hwMap);
         this.telemetry = telemetry;
     }
 

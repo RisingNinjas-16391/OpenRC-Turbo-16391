@@ -53,35 +53,35 @@ public class AutoCommand1 extends SequentialCommandGroup {
                 new LiftCommand(lift, () -> 0).withTimeout(1000),
                 new LiftCommand(lift, () -> 1).withTimeout(1000)
         );
-        TrajectorySequence parkTrajectory = drivetrain.trajectorySequenceBuilder(drivetrain.getPoseEstimate())
-                .build();
-        switch (aprilTagDetector.getParkLocation()) {
-            case 0:
-                break;
-            case 1:
-                parkTrajectory = parkLeft;
-                break;
-            case 2:
-                parkTrajectory = parkCenter;
-                break;
-            case 3:
-                parkTrajectory = parkRight;
-                break;
-
-        }
-        TrajectorySequence finalParkTrajectory = parkTrajectory;
+//        TrajectorySequence parkTrajectory = drivetrain.trajectorySequenceBuilder(drivetrain.getPoseEstimate())
+//                .lineToLinearHeading(new Pose2d(-15, -12, Math.toRadians(5)))
+//                .build();
+//        switch (aprilTagDetector.getParkLocation()) {
+//            case 0:
+//                break;
+//            case 1:
+//                parkTrajectory = parkLeft;
+//                break;
+//            case 2:
+//                parkTrajectory = parkCenter;
+//                break;
+//            case 3:
+//                parkTrajectory = parkRight;
+//                break;
+//
+//        }
+//        TrajectorySequence finalParkTrajectory = parkTrajectory;
         addCommands(
-                new ParallelCommandGroup(
-                        new InstantCommand(() -> drivetrain.setPoseEstimate(new Pose2d(-35, -60, Math.toRadians(90)))),
-                    new InstantCommand(() -> drivetrain.runTrajectory(Trajectory1)).withTimeout(5000),
-                    new LiftCommand(lift, () -> 1),
-                    new InstantCommand(intake::unfeed)),
-                new LiftCommand(lift, () -> 0).withTimeout(1000),
-                new LiftCommand(lift, () -> 1).withTimeout(1000),
+//                new ParallelCommandGroup(
+//                        new InstantCommand(() -> drivetrain.setPoseEstimate(new Pose2d(-35, -60, Math.toRadians(90)))),
+//                    new InstantCommand(() -> drivetrain.runTrajectory(Trajectory1)).withTimeout(5000),
+//                    new InstantCommand(() -> lift.indexToHeight(1)),
+//                    new InstantCommand(intake::unfeed)),
+                new InstantCommand(() -> lift.indexToHeight(0)).withTimeout(1000),
+                new InstantCommand(() -> lift.indexToHeight(1)).withTimeout(1000),
                 stackToHigh,
                 highToStack,
-                stackToHigh,
-                new InstantCommand(() -> drivetrain.runTrajectory(finalParkTrajectory))
+                stackToHigh
         );
     }
 }
