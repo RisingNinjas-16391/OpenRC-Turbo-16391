@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.drive.opmode.aprilTagDetector;
+package org.firstinspires.ftc.teamcode.drive.subsystems.aprilTagSubsystem.aprilTagDetector;
 
 public class AprilTagDetectorConstants {
     public static final double FEET_PER_METER = 3.28084;

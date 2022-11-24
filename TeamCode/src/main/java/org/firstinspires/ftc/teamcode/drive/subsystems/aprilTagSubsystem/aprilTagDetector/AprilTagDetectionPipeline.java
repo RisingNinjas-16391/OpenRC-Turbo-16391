@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.drive.opmode.aprilTagDetector;
+package org.firstinspires.ftc.teamcode.drive.subsystems.aprilTagSubsystem.aprilTagDetector;
 
 
 import org.opencv.core.Mat;

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.drive.opmode;
+package org.firstinspires.ftc.teamcode.drive.opmode.opmodes;
 
 /** Class containing constants used for {@link AutonomousTemplate} */
 public class AutoConstants {

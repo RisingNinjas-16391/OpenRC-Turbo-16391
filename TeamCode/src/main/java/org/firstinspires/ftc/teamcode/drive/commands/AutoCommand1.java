@@ -1,11 +1,12 @@
 package org.firstinspires.ftc.teamcode.drive.commands;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.arcrobotics.ftclib.command.ConditionalCommand;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 
-import org.firstinspires.ftc.teamcode.drive.subsystems.AprilTagSubsystem;
+import org.firstinspires.ftc.teamcode.drive.subsystems.aprilTagSubsystem.aprilTagDetector.AprilTagSubsystem;
 import org.firstinspires.ftc.teamcode.drive.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DrivetrainSubsystem;
 import org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftSubsystem;
@@ -53,32 +54,26 @@ public class AutoCommand1 extends SequentialCommandGroup {
                 new LiftCommand(lift, () -> 0).withTimeout(1000),
                 new LiftCommand(lift, () -> 1).withTimeout(1000)
         );
-//        TrajectorySequence parkTrajectory = drivetrain.trajectorySequenceBuilder(drivetrain.getPoseEstimate())
-//                .lineToLinearHeading(new Pose2d(-15, -12, Math.toRadians(5)))
-//                .build();
-//        switch (aprilTagDetector.getParkLocation()) {
-//            case 0:
-//                break;
-//            case 1:
-//                parkTrajectory = parkLeft;
-//                break;
-//            case 2:
-//                parkTrajectory = parkCenter;
-//                break;
-//            case 3:
-//                parkTrajectory = parkRight;
-//                break;
-//
-//        }
-//        TrajectorySequence finalParkTrajectory = parkTrajectory;
+        TrajectorySequence parkTrajectory = drivetrain.trajectorySequenceBuilder(drivetrain.getPoseEstimate())
+                .lineToLinearHeading(new Pose2d(-15, -12, Math.toRadians(5)))
+                .build();
+        switch (aprilTagDetector.getParkLocation()) {
+            case NONE:
+                break;
+            case LEFT:
+                parkTrajectory = parkLeft;
+                break;
+            case CENTER:
+                parkTrajectory = parkCenter;
+                break;
+            case RIGHT:
+                parkTrajectory = parkRight;
+                break;
+
+        }
+        TrajectorySequence finalParkTrajectory = parkTrajectory;
         addCommands(
-//                new ParallelCommandGroup(
-//                        new InstantCommand(() -> drivetrain.setPoseEstimate(new Pose2d(-35, -60, Math.toRadians(90)))),
-//                    new InstantCommand(() -> drivetrain.runTrajectory(Trajectory1)).withTimeout(5000),
-//                    new InstantCommand(() -> lift.indexToHeight(1)),
-//                    new InstantCommand(intake::unfeed)),
-                new InstantCommand(() -> lift.indexToHeight(0)).withTimeout(1000),
-                new InstantCommand(() -> lift.indexToHeight(1)).withTimeout(1000),
+                new InstantCommand(aprilTagDetector::detect),
                 stackToHigh,
                 highToStack,
                 stackToHigh

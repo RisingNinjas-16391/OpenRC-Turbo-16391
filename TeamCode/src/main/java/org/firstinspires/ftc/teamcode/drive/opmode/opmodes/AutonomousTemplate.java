@@ -1,21 +1,19 @@
-package org.firstinspires.ftc.teamcode.drive.opmode;
+package org.firstinspires.ftc.teamcode.drive.opmode.opmodes;
 
-import static org.firstinspires.ftc.teamcode.drive.opmode.AutoConstants.threshold;
-import static org.firstinspires.ftc.teamcode.drive.opmode.AutoConstants.timeout;
-import static org.firstinspires.ftc.teamcode.drive.opmode.aprilTagDetector.AprilTagDetectorConstants.TAG_ID_LEFT;
-import static org.firstinspires.ftc.teamcode.drive.opmode.aprilTagDetector.AprilTagDetectorConstants.TAG_ID_CENTER;
-import static org.firstinspires.ftc.teamcode.drive.opmode.aprilTagDetector.AprilTagDetectorConstants.TAG_ID_RIGHT;
+import static org.firstinspires.ftc.teamcode.drive.opmode.opmodes.AutoConstants.threshold;
+import static org.firstinspires.ftc.teamcode.drive.opmode.opmodes.AutoConstants.timeout;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.aprilTagSubsystem.aprilTagDetector.AprilTagDetectorConstants.TAG_ID_LEFT;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.aprilTagSubsystem.aprilTagDetector.AprilTagDetectorConstants.TAG_ID_CENTER;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.aprilTagSubsystem.aprilTagDetector.AprilTagDetectorConstants.TAG_ID_RIGHT;
 
 import android.util.Log;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.drive.opmode.aprilTagDetector.AprilTagDetector;
+import org.firstinspires.ftc.teamcode.drive.subsystems.aprilTagSubsystem.aprilTagDetector.AprilTagDetector;
 import org.openftc.apriltag.AprilTagDetection;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 
 public abstract class AutonomousTemplate extends LinearOpMode {

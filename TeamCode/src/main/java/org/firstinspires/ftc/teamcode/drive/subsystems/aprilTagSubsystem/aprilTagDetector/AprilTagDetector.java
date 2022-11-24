@@ -1,21 +1,10 @@
-package org.firstinspires.ftc.teamcode.drive.opmode.aprilTagDetector;
-
-import static org.firstinspires.ftc.teamcode.drive.opmode.aprilTagDetector.AprilTagDetectorConstants.DECIMATION_HIGH;
-import static org.firstinspires.ftc.teamcode.drive.opmode.aprilTagDetector.AprilTagDetectorConstants.DECIMATION_LOW;
-import static org.firstinspires.ftc.teamcode.drive.opmode.aprilTagDetector.AprilTagDetectorConstants.TAGSIZE;
-import static org.firstinspires.ftc.teamcode.drive.opmode.aprilTagDetector.AprilTagDetectorConstants.THRESHOLD_HIGH_DECIMATION_RANGE_METERS;
-import static org.firstinspires.ftc.teamcode.drive.opmode.aprilTagDetector.AprilTagDetectorConstants.THRESHOLD_NUM_FRAMES_NO_DETECTION_BEFORE_LOW_DECIMATION;
-import static org.firstinspires.ftc.teamcode.drive.opmode.aprilTagDetector.AprilTagDetectorConstants.cx;
-import static org.firstinspires.ftc.teamcode.drive.opmode.aprilTagDetector.AprilTagDetectorConstants.cy;
-import static org.firstinspires.ftc.teamcode.drive.opmode.aprilTagDetector.AprilTagDetectorConstants.fx;
-import static org.firstinspires.ftc.teamcode.drive.opmode.aprilTagDetector.AprilTagDetectorConstants.fy;
+package org.firstinspires.ftc.teamcode.drive.subsystems.aprilTagSubsystem.aprilTagDetector;
 
 import android.util.Log;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.openftc.apriltag.AprilTagDetection;
 import org.openftc.easyopencv.OpenCvCamera;
@@ -36,7 +25,7 @@ public class AprilTagDetector {
     public AprilTagDetector(HardwareMap hardwareMap) {
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
-        aprilTagDetectionPipeline = new AprilTagDetectionPipeline(TAGSIZE, fx, fy, cx, cy);
+        aprilTagDetectionPipeline = new AprilTagDetectionPipeline(AprilTagDetectorConstants.TAGSIZE, AprilTagDetectorConstants.fx, AprilTagDetectorConstants.fy, AprilTagDetectorConstants.cx, AprilTagDetectorConstants.cy);
 
         camera.setPipeline(aprilTagDetectionPipeline);
         camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
@@ -67,9 +56,9 @@ public class AprilTagDetector {
 
             // If we haven't seen a tag for a few frames, lower the decimation
             // so we can hopefully pick one up if we're e.g. far back
-            if(numFramesWithoutDetection >= THRESHOLD_NUM_FRAMES_NO_DETECTION_BEFORE_LOW_DECIMATION)
+            if(numFramesWithoutDetection >= AprilTagDetectorConstants.THRESHOLD_NUM_FRAMES_NO_DETECTION_BEFORE_LOW_DECIMATION)
             {
-                aprilTagDetectionPipeline.setDecimation(DECIMATION_LOW);
+                aprilTagDetectionPipeline.setDecimation(AprilTagDetectorConstants.DECIMATION_LOW);
             }
             // We do see tags!
             else
@@ -82,9 +71,9 @@ public class AprilTagDetector {
 
                 // If the target is within 1 meter, turn on high decimation to
                 // increase the frame rate
-                if(detections.get(0).pose.z < THRESHOLD_HIGH_DECIMATION_RANGE_METERS)
+                if(detections.get(0).pose.z < AprilTagDetectorConstants.THRESHOLD_HIGH_DECIMATION_RANGE_METERS)
                 {
-                    aprilTagDetectionPipeline.setDecimation(DECIMATION_HIGH);
+                    aprilTagDetectionPipeline.setDecimation(AprilTagDetectorConstants.DECIMATION_HIGH);
                 }
             }
         }
