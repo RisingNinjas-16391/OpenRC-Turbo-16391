@@ -16,33 +16,40 @@ import java.util.function.BooleanSupplier;
 
 public class AutoCommand1 extends SequentialCommandGroup {
     public AutoCommand1(DrivetrainSubsystem drivetrain, LiftSubsystem lift, IntakeSubsystem intake, AprilTagSubsystem aprilTagDetector) {
-        TrajectorySequence Trajectory1 = drivetrain.trajectorySequenceBuilder(drivetrain.getPoseEstimate())
+        TrajectorySequence Trajectory1 = drivetrain.trajectorySequenceBuilder(new Pose2d(-35, -60, Math.toRadians(90)))
                 .lineToLinearHeading(new Pose2d(-34, -34,  Math.toRadians(90)))
                 .build();
 
-        TrajectorySequence Trajectory2 = drivetrain.trajectorySequenceBuilder(drivetrain.getPoseEstimate())
+        TrajectorySequence Trajectory2 = drivetrain.trajectorySequenceBuilder(new Pose2d(-34, -34,  Math.toRadians(90)))
                 .lineToLinearHeading(new Pose2d(-38, -12,  Math.toRadians(180)))
                 .lineToLinearHeading(new Pose2d(-32, -7,  Math.toRadians(45)))
                 .build();
 
-        TrajectorySequence Trajectory3 = drivetrain.trajectorySequenceBuilder(drivetrain.getPoseEstimate())
+        TrajectorySequence Trajectory3 = drivetrain.trajectorySequenceBuilder(new Pose2d(-32, -7,  Math.toRadians(45)))
                 .lineToLinearHeading(new Pose2d(-38, -12,  Math.toRadians(180)))
                 .splineToLinearHeading(new Pose2d(-58, -12,  Math.toRadians(180)), Math.toRadians(180))
                 .build();
 
-        TrajectorySequence parkLeft = drivetrain.trajectorySequenceBuilder(drivetrain.getPoseEstimate())
+        TrajectorySequence parkLeft = drivetrain.trajectorySequenceBuilder(new Pose2d(-32, -7,  Math.toRadians(45)))
                 .lineToLinearHeading(new Pose2d(-10, -34, Math.toRadians(90)))
                 .build();
 
-        TrajectorySequence parkCenter = drivetrain.trajectorySequenceBuilder(drivetrain.getPoseEstimate())
+        TrajectorySequence parkCenter = drivetrain.trajectorySequenceBuilder(new Pose2d(-32, -7,  Math.toRadians(45)))
                 .lineToLinearHeading(new Pose2d(-34, -12, Math.toRadians(90)))
                 .lineToLinearHeading(new Pose2d(-34, -34,  Math.toRadians(90)))
                 .build();
 
-        TrajectorySequence parkRight = drivetrain.trajectorySequenceBuilder(drivetrain.getPoseEstimate())
+        TrajectorySequence parkRight = drivetrain.trajectorySequenceBuilder(new Pose2d(-32, -7,  Math.toRadians(45)))
                 .lineToLinearHeading(new Pose2d(-15, -12, Math.toRadians(90)))
                 .lineToLinearHeading(new Pose2d(-58, -20,  Math.toRadians(90)))
                 .build();
+
+        SequentialCommandGroup initToStack = new SequentialCommandGroup(new ParallelCommandGroup(
+                new FollowTrajectoryCommand(drivetrain, Trajectory1).withTimeout(5000),
+                new LiftCommand(lift, 1),
+                new InstantCommand(intake::feed)),
+                new LiftCommand(lift, 0).withTimeout(1000),
+                new LiftCommand(lift, 1));
 
         SequentialCommandGroup stackToHigh = new SequentialCommandGroup(new ParallelCommandGroup(
                 new FollowTrajectoryCommand(drivetrain, Trajectory2).withTimeout(5000),
@@ -61,7 +68,9 @@ public class AutoCommand1 extends SequentialCommandGroup {
                 .build();
 
         addCommands(
+                new InstantCommand(() -> drivetrain.setPoseEstimate(new Pose2d(-35, -60, Math.toRadians(90)))),
                 new InstantCommand(aprilTagDetector::detect),
+                initToStack,
                 stackToHigh,
                 highToStack,
                 stackToHigh,
