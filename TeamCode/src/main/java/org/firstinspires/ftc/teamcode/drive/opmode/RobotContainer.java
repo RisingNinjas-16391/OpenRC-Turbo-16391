@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.drive.opmode;
 
 import com.arcrobotics.ftclib.command.Command;
-import com.arcrobotics.ftclib.command.Robot;
 import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
@@ -13,7 +12,7 @@ import org.firstinspires.ftc.teamcode.drive.commands.AutoCommand1;
 import org.firstinspires.ftc.teamcode.drive.commands.FieldCentricDrivetrainCommand;
 import org.firstinspires.ftc.teamcode.drive.commands.IntakeCommand;
 import org.firstinspires.ftc.teamcode.drive.commands.LockedHeadingDrivetrainCommand;
-import org.firstinspires.ftc.teamcode.drive.commands.TurretCommand;
+import org.firstinspires.ftc.teamcode.drive.commands.TurretToggleCommand;
 import org.firstinspires.ftc.teamcode.drive.subsystems.aprilTagSubsystem.aprilTagDetector.AprilTagSubsystem;
 import org.firstinspires.ftc.teamcode.drive.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DrivetrainSubsystem;
@@ -105,7 +104,7 @@ public class RobotContainer {
 
         // Operator bindings
         dropCone.whileActiveOnce(new IntakeCommand(intake, IntakeSubsystem.Direction.UNFEED));
-        turretToggle.whenPressed(new TurretCommand(turret, lift::getCurrentHeight));
+        turretToggle.whenPressed(new TurretToggleCommand(turret, lift::getCurrentHeight));
         up.whenPressed(lift::incrementHeight);
         down.whenPressed(lift::decrementHeight);
         scoringHeight.whenPressed(lift::scoreHeight);
@@ -118,7 +117,7 @@ public class RobotContainer {
                 driverController::getLeftY, driverController::getLeftX,
                 driverController::getRightX));
 
-        intake.setDefaultCommand(new IntakeCommand(intake, IntakeSubsystem.Direction.FEED));
+        intake.setDefaultCommand(new IntakeCommand(intake, IntakeSubsystem.Direction.FEED).perpetually());
     }
 
     private void setAutoCommands(int chooser, Telemetry telemetry) {

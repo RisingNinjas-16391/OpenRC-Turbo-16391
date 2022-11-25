@@ -24,7 +24,7 @@ public final class TurretConstants {
     public static final int homePos = 0;
     public static final int otherSidePos = 125; // 288 ticks for full revolution
     public static final String name = "turret";
-    public static PIDCoefficients kPID = new PIDCoefficients(0.08, 0, 0);
+    public static PIDCoefficients kPID = new PIDCoefficients(0.075, 0, 0);
 
     public static double MAX_VEL = 3000;
     public static double MAX_ACCEL = 3000;
@@ -32,6 +32,6 @@ public final class TurretConstants {
 
     public static final double kV = 0.02;
     public static final double kA = 0.0025;
-    public static final double kStatic = 0.15;
+    public static final double kStatic = 0.12;
 
 }

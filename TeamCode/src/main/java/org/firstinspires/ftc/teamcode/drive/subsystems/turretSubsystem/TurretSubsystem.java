@@ -56,12 +56,11 @@ public class TurretSubsystem extends SubsystemBase {
             power = controller.update(currentPosition, motor.getVelocity()) + feedforward.calculate(state.getV(), state.getA());
         } else {
             // just hold the position
+            if (controller.getLastError() < tickMargin) {
+                return;
+            }
             controller.setTargetPosition(targetPosition);
             power = controller.update(currentPosition);
-            if (Math.abs(controller.getLastError()) > 5) {
-                power += feedforward.ks * Math.signum(power);
-
-            }
         }
         motor.setPower(power);
     }

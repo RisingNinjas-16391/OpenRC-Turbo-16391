@@ -68,7 +68,7 @@ public class AutoCommand1 extends SequentialCommandGroup {
                 }),
                 new ParallelCommandGroup(
                     new FollowTrajectoryCommand(drivetrain, Trajectory2).withTimeout(5000),
-                    new TurretCommand(turret, lift::getCurrentHeight),
+                    new TurretPositionCommand(turret, lift::getCurrentHeight, true),
                     new LiftCommand(lift, 4)),
                     new IntakeCommand(intake, IntakeSubsystem.Direction.FEED)
                 );
@@ -80,7 +80,7 @@ public class AutoCommand1 extends SequentialCommandGroup {
                 }),
                 new ParallelCommandGroup(
                     new FollowTrajectoryCommand(drivetrain, Trajectory3).withTimeout(5000),
-                    new TurretCommand(turret, lift::getCurrentHeight),
+                    new TurretPositionCommand(turret, lift::getCurrentHeight, false),
                     new LiftCommand(lift, 1),
                     new IntakeCommand(intake, IntakeSubsystem.Direction.UNFEED)
                 ),

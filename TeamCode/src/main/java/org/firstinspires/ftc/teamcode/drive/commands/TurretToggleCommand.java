@@ -8,12 +8,12 @@ import org.firstinspires.ftc.teamcode.drive.subsystems.turretSubsystem.TurretSub
 
 import java.util.function.DoubleSupplier;
 
-public class TurretCommand extends CommandBase {
+public class TurretToggleCommand extends CommandBase {
     @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
     private final TurretSubsystem turret;
     private final DoubleSupplier liftHeight;
 
-    public TurretCommand(TurretSubsystem turret, DoubleSupplier liftHeight) {
+    public TurretToggleCommand(TurretSubsystem turret, DoubleSupplier liftHeight) {
         this.turret = turret;
         this.liftHeight = liftHeight;
 
@@ -21,7 +21,7 @@ public class TurretCommand extends CommandBase {
     }
 
     @Override
-    public void execute() {
+    public void initialize() {
         if (liftHeight.getAsDouble() > minHeightTurret) {
             turret.togglePosition();
         }
@@ -29,6 +29,6 @@ public class TurretCommand extends CommandBase {
     
     @Override
     public boolean isFinished() {
-        return true;
+        return !turret.isBusy();
     }
 }
