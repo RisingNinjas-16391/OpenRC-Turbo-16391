@@ -6,6 +6,7 @@ import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.drive.subsystems.aprilTagSubsystem.aprilTagDetector.AprilTagSubsystem;
 import org.firstinspires.ftc.teamcode.drive.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DrivetrainSubsystem;
@@ -16,7 +17,7 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import java.util.function.BooleanSupplier;
 
 public class AutoCommand1 extends SequentialCommandGroup {
-    public AutoCommand1(DrivetrainSubsystem drivetrain, LiftSubsystem lift, IntakeSubsystem intake, AprilTagSubsystem aprilTagDetector) {
+    public AutoCommand1(DrivetrainSubsystem drivetrain, LiftSubsystem lift, IntakeSubsystem intake, AprilTagSubsystem aprilTagDetector, Telemetry telemetry) {
         TrajectorySequenceSupplier Trajectory1 = () -> drivetrain.trajectorySequenceBuilder(new Pose2d(-35, -60, Math.toRadians(90)))
                 .lineToLinearHeading(new Pose2d(-34, -34,  Math.toRadians(90)))
                 .build();
@@ -54,20 +55,23 @@ public class AutoCommand1 extends SequentialCommandGroup {
                 new LiftCommand(lift, 1),
                 new InstantCommand(intake::feed)),
                 new LiftCommand(lift, 0).withTimeout(1000),
-                new LiftCommand(lift, 1));
+                new LiftCommand(lift, 1),
+                new InstantCommand(() -> telemetry.addLine("Part 1 Complete")));
+
 
         SequentialCommandGroup stackToHigh = new SequentialCommandGroup(new ParallelCommandGroup(
                 new FollowTrajectoryCommand(drivetrain, Trajectory2).withTimeout(5000),
                 new LiftCommand(lift, 4)),
-                new InstantCommand(intake::feed).withTimeout(500));
+                new InstantCommand(intake::feed).withTimeout(500),
+                new InstantCommand(() -> telemetry.addLine("Part 2 Complete")));
 
         SequentialCommandGroup highToStack = new SequentialCommandGroup(new ParallelCommandGroup(
                 new FollowTrajectoryCommand(drivetrain, Trajectory3).withTimeout(5000),
                 new LiftCommand(lift, 1),
                 new InstantCommand(intake::unfeed)),
                 new LiftCommand(lift, 0).withTimeout(1000),
-                new LiftCommand(lift, 1).withTimeout(1000)
-        );
+                new LiftCommand(lift, 1).withTimeout(1000),
+                new InstantCommand(() -> telemetry.addLine("Part 3 Complete")));
 
 
         addCommands(

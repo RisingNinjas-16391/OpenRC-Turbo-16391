@@ -91,7 +91,7 @@ public class RobotContainer{
         turretToggle = null;
         scoringHeight = null;
 
-        setAutoCommands(autoNum);
+        setAutoCommands(autoNum, telemetry);
     }
 
     private void configureButtonBindings() {
@@ -120,8 +120,8 @@ public class RobotContainer{
         intake.setDefaultCommand(new IntakeCommand(intake, true));
     }
 
-    private void setAutoCommands(int chooser) {
-        Command Auto1 = new AutoCommand1(drivetrain, lift, intake, aprilTagDetector);
+    private void setAutoCommands(int chooser, Telemetry telemetry) {
+        Command Auto1 = new AutoCommand1(drivetrain, lift, intake, aprilTagDetector, telemetry);
 
         switch (chooser) {
             case 0:
