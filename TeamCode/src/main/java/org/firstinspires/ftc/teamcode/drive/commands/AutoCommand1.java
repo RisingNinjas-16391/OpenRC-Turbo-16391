@@ -97,11 +97,11 @@ public class AutoCommand1 extends SequentialCommandGroup {
                 highToStack,
                 stackToHigh,
                 // Park Left
-                new ConditionalCommand(new FollowTrajectoryCommand(drivetrain, parkTrajectory),
+                new ConditionalCommand(new FollowTrajectoryCommand(drivetrain, parkLeft),
                         // Park Right
-                        new ConditionalCommand(new FollowTrajectoryCommand(drivetrain, parkTrajectory),
+                        new ConditionalCommand(new FollowTrajectoryCommand(drivetrain, parkRight),
                                 // Park Center
-                                new FollowTrajectoryCommand(drivetrain, parkTrajectory),
+                                new FollowTrajectoryCommand(drivetrain, parkCenter),
                                 ()-> aprilTagDetector.getParkLocation() == AprilTagSubsystem.Detection.RIGHT)
                         , ()-> aprilTagDetector.getParkLocation() == AprilTagSubsystem.Detection.LEFT)
         );
