@@ -122,7 +122,7 @@ public class RobotContainer {
     }
 
     private void setAutoCommands(int chooser, Telemetry telemetry) {
-        Command Auto1 = new AutoCommand1(drivetrain, lift, intake, aprilTagDetector, telemetry);
+        Command Auto1 = new AutoCommand1(drivetrain, lift, intake, turret, aprilTagDetector, telemetry);
 
         switch (chooser) {
             case 0:
