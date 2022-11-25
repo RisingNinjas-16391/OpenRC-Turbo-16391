@@ -10,12 +10,28 @@ public class MeepMeepTesting {
         MeepMeep meepMeep = new MeepMeep(800);
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
-                .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
+                .setConstraints(60, 45, Math.toRadians(90), Math.toRadians(60), 15)
+                .setDimensions(15.5, 16)
                 .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(new Pose2d(-35, -60, Math.toRadians(90)))
-                                .lineToLinearHeading(new Pose2d(-15, -34,  Math.toRadians(90)))
-                                .build()
-                );
+                        drive.trajectorySequenceBuilder(new Pose2d(-35, -62, Math.toRadians(90)))
+                                .splineToSplineHeading(new Pose2d(-28, -5, Math.toRadians(45)), Math.toRadians(60)).setTangent(Math.toRadians(215))
+
+                                .splineToSplineHeading(new Pose2d(-62, -11.5, Math.toRadians(0)), Math.toRadians(180)).setTangent(0)
+                                .splineToSplineHeading(new Pose2d(-28, -5, Math.toRadians(45)), Math.toRadians(30)).setTangent(Math.toRadians(215))
+
+                                .splineToSplineHeading(new Pose2d(-62, -11.5, Math.toRadians(0)), Math.toRadians(180)).setTangent(0)
+                                .splineToSplineHeading(new Pose2d(-28, -5, Math.toRadians(45)), Math.toRadians(30)).setTangent(Math.toRadians(215))
+
+                                .splineToSplineHeading(new Pose2d(-62, -11.5, Math.toRadians(0)), Math.toRadians(180)).setTangent(0)
+                                .splineToSplineHeading(new Pose2d(-28, -5, Math.toRadians(45)), Math.toRadians(30)).setTangent(Math.toRadians(215))
+
+                                .splineToSplineHeading(new Pose2d(-62, -11.5, Math.toRadians(0)), Math.toRadians(180)).setTangent(0)
+                                .splineToSplineHeading(new Pose2d(-28, -5, Math.toRadians(45)), Math.toRadians(30)).setTangent(Math.toRadians(215))
+
+                                .splineToSplineHeading(new Pose2d(-62, -11.5, Math.toRadians(0)), Math.toRadians(180)).setTangent(0)
+                                .splineToSplineHeading(new Pose2d(-28, -5, Math.toRadians(45)), Math.toRadians(30)).setTangent(Math.toRadians(215))
+
+                                .build());
 
                 meepMeep.setBackground(MeepMeep.Background.FIELD_POWERPLAY_OFFICIAL)
                 .setDarkMode(true)

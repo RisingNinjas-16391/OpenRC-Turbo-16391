@@ -19,17 +19,15 @@ import java.util.function.BooleanSupplier;
 public class AutoCommand1 extends SequentialCommandGroup {
     public AutoCommand1(DrivetrainSubsystem drivetrain, LiftSubsystem lift, IntakeSubsystem intake, AprilTagSubsystem aprilTagDetector, Telemetry telemetry) {
         TrajectorySequenceSupplier Trajectory1 = () -> drivetrain.trajectorySequenceBuilder(new Pose2d(-35, -60, Math.toRadians(90)))
-                .lineToLinearHeading(new Pose2d(-34, -34,  Math.toRadians(90)))
+                .splineToSplineHeading(new Pose2d(-28, -5, Math.toRadians(45)), Math.toRadians(60)).setTangent(Math.toRadians(215))
                 .build();
 
         TrajectorySequenceSupplier Trajectory2 = () -> drivetrain.trajectorySequenceBuilder(new Pose2d(-34, -34,  Math.toRadians(90)))
-                .lineToLinearHeading(new Pose2d(-38, -12,  Math.toRadians(180)))
-                .lineToLinearHeading(new Pose2d(-32, -7,  Math.toRadians(45)))
+                .splineToSplineHeading(new Pose2d(-62, -11.5, Math.toRadians(0)), Math.toRadians(180)).setTangent(0)
                 .build();
 
         TrajectorySequenceSupplier Trajectory3 = () -> drivetrain.trajectorySequenceBuilder(new Pose2d(-32, -7,  Math.toRadians(45)))
-                .lineToLinearHeading(new Pose2d(-38, -12,  Math.toRadians(180)))
-                .splineToLinearHeading(new Pose2d(-58, -12,  Math.toRadians(180)), Math.toRadians(180))
+                .splineToSplineHeading(new Pose2d(-28, -5, Math.toRadians(45)), Math.toRadians(30)).setTangent(Math.toRadians(215))
                 .build();
 
         TrajectorySequenceSupplier parkLeft = () -> drivetrain.trajectorySequenceBuilder(new Pose2d(-32, -7,  Math.toRadians(45)))
