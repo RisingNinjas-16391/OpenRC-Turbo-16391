@@ -33,31 +33,34 @@ public class AprilTagSubsystem extends SubsystemBase {
 
     public void detect() {
         ArrayList<AprilTagDetection> detections =  aprilTagDetector.detect(timeout, threshold);
-        switch (detections.get(0).id) {
-            case TAG_ID_LEFT:
-                Log.i("Robot", "auto a");
-                telemetry.addLine("auto a");
-                telemetry.update();
-                savedDetection = Detection.LEFT;
+        if (detections.size() > 0) {
+            switch (detections.get(0).id) {
+                case TAG_ID_LEFT:
+                    Log.i("Robot", "auto a");
+                    telemetry.addLine("auto a");
+                    telemetry.update();
+                    savedDetection = Detection.LEFT;
+                    return;
 
-            case TAG_ID_CENTER:
-                Log.i("Robot", "auto b");
-                telemetry.addLine("auto b");
-                telemetry.update();
-                savedDetection = Detection.CENTER;
+                case TAG_ID_CENTER:
+                    Log.i("Robot", "auto b");
+                    telemetry.addLine("auto b");
+                    telemetry.update();
+                    savedDetection = Detection.CENTER;
+                    return;
 
-
-            case TAG_ID_RIGHT:
-                Log.i("Robot", "auto c");
-                telemetry.addLine("auto c");
-                telemetry.update();
-                savedDetection = Detection.RIGHT;
-
-            default:
-                telemetry.addLine("No park auto");
-                telemetry.update();
-                savedDetection = Detection.NONE;
+                case TAG_ID_RIGHT:
+                    Log.i("Robot", "auto c");
+                    telemetry.addLine("auto c");
+                    telemetry.update();
+                    savedDetection = Detection.RIGHT;
+                    return;
+            }
+            telemetry.addLine("No park auto");
+            telemetry.update();
+            savedDetection = Detection.NONE;
         }
+
     }
     public Detection getParkLocation() {
         return savedDetection;
