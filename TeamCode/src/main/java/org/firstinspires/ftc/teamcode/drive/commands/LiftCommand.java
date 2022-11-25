@@ -11,9 +11,10 @@ import java.util.function.IntSupplier;
 
 public class LiftCommand extends CommandBase {
     private final LiftSubsystem lift;
-    private final IntSupplier heightIndex;
+    private final int heightIndex;
 
-    public LiftCommand(LiftSubsystem lift, IntSupplier heightIndex) {
+
+    public LiftCommand(LiftSubsystem lift, int heightIndex) {
         this.lift = lift;
         this.heightIndex = heightIndex;
 
@@ -22,12 +23,12 @@ public class LiftCommand extends CommandBase {
 
     @Override
     public void initialize() {
-        lift.indexToHeight(heightIndex.getAsInt());
+        lift.indexToHeight(heightIndex);
     }
 
     @Override
     public boolean isFinished() {
-        return true;
+        return lift.isBusy();
     }
 }
 

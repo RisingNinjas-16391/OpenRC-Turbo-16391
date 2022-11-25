@@ -12,6 +12,8 @@ import org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.Drivetrain
 import org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftSubsystem;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
+import java.util.function.BooleanSupplier;
+
 public class AutoCommand1 extends SequentialCommandGroup {
     public AutoCommand1(DrivetrainSubsystem drivetrain, LiftSubsystem lift, IntakeSubsystem intake, AprilTagSubsystem aprilTagDetector) {
         TrajectorySequence Trajectory1 = drivetrain.trajectorySequenceBuilder(drivetrain.getPoseEstimate())
@@ -43,40 +45,34 @@ public class AutoCommand1 extends SequentialCommandGroup {
                 .build();
 
         SequentialCommandGroup stackToHigh = new SequentialCommandGroup(new ParallelCommandGroup(
-                new InstantCommand(() -> drivetrain.runTrajectory(Trajectory2)).withTimeout(5000),
-                new LiftCommand(lift, () -> 4)),
+                new FollowTrajectoryCommand(drivetrain, Trajectory2).withTimeout(5000),
+                new LiftCommand(lift, 4)),
                 new InstantCommand(intake::feed).withTimeout(500));
 
         SequentialCommandGroup highToStack = new SequentialCommandGroup(new ParallelCommandGroup(
-                new InstantCommand(() -> drivetrain.runTrajectory(Trajectory3)).withTimeout(5000),
-                new LiftCommand(lift, () -> 1),
+                new FollowTrajectoryCommand(drivetrain, Trajectory3).withTimeout(5000),
+                new LiftCommand(lift, 1),
                 new InstantCommand(intake::unfeed)),
-                new LiftCommand(lift, () -> 0).withTimeout(1000),
-                new LiftCommand(lift, () -> 1).withTimeout(1000)
+                new LiftCommand(lift, 0).withTimeout(1000),
+                new LiftCommand(lift, 1).withTimeout(1000)
         );
         TrajectorySequence parkTrajectory = drivetrain.trajectorySequenceBuilder(drivetrain.getPoseEstimate())
                 .lineToLinearHeading(new Pose2d(-15, -12, Math.toRadians(5)))
                 .build();
-        switch (aprilTagDetector.getParkLocation()) {
-            case NONE:
-                break;
-            case LEFT:
-                parkTrajectory = parkLeft;
-                break;
-            case CENTER:
-                parkTrajectory = parkCenter;
-                break;
-            case RIGHT:
-                parkTrajectory = parkRight;
-                break;
 
-        }
-        TrajectorySequence finalParkTrajectory = parkTrajectory;
         addCommands(
                 new InstantCommand(aprilTagDetector::detect),
                 stackToHigh,
                 highToStack,
-                stackToHigh
+                stackToHigh,
+                // Park Left
+                new ConditionalCommand(new FollowTrajectoryCommand(drivetrain,parkTrajectory),
+                        // Park Right
+                        new ConditionalCommand(new FollowTrajectoryCommand(drivetrain,parkTrajectory),
+                                // Park Center
+                                new FollowTrajectoryCommand(drivetrain,parkTrajectory),
+                                ()-> aprilTagDetector.getParkLocation() == AprilTagSubsystem.Detection.RIGHT)
+                        , ()-> aprilTagDetector.getParkLocation() == AprilTagSubsystem.Detection.LEFT)
         );
     }
 }

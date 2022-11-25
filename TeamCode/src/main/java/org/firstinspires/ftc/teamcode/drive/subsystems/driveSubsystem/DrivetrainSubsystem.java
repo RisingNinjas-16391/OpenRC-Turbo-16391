@@ -43,6 +43,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
     public TrajectorySequenceBuilder trajectorySequenceBuilder(Pose2d startPose) {
         return drivetrain.trajectorySequenceBuilder(startPose);
     }
+    public boolean isBusy() {
+        return drivetrain.isBusy();
+    }
 
     @Override
     public void periodic() {
