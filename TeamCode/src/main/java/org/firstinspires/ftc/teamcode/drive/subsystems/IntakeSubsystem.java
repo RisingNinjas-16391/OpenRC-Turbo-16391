@@ -16,18 +16,12 @@ public class IntakeSubsystem extends SubsystemBase {
     private final Telemetry telemetry;
 
     public IntakeSubsystem(@NonNull HardwareMap hwMap, Telemetry telemetry) {
+        super();
         intake = hwMap.get(CRServo.class, "intake");
         intake.setDirection(CRServo.Direction.FORWARD);
         intake.setPower(0);
 
         this.telemetry = telemetry;
-    }
-
-    @Override
-    public void periodic() {
-        telemetry.addLine("Intake Power")
-                .addData("intake", intake.getPower());
-        telemetry.update();
     }
 
     public void feed() {

@@ -26,6 +26,7 @@ public class AprilTagSubsystem extends SubsystemBase {
     }
 
     public AprilTagSubsystem(HardwareMap hwMap, Telemetry telemetry) {
+        super();
         aprilTagDetector = new AprilTagDetector(hwMap);
         this.telemetry = telemetry;
 

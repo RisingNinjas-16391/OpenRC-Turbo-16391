@@ -16,6 +16,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     private double speedMultiplier = 1;
 
     public DrivetrainSubsystem(HardwareMap hwMap, Telemetry telemetry) {
+        super();
         this.drivetrain = new MecanumDriveR(hwMap);
         this.telemetry = telemetry;
     }
@@ -50,7 +51,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         drivetrain.update();
-        telemetry.addData("Drive heading", drivetrain.getPoseEstimate().getHeading());
     }
 
     public void setSpeedMultiplier(double speedMultiplier) {

@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.drive.opmode;
 
 import com.arcrobotics.ftclib.command.Command;
+import com.arcrobotics.ftclib.command.Robot;
 import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
@@ -19,7 +20,7 @@ import org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.Drivetrain
 import org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftSubsystem;
 import org.firstinspires.ftc.teamcode.drive.subsystems.turretSubsystem.TurretSubsystem;
 
-public class RobotContainer{
+public class RobotContainer {
     private final DrivetrainSubsystem drivetrain;
     private final LiftSubsystem lift;
     private final IntakeSubsystem intake;
@@ -65,7 +66,7 @@ public class RobotContainer{
 
         setDefaultCommands();
         configureButtonBindings();
-
+        telemetry.setAutoClear(true);
     }
 
     /**
@@ -90,7 +91,7 @@ public class RobotContainer{
         dropCone = null;
         turretToggle = null;
         scoringHeight = null;
-
+        telemetry.setAutoClear(false);
         setAutoCommands(autoNum, telemetry);
     }
 

@@ -50,31 +50,42 @@ public class AutoCommand1 extends SequentialCommandGroup {
                 .lineToLinearHeading(new Pose2d(-15, -12, Math.toRadians(5)))
                 .build();
 
-        SequentialCommandGroup initToStack = new SequentialCommandGroup(new ParallelCommandGroup(
-                new FollowTrajectoryCommand(drivetrain, Trajectory1).withTimeout(5000),
-                new LiftCommand(lift, 1),
-                new InstantCommand(intake::feed)),
-                new LiftCommand(lift, 0).withTimeout(1000),
-                new LiftCommand(lift, 1),
-                new InstantCommand(() -> telemetry.addLine("Part 1 Complete")),
-                new InstantCommand(telemetry::update));
+        SequentialCommandGroup initToStack = new SequentialCommandGroup(
+                new InstantCommand(() -> {
+                    telemetry.addLine("Part 1 Complete");
+                    telemetry.update();
+                }),
+                new ParallelCommandGroup(
+                    new FollowTrajectoryCommand(drivetrain, Trajectory1).withTimeout(5000),
+                    new LiftCommand(lift, 1),
+                    new InstantCommand(intake::feed)),
+                    new LiftCommand(lift, 0).withTimeout(1000)
+                );
 
 
-        SequentialCommandGroup stackToHigh = new SequentialCommandGroup(new ParallelCommandGroup(
-                new FollowTrajectoryCommand(drivetrain, Trajectory2).withTimeout(5000),
-                new LiftCommand(lift, 4)),
-                new InstantCommand(intake::feed).withTimeout(500),
-                new InstantCommand(() -> telemetry.addLine("Part 2 Complete")),
-                new InstantCommand(telemetry::update));
+        SequentialCommandGroup stackToHigh = new SequentialCommandGroup(
+                new InstantCommand(() -> {
+                    telemetry.addLine("Part 2 Complete");
+                    telemetry.update();
+                }),
+                new ParallelCommandGroup(
+                    new FollowTrajectoryCommand(drivetrain, Trajectory2).withTimeout(5000),
+                    new LiftCommand(lift, 4)),
+                    new InstantCommand(intake::feed).withTimeout(500)
+                );
 
-        SequentialCommandGroup highToStack = new SequentialCommandGroup(new ParallelCommandGroup(
-                new FollowTrajectoryCommand(drivetrain, Trajectory3).withTimeout(5000),
-                new LiftCommand(lift, 1),
-                new InstantCommand(intake::unfeed)),
-                new LiftCommand(lift, 0).withTimeout(1000),
-                new LiftCommand(lift, 1).withTimeout(1000),
-                new InstantCommand(() -> telemetry.addLine("Part 3 Complete")),
-                new InstantCommand(telemetry::update));
+        SequentialCommandGroup highToStack = new SequentialCommandGroup(
+                new InstantCommand(() -> {
+                    telemetry.addLine("Part 3 Complete");
+                    telemetry.update();
+                }),
+                new ParallelCommandGroup(
+                    new FollowTrajectoryCommand(drivetrain, Trajectory3).withTimeout(5000),
+                    new LiftCommand(lift, 1),
+                    new InstantCommand(intake::unfeed)),
+                    new LiftCommand(lift, 0).withTimeout(1000),
+                    new LiftCommand(lift, 1).withTimeout(1000)
+                );
 
 
         addCommands(

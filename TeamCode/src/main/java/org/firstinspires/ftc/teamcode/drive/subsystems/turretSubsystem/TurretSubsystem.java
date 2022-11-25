@@ -29,6 +29,7 @@ public class TurretSubsystem extends SubsystemBase {
 
 
     public TurretSubsystem(HardwareMap hwMap, Telemetry telemetry) {
+        super();
         motor = hwMap.get(DcMotorEx.class, name);
         // TODO: Turn back to brake mode
         motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -63,13 +64,6 @@ public class TurretSubsystem extends SubsystemBase {
             }
         }
         motor.setPower(power);
-
-        telemetry.addLine("Turret Encoder Position")
-                .addData("Ticks: ", motor.getCurrentPosition());
-        telemetry.addLine("Turret Error")
-                .addData("Ticks: ", controller.getLastError());
-        telemetry.addLine("Turret Power")
-                .addData("Power: ", motor.getPower());
     }
 
     public boolean isBusy() {

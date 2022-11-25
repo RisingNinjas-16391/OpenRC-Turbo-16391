@@ -36,6 +36,7 @@ public class LiftSubsystem extends SubsystemBase {
     private DcMotor.RunMode mode;
 
     public LiftSubsystem(HardwareMap hardwareMap, Telemetry telemetry) {
+        super();
         this.telemetry = telemetry;
 
         motor = hardwareMap.get(DcMotorEx.class, name);
@@ -51,7 +52,7 @@ public class LiftSubsystem extends SubsystemBase {
         offset = motor.getCurrentPosition();
 
         heightIndex = 0;
-        setHeight(0);
+
     }
 
     private static double encoderTicksToInches(int ticks) {
@@ -87,15 +88,9 @@ public class LiftSubsystem extends SubsystemBase {
         if (mode == DcMotor.RunMode.RUN_TO_POSITION) {
             motor.setPower(power);
         }
-
-        telemetry.addLine("Linear Slide ticks")
-                .addData("slide", motor.getCurrentPosition());
-
-        telemetry.addLine("Linear Slide power")
-                .addData("slide", motor.getPower());
-
-        telemetry.addLine("Linear Slide Level")
-                .addData("slide", heightIndex);
+        // TODO: Uncomment telemetry
+//        telemetry.addLine("Linear Slide Level")
+//                .addData("slide", heightIndex);
     }
 
     public boolean isBusy() {
