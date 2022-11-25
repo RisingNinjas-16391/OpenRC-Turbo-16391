@@ -29,7 +29,13 @@ public class MeepMeepTesting {
                                 .splineToSplineHeading(new Pose2d(-28, -5, Math.toRadians(45)), Math.toRadians(30)).setTangent(Math.toRadians(215))
 
                                 .splineToSplineHeading(new Pose2d(-62, -11.5, Math.toRadians(0)), Math.toRadians(180)).setTangent(0)
-                                .splineToSplineHeading(new Pose2d(-28, -5, Math.toRadians(45)), Math.toRadians(30)).setTangent(Math.toRadians(215))
+                                .splineToSplineHeading(new Pose2d(-28, -5, Math.toRadians(45)), Math.toRadians(30)).setTangent(Math.toRadians(-45))
+
+                                //center park
+//                                .splineToSplineHeading(new Pose2d(-34, -34, Math.toRadians(90)), Math.toRadians(270))
+
+                                //left park
+                                .splineToSplineHeading(new Pose2d(-10, -34, Math.toRadians(90)), Math.toRadians(270))
 
                                 .build());
 

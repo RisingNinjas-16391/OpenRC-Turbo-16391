@@ -17,15 +17,15 @@ import org.firstinspires.ftc.teamcode.helpers.TrajectorySequenceSupplier;
 
 public class AutoCommand1 extends SequentialCommandGroup {
     public AutoCommand1(DrivetrainSubsystem drivetrain, LiftSubsystem lift, IntakeSubsystem intake, TurretSubsystem turret, AprilTagSubsystem aprilTagDetector, Telemetry telemetry) {
-        TrajectorySequenceSupplier Trajectory1 = () -> drivetrain.trajectorySequenceBuilder(new Pose2d(-35, -60, Math.toRadians(90)))
+        TrajectorySequenceSupplier Trajectory1 = () -> drivetrain.trajectorySequenceBuilder(new Pose2d(-35, -62, Math.toRadians(90)))
                 .splineToSplineHeading(new Pose2d(-28, -5, Math.toRadians(45)), Math.toRadians(60)).setTangent(Math.toRadians(215))
                 .build();
 
-        TrajectorySequenceSupplier Trajectory2 = () -> drivetrain.trajectorySequenceBuilder(new Pose2d(-34, -34,  Math.toRadians(90)))
+        TrajectorySequenceSupplier Trajectory2 = () -> drivetrain.trajectorySequenceBuilder(new Pose2d(-25, -5,  Math.toRadians(90)))
                 .splineToSplineHeading(new Pose2d(-62, -11.5, Math.toRadians(0)), Math.toRadians(180)).setTangent(0)
                 .build();
 
-        TrajectorySequenceSupplier Trajectory3 = () -> drivetrain.trajectorySequenceBuilder(new Pose2d(-32, -7,  Math.toRadians(45)))
+        TrajectorySequenceSupplier Trajectory3 = () -> drivetrain.trajectorySequenceBuilder(new Pose2d(-62, -11.5,  Math.toRadians(45)))
                 .splineToSplineHeading(new Pose2d(-28, -5, Math.toRadians(45)), Math.toRadians(30)).setTangent(Math.toRadians(215))
                 .build();
 
@@ -80,7 +80,7 @@ public class AutoCommand1 extends SequentialCommandGroup {
                 }),
                 new ParallelCommandGroup(
                     new FollowTrajectoryCommand(drivetrain, Trajectory3).withTimeout(5000),
-                        new TurretCommand(turret, lift::getCurrentHeight),
+                    new TurretCommand(turret, lift::getCurrentHeight),
                     new LiftCommand(lift, 1),
                     new IntakeCommand(intake, IntakeSubsystem.Direction.UNFEED)
                 ),
