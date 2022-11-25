@@ -45,7 +45,7 @@ public class AutoCommand1 extends SequentialCommandGroup {
                 .lineToLinearHeading(new Pose2d(-58, -20,  Math.toRadians(90)))
                 .build();
 
-        TrajectorySequenceSupplier parkTrajectory = () -> drivetrain.trajectorySequenceBuilder(drivetrain.getPoseEstimate())
+        TrajectorySequenceSupplier parkTrajectory = () -> drivetrain.trajectorySequenceBuilder(new Pose2d(-32, -7,  Math.toRadians(45)))
                 .lineToLinearHeading(new Pose2d(-15, -12, Math.toRadians(5)))
                 .build();
 
