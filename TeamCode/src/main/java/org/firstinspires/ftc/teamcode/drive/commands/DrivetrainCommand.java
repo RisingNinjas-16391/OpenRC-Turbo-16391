@@ -3,19 +3,20 @@ package org.firstinspires.ftc.teamcode.drive.commands;
 import com.arcrobotics.ftclib.command.CommandBase;
 
 import org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DrivetrainSubsystem;
+import org.firstinspires.ftc.teamcode.helpers.DoubleSupplierSupplier;
 
 import java.util.function.DoubleSupplier;
 
 public class DrivetrainCommand extends CommandBase {
     @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
     private final DrivetrainSubsystem drivetrain;
-    private final DoubleSupplier multiplier;
-    private final DoubleSupplier forward;
-    private final DoubleSupplier strafe;
-    private final DoubleSupplier turn;
+    private final DoubleSupplierSupplier multiplier;
+    private final DoubleSupplierSupplier forward;
+    private final DoubleSupplierSupplier strafe;
+    private final DoubleSupplierSupplier turn;
 
-    public DrivetrainCommand(DrivetrainSubsystem drivetrain, DoubleSupplier multiplier,
-                             DoubleSupplier forward, DoubleSupplier strafe, DoubleSupplier turn) {
+    public DrivetrainCommand(DrivetrainSubsystem drivetrain, DoubleSupplierSupplier multiplier,
+                             DoubleSupplierSupplier forward, DoubleSupplierSupplier strafe, DoubleSupplierSupplier turn) {
         this.drivetrain = drivetrain;
         this.multiplier = multiplier;
         this.forward = forward;
@@ -29,9 +30,9 @@ public class DrivetrainCommand extends CommandBase {
     public void execute() {
 
         drivetrain.driveMultiplied(
-                forward.getAsDouble(),
-                -strafe.getAsDouble(),
-                -turn.getAsDouble(),
-                multiplier.getAsDouble());
+                forward.getAsDoubleSupplier().getAsDouble(),
+                -strafe.getAsDoubleSupplier().getAsDouble(),
+                -turn.getAsDoubleSupplier().getAsDouble(),
+                multiplier.getAsDoubleSupplier().getAsDouble());
     }
 }
