@@ -45,19 +45,19 @@ public class AutoCommand1 extends SequentialCommandGroup {
                 .build();
 
         SequentialCommandGroup initToStack = new SequentialCommandGroup(new ParallelCommandGroup(
-                new FollowTrajectoryCommand(drivetrain, Trajectory1).withTimeout(5000),
+                new FollowTrajectoryCommand(drivetrain, () -> Trajectory1).withTimeout(5000),
                 new LiftCommand(lift, 1),
                 new InstantCommand(intake::feed)),
                 new LiftCommand(lift, 0).withTimeout(1000),
                 new LiftCommand(lift, 1));
 
         SequentialCommandGroup stackToHigh = new SequentialCommandGroup(new ParallelCommandGroup(
-                new FollowTrajectoryCommand(drivetrain, Trajectory2).withTimeout(5000),
+                new FollowTrajectoryCommand(drivetrain, () -> Trajectory2).withTimeout(5000),
                 new LiftCommand(lift, 4)),
                 new InstantCommand(intake::feed).withTimeout(500));
 
         SequentialCommandGroup highToStack = new SequentialCommandGroup(new ParallelCommandGroup(
-                new FollowTrajectoryCommand(drivetrain, Trajectory3).withTimeout(5000),
+                new FollowTrajectoryCommand(drivetrain, () -> Trajectory3).withTimeout(5000),
                 new LiftCommand(lift, 1),
                 new InstantCommand(intake::unfeed)),
                 new LiftCommand(lift, 0).withTimeout(1000),
@@ -75,11 +75,11 @@ public class AutoCommand1 extends SequentialCommandGroup {
                 highToStack,
                 stackToHigh,
                 // Park Left
-                new ConditionalCommand(new FollowTrajectoryCommand(drivetrain,parkTrajectory),
+                new ConditionalCommand(new FollowTrajectoryCommand(drivetrain, () -> parkTrajectory),
                         // Park Right
-                        new ConditionalCommand(new FollowTrajectoryCommand(drivetrain,parkTrajectory),
+                        new ConditionalCommand(new FollowTrajectoryCommand(drivetrain, () -> parkTrajectory),
                                 // Park Center
-                                new FollowTrajectoryCommand(drivetrain,parkTrajectory),
+                                new FollowTrajectoryCommand(drivetrain, () -> parkTrajectory),
                                 ()-> aprilTagDetector.getParkLocation() == AprilTagSubsystem.Detection.RIGHT)
                         , ()-> aprilTagDetector.getParkLocation() == AprilTagSubsystem.Detection.LEFT)
         );
