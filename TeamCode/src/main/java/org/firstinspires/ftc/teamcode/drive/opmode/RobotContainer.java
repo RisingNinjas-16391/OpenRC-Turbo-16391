@@ -46,7 +46,7 @@ public class RobotContainer {
     public RobotContainer(HardwareMap hwMap, Gamepad gamepad1, Gamepad gamepad2, Telemetry telemetry) {
         drivetrain = new DrivetrainSubsystem(hwMap, telemetry);
         lift = new LiftSubsystem(hwMap, telemetry);
-        intake = new IntakeSubsystem(hwMap, telemetry);
+        intake = new IntakeSubsystem(hwMap);
         turret = new TurretSubsystem(hwMap, telemetry);
         aprilTagDetector = new AprilTagSubsystem(hwMap, telemetry);
 
@@ -75,7 +75,7 @@ public class RobotContainer {
     public RobotContainer(HardwareMap hwMap, int autoNum, Telemetry telemetry) {
         drivetrain = new DrivetrainSubsystem(hwMap, telemetry);
         lift = new LiftSubsystem(hwMap, telemetry);
-        intake = new IntakeSubsystem(hwMap, telemetry);
+        intake = new IntakeSubsystem(hwMap);
         turret = new TurretSubsystem(hwMap, telemetry);
         aprilTagDetector = new AprilTagSubsystem(hwMap, telemetry);
 
@@ -104,7 +104,7 @@ public class RobotContainer {
         lockRotation.toggleWhenPressed(new LockedHeadingDrivetrainCommand(drivetrain, lift::getDriveMultiplier, driverController::getLeftY, driverController::getLeftX, drivetrain.getPoseEstimate().getHeading()));
 
         // Operator bindings
-        dropCone.whileActiveOnce(new IntakeCommand(intake, false));
+        dropCone.whileActiveOnce(new IntakeCommand(intake, IntakeSubsystem.Direction.UNFEED));
         turretToggle.whenPressed(new TurretCommand(turret, lift::getCurrentHeight));
         up.whenPressed(lift::incrementHeight);
         down.whenPressed(lift::decrementHeight);
@@ -118,7 +118,7 @@ public class RobotContainer {
                 driverController::getLeftY, driverController::getLeftX,
                 driverController::getRightX));
 
-        intake.setDefaultCommand(new IntakeCommand(intake, true));
+        intake.setDefaultCommand(new IntakeCommand(intake, IntakeSubsystem.Direction.FEED));
     }
 
     private void setAutoCommands(int chooser, Telemetry telemetry) {
