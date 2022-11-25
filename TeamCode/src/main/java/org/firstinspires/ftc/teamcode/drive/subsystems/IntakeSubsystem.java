@@ -13,15 +13,28 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 public class IntakeSubsystem extends SubsystemBase {
 
     private final CRServo intake;
-    private final Telemetry telemetry;
 
-    public IntakeSubsystem(@NonNull HardwareMap hwMap, Telemetry telemetry) {
+    public enum Direction {
+        FEED, UNFEED, STOP
+    }
+    public IntakeSubsystem(@NonNull HardwareMap hwMap) {
         super();
         intake = hwMap.get(CRServo.class, "intake");
         intake.setDirection(CRServo.Direction.FORWARD);
         intake.setPower(0);
 
-        this.telemetry = telemetry;
+    }
+    public void setIntake(Direction direction) {
+        switch (direction) {
+            case FEED:
+                feed();
+                break;
+            case UNFEED:
+                unfeed();
+                break;
+            case STOP:
+                intake.setPower(0);
+        }
     }
 
     public void feed() {

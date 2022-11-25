@@ -28,7 +28,7 @@ public class LiftCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return lift.isBusy();
+        return !lift.isBusy();
     }
 }
 

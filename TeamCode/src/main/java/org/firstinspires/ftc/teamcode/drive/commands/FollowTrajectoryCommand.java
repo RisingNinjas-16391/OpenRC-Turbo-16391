@@ -23,6 +23,6 @@ public class FollowTrajectoryCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return drivetrain.isBusy();
+        return !drivetrain.isBusy();
     }
 }

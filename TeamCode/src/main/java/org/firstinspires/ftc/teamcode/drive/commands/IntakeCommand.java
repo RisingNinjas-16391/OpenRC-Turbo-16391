@@ -7,8 +7,8 @@ import org.firstinspires.ftc.teamcode.drive.subsystems.IntakeSubsystem;
 public class IntakeCommand extends CommandBase {
 
     private final IntakeSubsystem intake;
-    private final boolean direction;
-    public IntakeCommand(IntakeSubsystem intake, boolean direction) {
+    private final IntakeSubsystem.Direction direction;
+    public IntakeCommand(IntakeSubsystem intake, IntakeSubsystem.Direction direction) {
         this.intake = intake;
         this.direction = direction;
 
@@ -16,12 +16,12 @@ public class IntakeCommand extends CommandBase {
     }
 
     @Override
-    public void execute() {
-        if (direction) {
-            intake.feed();
-        }
-        else {
-            intake.unfeed();
-        }
+    public void initialize() {
+        intake.setIntake(direction);
+    }
+
+    @Override
+    public boolean isFinished() {
+        return true;
     }
 }

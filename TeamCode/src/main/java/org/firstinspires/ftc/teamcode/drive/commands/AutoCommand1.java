@@ -5,6 +5,7 @@ import com.arcrobotics.ftclib.command.ConditionalCommand;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitCommand;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.drive.subsystems.aprilTagSubsystem.aprilTagDetector.AprilTagSubsystem;
@@ -56,9 +57,10 @@ public class AutoCommand1 extends SequentialCommandGroup {
                 new ParallelCommandGroup(
                     new FollowTrajectoryCommand(drivetrain, Trajectory1).withTimeout(5000),
                     new LiftCommand(lift, 1),
-                    new InstantCommand(intake::feed)),
-                    new LiftCommand(lift, 0).withTimeout(1000)
-                );
+                    new IntakeCommand(intake, IntakeSubsystem.Direction.FEED)
+                ),
+                new LiftCommand(lift, 0).withTimeout(1000)
+            );
 
 
         SequentialCommandGroup stackToHigh = new SequentialCommandGroup(
@@ -69,7 +71,7 @@ public class AutoCommand1 extends SequentialCommandGroup {
                 new ParallelCommandGroup(
                     new FollowTrajectoryCommand(drivetrain, Trajectory2).withTimeout(5000),
                     new LiftCommand(lift, 4)),
-                    new InstantCommand(intake::feed).withTimeout(500)
+                    new IntakeCommand(intake, IntakeSubsystem.Direction.FEED)
                 );
 
         SequentialCommandGroup highToStack = new SequentialCommandGroup(
@@ -80,10 +82,11 @@ public class AutoCommand1 extends SequentialCommandGroup {
                 new ParallelCommandGroup(
                     new FollowTrajectoryCommand(drivetrain, Trajectory3).withTimeout(5000),
                     new LiftCommand(lift, 1),
-                    new InstantCommand(intake::unfeed)),
-                    new LiftCommand(lift, 0).withTimeout(1000),
-                    new LiftCommand(lift, 1).withTimeout(1000)
-                );
+                    new IntakeCommand(intake, IntakeSubsystem.Direction.UNFEED)
+                ),
+                new LiftCommand(lift, 0).withTimeout(1000),
+                new LiftCommand(lift, 1).withTimeout(1000)
+            );
 
 
         addCommands(
