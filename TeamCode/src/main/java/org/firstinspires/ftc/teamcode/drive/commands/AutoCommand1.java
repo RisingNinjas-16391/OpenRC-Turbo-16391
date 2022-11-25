@@ -29,18 +29,18 @@ public class AutoCommand1 extends SequentialCommandGroup {
                 .splineToSplineHeading(new Pose2d(-28, -5, Math.toRadians(45)), Math.toRadians(30))
                 .build();
 
-        TrajectorySequenceSupplier parkLeft = () -> drivetrain.trajectorySequenceBuilder(new Pose2d(-32, -7,  Math.toRadians(45)))
-                .lineToLinearHeading(new Pose2d(-10, -34, Math.toRadians(90)))
+        TrajectorySequenceSupplier parkLeft = () -> drivetrain.trajectorySequenceBuilder(new Pose2d(-28, -5, Math.toRadians(45)))
+                .splineToSplineHeading(new Pose2d(-37, -34, Math.toRadians(90)), Math.toRadians(270)).setTangent(Math.toRadians(180))
+                .splineToSplineHeading(new Pose2d(-60, -34, Math.toRadians(90)), Math.toRadians(180))
                 .build();
 
-        TrajectorySequenceSupplier parkCenter = () -> drivetrain.trajectorySequenceBuilder(new Pose2d(-32, -7,  Math.toRadians(45)))
-                .lineToLinearHeading(new Pose2d(-34, -12, Math.toRadians(90)))
-                .lineToLinearHeading(new Pose2d(-34, -34,  Math.toRadians(90)))
+        TrajectorySequenceSupplier parkCenter = () -> drivetrain.trajectorySequenceBuilder(new Pose2d(-28, -5, Math.toRadians(45)))
+                .splineToSplineHeading(new Pose2d(-34, -34, Math.toRadians(90)), Math.toRadians(270))
                 .build();
 
-        TrajectorySequenceSupplier parkRight = () -> drivetrain.trajectorySequenceBuilder(new Pose2d(-32, -7,  Math.toRadians(45)))
-                .lineToLinearHeading(new Pose2d(-15, -12, Math.toRadians(90)))
-                .lineToLinearHeading(new Pose2d(-58, -20,  Math.toRadians(90)))
+        TrajectorySequenceSupplier parkRight = () -> drivetrain.trajectorySequenceBuilder(new Pose2d(-28, -5, Math.toRadians(45)))
+                .splineToSplineHeading(new Pose2d(-30, -34, Math.toRadians(90)), Math.toRadians(-45)).setTangent(Math.toRadians(0))
+                .splineToSplineHeading(new Pose2d(-10, -34, Math.toRadians(90)), Math.toRadians(0))
                 .build();
 
         TrajectorySequenceSupplier parkTrajectory = () -> drivetrain.trajectorySequenceBuilder(drivetrain.getPoseEstimate())
