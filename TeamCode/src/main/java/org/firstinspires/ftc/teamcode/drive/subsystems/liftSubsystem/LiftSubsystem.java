@@ -25,7 +25,8 @@ public class LiftSubsystem extends SubsystemBase {
     private final PIDFController controller;
     private final Telemetry telemetry;
     private final NanoClock clock = NanoClock.system();
-    private final int offset;
+    private static int savedPosition = 0;
+    private int offset;
     ElevatorFeedforward feedforward = new ElevatorFeedforward(
             kStatic, kG, kV, kA
     );
@@ -52,6 +53,8 @@ public class LiftSubsystem extends SubsystemBase {
         offset = motor.getCurrentPosition();
 
         heightIndex = 0;
+
+        offset = savedPosition;
 
     }
 
@@ -108,7 +111,8 @@ public class LiftSubsystem extends SubsystemBase {
     }
 
     public double getCurrentHeight() {
-        return encoderTicksToInches(motor.getCurrentPosition() - offset);
+        savedPosition = getAdjustedPosition(motor.getCurrentPosition());
+        return encoderTicksToInches(savedPosition);
     }
 
     public void incrementHeight() {
@@ -178,5 +182,9 @@ public class LiftSubsystem extends SubsystemBase {
                 break;
         }
         heightIndex = height;
+    }
+
+    public int getAdjustedPosition(int position) {
+        return position + offset;
     }
 }

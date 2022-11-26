@@ -20,7 +20,7 @@ import java.util.ArrayList;
 public class AprilTagSubsystem extends SubsystemBase {
     private AprilTagDetector aprilTagDetector;
     private Telemetry telemetry;
-    private Detection savedDetection;
+    private Detection savedDetection = Detection.NONE;
     public enum Detection {
         LEFT, CENTER, RIGHT, NONE
     }

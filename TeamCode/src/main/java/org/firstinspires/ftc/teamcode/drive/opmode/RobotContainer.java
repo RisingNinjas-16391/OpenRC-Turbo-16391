@@ -90,7 +90,7 @@ public class RobotContainer {
         dropCone = null;
         turretToggle = null;
         scoringHeight = null;
-        telemetry.setAutoClear(false);
+
         setAutoCommands(autoNum, telemetry);
     }
 

@@ -32,9 +32,9 @@ public final class DriveConstants {
     public static double kA = 0;
     public static double kStatic = 0;
     public static double MAX_VEL = 59;
-    public static double MAX_ACCEL = 45;
+    public static double MAX_ACCEL = 50;
     public static double MAX_ANG_VEL = Math.toRadians(90);
-    public static double MAX_ANG_ACCEL = Math.toRadians(60);
+    public static double MAX_ANG_ACCEL = Math.toRadians(70);
 
     public static final TrajectoryVelocityConstraint VEL_CONSTRAINT = MecanumDriveR.getVelocityConstraint(MAX_VEL, MAX_ANG_VEL, TRACK_WIDTH);
     public static final TrajectoryAccelerationConstraint ACCEL_CONSTRAINT = MecanumDriveR.getAccelerationConstraint(MAX_ACCEL);

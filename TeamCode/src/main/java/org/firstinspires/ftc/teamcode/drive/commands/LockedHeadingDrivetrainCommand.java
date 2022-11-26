@@ -39,8 +39,8 @@ public class LockedHeadingDrivetrainCommand extends CommandBase {
         // Create a vector from the gamepad x/y inputs
         // Then, rotate that vector by the inverse of that heading
         Vector2d input = new Vector2d(
-                forward.getAsDouble(),
-                -strafe.getAsDouble()
+                -forward.getAsDouble(),
+                strafe.getAsDouble()
         ).rotated(-poseEstimate.getHeading());
 
         // Pass in the rotated input + right stick value for rotation

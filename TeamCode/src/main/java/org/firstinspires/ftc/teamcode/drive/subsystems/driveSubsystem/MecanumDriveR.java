@@ -119,9 +119,7 @@ public class MecanumDriveR extends com.acmerobotics.roadrunner.drive.MecanumDriv
         return new ProfileAccelerationConstraint(maxAccel);
     }
 
-    public static void saveCurrentPose(Pose2d pose) {
-        currentPose = pose;
-    }
+
 
     public TrajectoryBuilder trajectoryBuilder(@NonNull Pose2d startPose) {
         return new TrajectoryBuilder(startPose, VEL_CONSTRAINT, ACCEL_CONSTRAINT);
@@ -278,8 +276,15 @@ public class MecanumDriveR extends com.acmerobotics.roadrunner.drive.MecanumDriv
         return (double) -imu.getAngularVelocity().zRotationRate;
     }
 
+    public static void saveCurrentPose(Pose2d pose) {
+        currentPose = pose;
+    }
+
+    public void loadCurrentPose() {
+        setPoseEstimate(currentPose);
+    }
 
     public void saveCurrentPose() {
-        currentPose = getPoseEstimate();
+        saveCurrentPose(getPoseEstimate());
     }
 }

@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigu
 /**
  * Class containing constants used for {@link LiftSubsystem}
  */
-// @Config
+@Config
 public final class LiftConstants {
     // if necessary, reverse the motor so "up" is positive
     public static final DcMotorSimple.Direction DIRECTION = DcMotorSimple.Direction.REVERSE;
@@ -37,13 +37,13 @@ public final class LiftConstants {
     public static final double GEAR_RATIO = 5; // output (spool) speed / input (motor) speed
     // the operating range of the elevator is restricted to [0, MAX_HEIGHT]
     public static final double MAX_HEIGHT = 37; // inches
-    public static double MAX_VEL = 400; // in/s
-    public static double MAX_ACCEL = 400; // in/s^2
-    public static double MAX_JERK = 200; // in/s^3
-    public static PIDCoefficients kPID = new PIDCoefficients(0.5, 0, 0);
-    public static double kV = 0.005;
-    public static double kA = 0.0005;
-    public static double kG = 0.007;
+    public static double MAX_VEL = 600; // in/s
+    public static double MAX_ACCEL = 600; // in/s^2
+    public static double MAX_JERK = 400; // in/s^3
+    public static PIDCoefficients kPID = new PIDCoefficients(2.5, 0, 0);
+    public static double kV = 0.01;
+    public static double kA = 0.001;
+    public static double kG = 0.1;
     public static double kStatic = 0.1;
 
 }

@@ -11,14 +11,13 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequenceBuild
 public class DrivetrainSubsystem extends SubsystemBase {
 
     private final MecanumDriveR drivetrain;
-    private final Telemetry telemetry;
 
     private double speedMultiplier = 1;
 
     public DrivetrainSubsystem(HardwareMap hwMap, Telemetry telemetry) {
         super();
         this.drivetrain = new MecanumDriveR(hwMap);
-        this.telemetry = telemetry;
+        drivetrain.loadCurrentPose();
     }
 
     public Pose2d getPoseEstimate() {
@@ -51,6 +50,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         drivetrain.update();
+        drivetrain.saveCurrentPose();
     }
 
     public void setSpeedMultiplier(double speedMultiplier) {

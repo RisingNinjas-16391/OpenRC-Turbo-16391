@@ -18,8 +18,9 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 public class TurretSubsystem extends SubsystemBase {
 
     public DcMotorEx motor;
-    private Telemetry telemetry;
-    private boolean toggle;
+    private static int savedPosition = 0;
+    private int offset;
+    private boolean toggle = true;
     private MotionProfile profile;
     private double profileStartTime = 0;
     private int targetPosition = 0;
@@ -39,13 +40,14 @@ public class TurretSubsystem extends SubsystemBase {
         controller = new PIDFController(kPID);
         feedforward = new SimpleMotorFeedforward(kStatic, kV, kA);
         motor.setPower(0);
-        this.telemetry = telemetry;
+        offset = savedPosition;
     }
 
     @Override
     public void periodic() {
         double power;
-        double currentPosition = motor.getCurrentPosition();
+        savedPosition = motor.getCurrentPosition();
+        int currentPosition = getAdjustedPosition(savedPosition);
         if (isBusy()) {
             // following a profile
             double time = clock.seconds() - profileStartTime;
@@ -88,6 +90,10 @@ public class TurretSubsystem extends SubsystemBase {
     public void togglePosition() {
         toggle = !toggle;
         togglePosition(toggle);
+    }
+
+    public int getAdjustedPosition(int position) {
+        return position + offset;
     }
 
 }

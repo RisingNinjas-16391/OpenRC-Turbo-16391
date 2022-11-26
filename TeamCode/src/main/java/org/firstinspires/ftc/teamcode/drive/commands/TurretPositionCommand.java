@@ -23,6 +23,11 @@ public class TurretPositionCommand extends CommandBase {
     }
 
     @Override
+    public void initialize() {
+        this.toggled = false;
+    }
+
+    @Override
     public void execute() {
         if (liftHeight.getAsDouble() > minHeightTurret && !toggled) {
             turret.togglePosition(position);
