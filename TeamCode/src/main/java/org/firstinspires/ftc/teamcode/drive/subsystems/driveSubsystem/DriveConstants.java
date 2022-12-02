@@ -31,7 +31,7 @@ public final class DriveConstants {
     public static double kV = 1.0 / rpmToVelocity(MAX_RPM);
     public static double kA = 0;
     public static double kStatic = 0;
-    public static double MAX_VEL = 59;
+    public static double MAX_VEL = 40;
     public static double MAX_ACCEL = 50;
     public static double MAX_ANG_VEL = Math.toRadians(90);
     public static double MAX_ANG_ACCEL = Math.toRadians(70);

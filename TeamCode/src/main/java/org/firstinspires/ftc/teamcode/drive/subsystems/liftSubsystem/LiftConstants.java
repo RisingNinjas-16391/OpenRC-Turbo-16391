@@ -31,6 +31,8 @@ public final class LiftConstants {
 
     public static final MotorConfigurationType MOTOR_CONFIG =
             MotorConfigurationType.getMotorType(GoBILDA5202Series.class);
+    public static double heightThreshold = 0.25;
+    public static boolean simpleMode = true;
     public static final String name = "slide";
     public static double minHeightTurret = 5;
     public static final double SPOOL_RADIUS = 0.75; // in

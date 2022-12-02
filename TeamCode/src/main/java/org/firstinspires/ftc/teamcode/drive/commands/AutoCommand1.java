@@ -113,15 +113,10 @@ public class AutoCommand1 extends SequentialCommandGroup {
                 highToStack,
                 new PrintCommand("Third Stack"),
                 displayTime,
-                // 4
-                stackToHigh,
-                highToStack,
-                new PrintCommand("Fourth Stack"),
-                displayTime,
                 // 5
                 stackToHigh,
                 // Park Left
-                new PrintCommand("Fifth Stack"),
+                new PrintCommand("Fourth Stack"),
                 displayTime,
                 new LiftCommand(lift, 0).withTimeout(1),
                 new ConditionalCommand(new FollowTrajectoryCommand(drivetrain, parkLeft),

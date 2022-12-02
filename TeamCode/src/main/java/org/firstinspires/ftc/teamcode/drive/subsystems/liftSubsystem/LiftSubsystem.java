@@ -50,8 +50,6 @@ public class LiftSubsystem extends SubsystemBase {
 
         // Create a new ElevatorFeedforward with gains kS, kG, kV, and kA
 
-        offset = motor.getCurrentPosition();
-
         heightIndex = 0;
 
         offset = savedPosition;
@@ -68,46 +66,56 @@ public class LiftSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        double power;
         double currentHeight = getCurrentHeight();
 
-
-        if (isBusy()) {
-            // following a profile
-            double time = clock.seconds() - profileStartTime;
-            MotionState state = profile.get(time);
-            controller.setTargetPosition(state.getX());
-            controller.setTargetVelocity(state.getV());
-            controller.setTargetAcceleration(state.getV());
-            power = controller.update(currentHeight, motor.getVelocity()) + feedforward.calculate(state.getV(), state.getA());
-        } else {
-            // just hold the position
-            controller.setTargetPosition(targetHeight);
-            power = controller.update(currentHeight);
-            if (Math.abs(controller.getLastError()) > 5) {
-                power += feedforward.ks * Math.signum(power);
-            }
-        }
         if (mode == DcMotor.RunMode.RUN_TO_POSITION) {
+            double power;
+
+            if (isBusy()) {
+
+                if (simpleMode) {
+                    power = currentHeight < targetHeight ? 1:-1;   // Bang Bang control
+                } else {  // following a profile
+                    double time = clock.seconds() - profileStartTime;
+                    MotionState state = profile.get(time);
+                    controller.setTargetPosition(state.getX());
+                    controller.setTargetVelocity(state.getV());
+                    controller.setTargetAcceleration(state.getV());
+                    power = controller.update(currentHeight, motor.getVelocity()) + feedforward.calculate(state.getV(), state.getA());
+                }
+            } else {
+                // just hold the position
+                controller.setTargetPosition(targetHeight);
+                power = controller.update(currentHeight);
+                if (Math.abs(controller.getLastError()) > 5) {
+                    power += feedforward.ks * Math.signum(power);
+                }
+            }
             motor.setPower(power);
         }
-        // TODO: Uncomment telemetry
-//        telemetry.addLine("Linear Slide Level")
-//                .addData("slide", heightIndex);
+
+        telemetry.addLine("Linear Slide Level")
+                .addData("slide", heightIndex);
     }
 
     public boolean isBusy() {
-        return profile != null && (clock.seconds() - profileStartTime) <= profile.duration();
+        if (simpleMode)
+            return profile != null && (clock.seconds() - profileStartTime) <= profile.duration();
+        else
+            return Math.abs(getCurrentHeight() - targetHeight) > heightThreshold;
     }
 
     public void setHeight(double height) {
-        MotionState start = new MotionState(getCurrentHeight(), 0, 0, 0);
         targetHeight = Math.min(Math.max(0, height), MAX_HEIGHT);
-        MotionState goal = new MotionState(targetHeight, 0, 0, 0);
-        profile = MotionProfileGenerator.generateSimpleMotionProfile(
-                start, goal, MAX_VEL, MAX_ACCEL, MAX_JERK
-        );
-        profileStartTime = clock.seconds();
+        if (!simpleMode) {
+            double time = clock.seconds() - profileStartTime;
+            MotionState start = isBusy() ? profile.get(time) : new MotionState(getCurrentHeight(), 0, 0, 0);
+            MotionState goal = new MotionState(targetHeight, 0, 0, 0);
+            profile = MotionProfileGenerator.generateSimpleMotionProfile(
+                    start, goal, MAX_VEL, MAX_ACCEL, MAX_JERK
+            );
+            profileStartTime = clock.seconds();
+        }
     }
 
     public double getCurrentHeight() {
