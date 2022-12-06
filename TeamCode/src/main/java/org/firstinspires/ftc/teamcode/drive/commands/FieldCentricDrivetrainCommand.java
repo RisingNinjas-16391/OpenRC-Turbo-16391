@@ -43,8 +43,8 @@ public class FieldCentricDrivetrainCommand extends CommandBase {
         // Pass in the rotated input + right stick value for rotation
         // Rotation is not part of the rotated input thus must be passed in separately
         drivetrain.driveMultiplied(
-                input.getX(),
-                input.getY(),
+                -input.getX(),
+                -input.getY(),
                 -turn.getAsDouble(),
                 multiplier.getAsDouble());
     }

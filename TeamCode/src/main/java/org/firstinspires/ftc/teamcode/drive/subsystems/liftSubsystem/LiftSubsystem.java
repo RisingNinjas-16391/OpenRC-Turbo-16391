@@ -94,6 +94,10 @@ public class LiftSubsystem extends SubsystemBase {
             motor.setPower(power);
         }
 
+<<<<<<< Updated upstream
+=======
+        // TODO: Uncomment telemetry
+>>>>>>> Stashed changes
         telemetry.addLine("Linear Slide Level")
                 .addData("slide", heightIndex);
     }

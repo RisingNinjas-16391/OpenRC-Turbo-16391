@@ -4,6 +4,7 @@ import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
+import com.arcrobotics.ftclib.geometry.Pose2d;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -35,9 +36,12 @@ public class RobotContainer {
     private final GamepadButton turboMode;
     private final GamepadButton lockRotation;
 
-    private final GamepadButton dropCone;
+    private final GamepadButton dropConeD;
+    private final GamepadButton dropConeO;
+    private final GamepadButton feedCone;
     private final GamepadButton turretToggle;
     private final GamepadButton scoringHeight;
+    private final GamepadButton resetPose;
 
     /**
      * Teleop Constructor
@@ -57,11 +61,14 @@ public class RobotContainer {
         turboMode = new GamepadButton(driverController, GamepadKeys.Button.LEFT_BUMPER);
         lockRotation = new GamepadButton(driverController, GamepadKeys.Button.RIGHT_STICK_BUTTON);
 
-        dropCone = new GamepadButton(operatorController, GamepadKeys.Button.RIGHT_BUMPER);
-        turretToggle = new GamepadButton(operatorController, GamepadKeys.Button.LEFT_BUMPER);
+        dropConeD = new GamepadButton(driverController, GamepadKeys.Button.A);
+        dropConeO = new GamepadButton(operatorController, GamepadKeys.Button.LEFT_BUMPER);
+        feedCone = new GamepadButton(operatorController, GamepadKeys.Button.RIGHT_BUMPER);
+        turretToggle = new GamepadButton(operatorController, GamepadKeys.Button.DPAD_LEFT);
         up = new GamepadButton(operatorController, GamepadKeys.Button.DPAD_UP);
         down = new GamepadButton(operatorController, GamepadKeys.Button.DPAD_DOWN);
-        scoringHeight = new GamepadButton(operatorController, GamepadKeys.Button.DPAD_LEFT);
+        scoringHeight = new GamepadButton(operatorController, GamepadKeys.Button.DPAD_RIGHT);
+        resetPose = new GamepadButton(operatorController, GamepadKeys.Button.START);
 
         setDefaultCommands();
         configureButtonBindings();
@@ -87,9 +94,12 @@ public class RobotContainer {
 
         up = null;
         down = null;
-        dropCone = null;
+        dropConeD = null;
+        dropConeO = null;
+        feedCone = null;
         turretToggle = null;
         scoringHeight = null;
+        resetPose = null;
 
         setAutoCommands(autoNum, telemetry);
     }
@@ -97,18 +107,20 @@ public class RobotContainer {
     private void configureButtonBindings() {
         // Driver bindings
         // Speed mode button binding
-        slowMode.whenPressed(() -> drivetrain.setSpeedMultiplier(0.6));
-        turboMode.whenActive(() -> drivetrain.setSpeedMultiplier(1));
+        slowMode.whileHeld(() -> drivetrain.setSpeedMultiplier(0.5));
+        turboMode.whileHeld(() -> drivetrain.setSpeedMultiplier(1));
         slowMode.negate().and(turboMode.negate()).whenActive(() -> drivetrain.setSpeedMultiplier(0.7));
         lockRotation.toggleWhenPressed(new LockedHeadingDrivetrainCommand(drivetrain, lift::getDriveMultiplier, driverController::getLeftY, driverController::getLeftX, drivetrain.getPoseEstimate().getHeading()));
+        dropConeD.whileHeld(new IntakeCommand(intake, IntakeSubsystem.Direction.UNFEED).perpetually());
 
         // Operator bindings
-        dropCone.whileActiveOnce(new IntakeCommand(intake, IntakeSubsystem.Direction.UNFEED));
+        dropConeO.whileHeld(new IntakeCommand(intake, IntakeSubsystem.Direction.UNFEED).perpetually());
+        feedCone.whileHeld(new IntakeCommand(intake, IntakeSubsystem.Direction.FEED).perpetually());
         turretToggle.whenPressed(new TurretToggleCommand(turret, lift::getCurrentHeight));
         up.whenPressed(lift::incrementHeight);
         down.whenPressed(lift::decrementHeight);
         scoringHeight.whenPressed(lift::scoreHeight);
-        scoringHeight.whenReleased(() -> lift.indexToHeight());
+//        resetPose.whenPressed((drivetrain.setPoseEstimate()));
 
     }
 

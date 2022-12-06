@@ -18,6 +18,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
         super();
         this.drivetrain = new MecanumDriveR(hwMap);
         drivetrain.loadCurrentPose();
+
     }
 
     public Pose2d getPoseEstimate() {
