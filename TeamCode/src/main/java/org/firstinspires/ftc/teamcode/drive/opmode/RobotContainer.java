@@ -1,10 +1,10 @@
 package org.firstinspires.ftc.teamcode.drive.opmode;
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
-import com.arcrobotics.ftclib.geometry.Pose2d;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -56,12 +56,13 @@ public class RobotContainer {
         driverController = new GamepadEx(gamepad1);
         operatorController = new GamepadEx(gamepad2);
 
-
+        // Driver Controls
         slowMode = new GamepadButton(driverController, GamepadKeys.Button.RIGHT_BUMPER);
         turboMode = new GamepadButton(driverController, GamepadKeys.Button.LEFT_BUMPER);
         lockRotation = new GamepadButton(driverController, GamepadKeys.Button.RIGHT_STICK_BUTTON);
-
         dropConeD = new GamepadButton(driverController, GamepadKeys.Button.A);
+
+        // Operator Controls
         dropConeO = new GamepadButton(operatorController, GamepadKeys.Button.LEFT_BUMPER);
         feedCone = new GamepadButton(operatorController, GamepadKeys.Button.RIGHT_BUMPER);
         turretToggle = new GamepadButton(operatorController, GamepadKeys.Button.DPAD_LEFT);
@@ -120,8 +121,7 @@ public class RobotContainer {
         up.whenPressed(lift::incrementHeight);
         down.whenPressed(lift::decrementHeight);
         scoringHeight.whenPressed(lift::scoreHeight);
-//        resetPose.whenPressed((drivetrain.setPoseEstimate()));
-
+        resetPose.whenPressed((() -> drivetrain.setPoseEstimate(new Pose2d(0, 0, Math.toRadians(0)))));
     }
 
     private void setDefaultCommands() {
