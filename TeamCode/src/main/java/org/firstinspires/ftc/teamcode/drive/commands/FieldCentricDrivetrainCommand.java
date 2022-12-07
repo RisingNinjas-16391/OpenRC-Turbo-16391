@@ -36,9 +36,9 @@ public class FieldCentricDrivetrainCommand extends CommandBase {
         // Create a vector from the gamepad x/y inputs
         // Then, rotate that vector by the inverse of that heading
         Vector2d input = new Vector2d(
-                -forward.getAsDouble(),
-                strafe.getAsDouble()
-        ).rotated(-poseEstimate.getHeading());
+                forward.getAsDouble(),
+                -strafe.getAsDouble()
+        ).rotated(-poseEstimate.getHeading() + Math.toRadians(180));
 
         // Pass in the rotated input + right stick value for rotation
         // Rotation is not part of the rotated input thus must be passed in separately

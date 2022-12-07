@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.drive.commands.AutoCommand1;
+import org.firstinspires.ftc.teamcode.drive.commands.DrivetrainCommand;
 import org.firstinspires.ftc.teamcode.drive.commands.FieldCentricDrivetrainCommand;
 import org.firstinspires.ftc.teamcode.drive.commands.IntakeCommand;
 import org.firstinspires.ftc.teamcode.drive.commands.LockedHeadingDrivetrainCommand;
@@ -125,7 +126,7 @@ public class RobotContainer {
     }
 
     private void setDefaultCommands() {
-        drivetrain.setDefaultCommand(new FieldCentricDrivetrainCommand(drivetrain, lift::getDriveMultiplier,
+        drivetrain.setDefaultCommand(new DrivetrainCommand(drivetrain, lift::getDriveMultiplier,
                 driverController::getLeftY, driverController::getLeftX,
                 driverController::getRightX));
 
