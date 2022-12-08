@@ -24,7 +24,7 @@ public final class LiftConstants {
     public static double FEED_POS = 8;
     public static double LOW_POS = 15;
     public static double MID_POS = 25;
-    public static double HIGH_POS = 37;
+    public static double HIGH_POS = 32;
 
     public static double SCORE_ADJ = 7;
 

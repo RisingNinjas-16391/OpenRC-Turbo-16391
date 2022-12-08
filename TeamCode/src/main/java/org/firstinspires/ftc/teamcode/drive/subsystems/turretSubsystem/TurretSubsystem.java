@@ -57,11 +57,12 @@ public class TurretSubsystem extends SubsystemBase {
             controller.setTargetAcceleration(state.getV());
             power = controller.update(currentPosition, motor.getVelocity()) + feedforward.calculate(state.getV(), state.getA());
         } else {
+            controller.setTargetPosition(targetPosition);
+
             // just hold the position
             if (controller.getLastError() < tickMargin) {
                 return;
             }
-            controller.setTargetPosition(targetPosition);
             power = controller.update(currentPosition);
         }
         motor.setPower(power);
@@ -72,13 +73,19 @@ public class TurretSubsystem extends SubsystemBase {
     }
     public void setPosition(int position) {
         double time = clock.seconds() - profileStartTime;
-        MotionState start = isBusy() ? profile.get(time) : new MotionState(targetPosition, 0, 0, 0);
+        MotionState start = new MotionState(motor.getCurrentPosition(), motor.getVelocity(), 0, 0);
         targetPosition = Math.min(Math.max(homePos, position), otherSidePos);
         MotionState goal = new MotionState(targetPosition, 0, 0, 0);
         profile = MotionProfileGenerator.generateSimpleMotionProfile(
                 start, goal, MAX_VEL, MAX_ACCEL, MAX_JERK
         );
         profileStartTime = clock.seconds();
+    }
+
+    public void setPosition() {
+        if (!isBusy()) {
+            setPosition(targetPosition);
+        }
     }
 
 

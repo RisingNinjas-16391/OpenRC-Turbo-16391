@@ -14,6 +14,7 @@ import org.firstinspires.ftc.teamcode.drive.commands.DrivetrainCommand;
 import org.firstinspires.ftc.teamcode.drive.commands.FieldCentricDrivetrainCommand;
 import org.firstinspires.ftc.teamcode.drive.commands.IntakeCommand;
 import org.firstinspires.ftc.teamcode.drive.commands.LockedHeadingDrivetrainCommand;
+import org.firstinspires.ftc.teamcode.drive.commands.TurretLockCommand;
 import org.firstinspires.ftc.teamcode.drive.commands.TurretToggleCommand;
 import org.firstinspires.ftc.teamcode.drive.subsystems.aprilTagSubsystem.aprilTagDetector.AprilTagSubsystem;
 import org.firstinspires.ftc.teamcode.drive.subsystems.IntakeSubsystem;
@@ -131,6 +132,7 @@ public class RobotContainer {
                 driverController::getRightX));
 
         intake.setDefaultCommand(new IntakeCommand(intake, IntakeSubsystem.Direction.FEED).perpetually());
+        turret.setDefaultCommand(new TurretLockCommand(turret));
     }
 
     private void setAutoCommands(int chooser, Telemetry telemetry) {
