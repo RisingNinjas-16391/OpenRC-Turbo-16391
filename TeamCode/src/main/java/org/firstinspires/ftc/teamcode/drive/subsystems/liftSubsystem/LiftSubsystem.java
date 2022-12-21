@@ -35,6 +35,7 @@ public class LiftSubsystem extends SubsystemBase {
     private double targetHeight = 0;
     private int heightIndex;
     private DcMotor.RunMode mode;
+    private boolean seeking = false;
 
     public LiftSubsystem(HardwareMap hardwareMap, Telemetry telemetry) {
         super();
@@ -101,8 +102,10 @@ public class LiftSubsystem extends SubsystemBase {
     public boolean isBusy() {
         if (simpleMode)
             return profile != null && (clock.seconds() - profileStartTime) <= profile.duration();
-        else
-            return Math.abs(getCurrentHeight() - targetHeight) > heightThreshold;
+        else{
+            seeking = seeking || Math.abs(getCurrentHeight() - targetHeight) > heightThreshold;
+            return seeking;
+        }
     }
 
     public void setHeight(double height) {
@@ -115,6 +118,8 @@ public class LiftSubsystem extends SubsystemBase {
                     start, goal, MAX_VEL, MAX_ACCEL, MAX_JERK
             );
             profileStartTime = clock.seconds();
+        } else {
+            seeking = true;
         }
     }
 
@@ -163,8 +168,8 @@ public class LiftSubsystem extends SubsystemBase {
     }
 
     public void indexToHeight() {
-        if (heightIndex > 4) {
-            heightIndex = 4;
+        if (heightIndex > 5) {
+            heightIndex = 5;
         } else if (heightIndex < 0) {
             heightIndex = 0;
         }
@@ -187,6 +192,9 @@ public class LiftSubsystem extends SubsystemBase {
                 break;
             case 4:
                 setHeight(HIGH_POS);
+                break;
+            case 5:
+                setHeight(EX_HIGH_POS);
                 break;
         }
         heightIndex = height;

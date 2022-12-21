@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.drive.commands.AutoCommand1;
+import org.firstinspires.ftc.teamcode.drive.commands.AutoCommandPark;
 import org.firstinspires.ftc.teamcode.drive.commands.DrivetrainCommand;
 import org.firstinspires.ftc.teamcode.drive.commands.FieldCentricDrivetrainCommand;
 import org.firstinspires.ftc.teamcode.drive.commands.IntakeCommand;
@@ -137,12 +138,14 @@ public class RobotContainer {
 
     private void setAutoCommands(int chooser, Telemetry telemetry) {
         Command Auto1 = new AutoCommand1(drivetrain, lift, intake, turret, aprilTagDetector, telemetry);
+        Command Park = new AutoCommandPark(drivetrain, lift, intake, turret, aprilTagDetector, telemetry);
 
         switch (chooser) {
             case 0:
                 Auto1.schedule();
                 break;
             case 1:
+                Park.schedule();
                 break;
         }
 

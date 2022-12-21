@@ -5,10 +5,10 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.drive.opmode.RobotContainer;
 
-@Autonomous(name = "Autonomous", group = "Autonomous")
-public class CommandAuto extends CommandOpMode {
+@Autonomous(name = "Just Park", group = "Autonomous")
+public class CommandAutoPark extends CommandOpMode {
     @Override
     public void initialize() {
-        new RobotContainer(hardwareMap, 1, telemetry);
+        new RobotContainer(hardwareMap, 0, telemetry);
     }
 }
