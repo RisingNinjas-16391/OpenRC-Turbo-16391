@@ -27,7 +27,7 @@ public class AutoCommand1 extends SequentialCommandGroup {
     public AutoCommand1(DrivetrainSubsystem drivetrain, LiftSubsystem lift, IntakeSubsystem intake, TurretSubsystem turret, AprilTagSubsystem aprilTagDetector, Telemetry telemetry) {
 
         TrajectorySequenceSupplier initToHighTrajectory = () -> drivetrain.trajectorySequenceBuilder(new Pose2d(-62, 35, Math.toRadians(90)))
-                .splineToSplineHeading(new Pose2d(-62, 32, Math.toRadians(130)), Math.toRadians(110))
+                .splineToSplineHeading(new Pose2d(-66, 91, Math.toRadians(130)), Math.toRadians(110))
                 .build();
 
         TrajectorySequenceSupplier highToStackTrajectory = () -> drivetrain.trajectorySequenceBuilder(new Pose2d(-28, -5, Math.toRadians(45))).setTangent(Math.toRadians(215))
@@ -59,6 +59,7 @@ public class AutoCommand1 extends SequentialCommandGroup {
         SequentialCommandGroup initToHigh = new SequentialCommandGroup(
                 new ParallelCommandGroup(
                     new FollowTrajectoryCommand(drivetrain, initToHighTrajectory).withTimeout(5000),
+                    new LiftCommand(lift, 4),
                     new IntakeCommand(intake, IntakeSubsystem.Direction.FEED)
                 )
             );
