@@ -37,15 +37,15 @@ public final class LiftConstants {
     public static double minHeightTurret = 5;
     public static final double SPOOL_RADIUS = 0.75; // in
     public static final double GEAR_RATIO = 5; // output (spool) speed / input (motor) speed
-    // the operating range of the elevator is restricted to [0, MAX_HEIGHT]
+    // the operating range of the elevator is restricted to [0, MAX_HEIGHT]n
     public static final double MAX_HEIGHT = 37; // inches
     public static double MAX_VEL = 600; // in/s
     public static double MAX_ACCEL = 600; // in/s^2
     public static double MAX_JERK = 400; // in/s^3
-    public static PIDCoefficients kPID = new PIDCoefficients(2.5, 0, 0);
+    public static PIDCoefficients kPID = new PIDCoefficients(2.35, 0.1, 0);
     public static double kV = 0.01;
     public static double kA = 0.001;
-    public static double kG = 0.1;
+    public static double kG = 0.001;
     public static double kStatic = 0.1;
 
 }
