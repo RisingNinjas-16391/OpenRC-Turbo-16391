@@ -19,132 +19,119 @@ import org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftSubsyst
 import org.firstinspires.ftc.teamcode.drive.subsystems.turretSubsystem.TurretSubsystem;
 import org.firstinspires.ftc.teamcode.helpers.TrajectorySequenceSupplier;
 
+import java.util.Locale;
+
 
 public class AutoCommand1 extends SequentialCommandGroup {
     ElapsedTime timer = new ElapsedTime();
-    final double parkY = -40;
-    final Pose2d initPosition = new Pose2d(-35, -60, Math.toRadians(90));
-    final Pose2d highPosition = new Pose2d(-28, -4.75, Math.toRadians(45));
-    final Pose2d stackPosition = new Pose2d(-60.5, -11.25, Math.toRadians(0));
-    double stackHeight = 3.0;
-    final double stackIncrement = 0.4;
-    final DrivetrainSubsystem drivetrain;
-    final LiftSubsystem lift;
-    final IntakeSubsystem intake;
-    final TurretSubsystem turret;
-    final TrajectorySequenceSupplier highToStackTrajectory;
     public AutoCommand1(DrivetrainSubsystem drivetrain, LiftSubsystem lift, IntakeSubsystem intake, TurretSubsystem turret, AprilTagSubsystem aprilTagDetector, Telemetry telemetry) {
-        this.drivetrain = drivetrain;
-        this.lift = lift;
-        this.intake = intake;
-        this.turret = turret;
-        TrajectorySequenceSupplier initToHighTrajectory = () -> drivetrain.trajectorySequenceBuilder(initPosition)
-                .splineToSplineHeading(highPosition, Math.toRadians(60))
+
+        TrajectorySequenceSupplier initToHighTrajectory = () -> drivetrain.trajectorySequenceBuilder(new Pose2d(-62, 35, Math.toRadians(90)))
+                .splineToSplineHeading(new Pose2d(-71, 92, Math.toRadians(130)), Math.toRadians(120))
                 .build();
 
-        highToStackTrajectory = () -> drivetrain.trajectorySequenceBuilder(highPosition).setTangent(Math.toRadians(215))
-                .splineToSplineHeading(stackPosition, Math.toRadians(180))
+        TrajectorySequenceSupplier highToStackTrajectory = () -> drivetrain.trajectorySequenceBuilder(new Pose2d(-71, 92, Math.toRadians(130))).setTangent(0)
+                .splineToSplineHeading(new Pose2d(-38, 89, Math.toRadians(0)), Math.toRadians(-5))
                 .build();
 
-        TrajectorySequenceSupplier stackToHighTrajectory = () -> drivetrain.trajectorySequenceBuilder(stackPosition).setTangent(0)
-                .splineToSplineHeading(highPosition, Math.toRadians(30))
+        TrajectorySequenceSupplier stackToHighTrajectory = () -> drivetrain.trajectorySequenceBuilder(new Pose2d(-38, 89,  Math.toRadians(0))).setTangent(0)
+                .splineToSplineHeading(new Pose2d(-71, 92, Math.toRadians(130)), Math.toRadians(-5))
                 .build();
 
         TrajectorySequenceSupplier parkLeft = () -> drivetrain.trajectorySequenceBuilder(new Pose2d(-28, -5, Math.toRadians(45)))
-                .splineToSplineHeading(new Pose2d(-37, parkY, Math.toRadians(90)), Math.toRadians(270)).setTangent(Math.toRadians(180))
-                .splineToSplineHeading(new Pose2d(-62, parkY, Math.toRadians(90)), Math.toRadians(180))
+                .splineToSplineHeading(new Pose2d(-37, -30, Math.toRadians(90)), Math.toRadians(270)).setTangent(Math.toRadians(180))
+                .splineToSplineHeading(new Pose2d(-60, -30, Math.toRadians(90)), Math.toRadians(180))
                 .build();
 
-        TrajectorySequenceSupplier parkCenter = () -> drivetrain.trajectorySequenceBuilder(new Pose2d(-28, -5, Math.toRadians(45)))
-                .splineToSplineHeading(new Pose2d(-34, parkY, Math.toRadians(90)), Math.toRadians(270))
+        TrajectorySequenceSupplier parkCenter = () -> drivetrain.trajectorySequenceBuilder(new Pose2d(-28, -1, Math.toRadians(45)))
+                .splineToSplineHeading(new Pose2d(-34, -30, Math.toRadians(90)), Math.toRadians(270))
                 .build();
 
-        TrajectorySequenceSupplier parkRight = () -> drivetrain.trajectorySequenceBuilder(new Pose2d(-28, -5, Math.toRadians(45)))
-                .splineToSplineHeading(new Pose2d(-30, parkY, Math.toRadians(90)), Math.toRadians(-45)).setTangent(Math.toRadians(0))
-                .splineToSplineHeading(new Pose2d(-10, parkY, Math.toRadians(90)), Math.toRadians(0))
+        TrajectorySequenceSupplier parkRight = () -> drivetrain.trajectorySequenceBuilder(new Pose2d(-28, -1, Math.toRadians(45)))
+                .splineToSplineHeading(new Pose2d(-30, -30, Math.toRadians(90)), Math.toRadians(-45)).setTangent(Math.toRadians(0))
+                .splineToSplineHeading(new Pose2d(-10, -30, Math.toRadians(90)), Math.toRadians(0))
+                .build();
+
+        TrajectorySequenceSupplier parkTrajectory = () -> drivetrain.trajectorySequenceBuilder(drivetrain.getPoseEstimate())
+                .lineToLinearHeading(new Pose2d(-15, -12, Math.toRadians(5)))
                 .build();
 
         SequentialCommandGroup initToHigh = new SequentialCommandGroup(
                 new ParallelCommandGroup(
                     new FollowTrajectoryCommand(drivetrain, initToHighTrajectory).withTimeout(5000),
-                    new LiftCommand(lift, 34.0),
-                    new IntakeCommand(intake, IntakeSubsystem.Direction.FEED).perpetually().withTimeout(100)
+//                    new LiftCommand(lift, 4),
+                    new IntakeCommand(intake, IntakeSubsystem.Direction.FEED)
                 )
             );
 
+        SequentialCommandGroup highToStack = new SequentialCommandGroup(
+                new IntakeCommand(intake, IntakeSubsystem.Direction.UNFEED),
+                new WaitCommand(1000),
+                new ParallelDeadlineGroup(
+                    new FollowTrajectoryCommand(drivetrain, highToStackTrajectory).withTimeout(5000),
+                    new WaitCommand(1000),
+//                    new TurretPositionCommand(turret, lift::getCurrentHeight, false),
+//                    new LiftCommand(lift, 1),
+                    new IntakeCommand(intake, IntakeSubsystem.Direction.FEED)
+                )
+//                new LiftCommand(lift, 0).withTimeout(500)
+
+            );
 
         SequentialCommandGroup stackToHigh = new SequentialCommandGroup(
+//                new LiftCommand(lift, 4).withTimeout(250),
                 new ParallelCommandGroup(
-                        new LiftCommand(lift, 34.0),
-                        new FollowTrajectoryCommand(drivetrain, stackToHighTrajectory).withTimeout(5000),
-                        new TurretPositionCommand(turret, lift::getCurrentHeight, true)
+                        new FollowTrajectoryCommand(drivetrain, stackToHighTrajectory).withTimeout(5000)
+//                        new TurretPositionCommand(turret, lift::getCurrentHeight, true),
+//                        new LiftCommand(lift, 4)
                 )
         );
 
-        Command displayTime = new InstantCommand(() -> System.out.printf("Time Left: %f.2%n", 30 - timer.time()));
+        Command displayTime = new InstantCommand(() -> System.out.println(String.format("Time Left: %f.2", 30 - timer.time())));
         addCommands(
                 new PrintCommand("Start Auto"),
                 new InstantCommand(() -> {
                     timer.reset();
-                    drivetrain.setPoseEstimate(initPosition);
+                    drivetrain.setPoseEstimate(new Pose2d(-62, 35, Math.toRadians(90)));
                 }),
                 new InstantCommand(aprilTagDetector::detect),
                 // Preload
                 initToHigh,
-                getHighToStack(),
-                new PrintCommand("Preload Stack"),
-                displayTime,
-                // 1
+                highToStack,
+//                new PrintCommand("Preload Stack"),
+//                displayTime,
+//                // 1
                 stackToHigh,
-                getHighToStack(),
-                new PrintCommand("First Stack"),
-                displayTime,
-                // 2
-                stackToHigh,
-                getHighToStack(),
-                new PrintCommand("Second Stack"),
-                displayTime,
-                // 3
-                stackToHigh,
+//                highToStack,
+//                new PrintCommand("First Stack"),
+//                displayTime,
+//                // 2
+//                stackToHigh,
+//                highToStack,
+//                new PrintCommand("Second Stack"),
+//                displayTime,
+//                // 3
+//                stackToHigh,
+//                highToStack,
+//                new PrintCommand("Third Stack"),
+//                displayTime,
+//                // 5
+//                stackToHigh,
+//
+//                new PrintCommand("Fourth Stack"),
+//                displayTime,
+//                new LiftCommand(lift, 0).withTimeout(1),
                 // Park Left
-                new PrintCommand("Third Stack"),
-                displayTime,
-                new ParallelCommandGroup(
-                        new SequentialCommandGroup(
-                                new WaitCommand(500),
-                                new LiftCommand(lift, 0)
-                        ),
-                        new ConditionalCommand(new FollowTrajectoryCommand(drivetrain, parkLeft),
-                                // Park Right
-                                new ConditionalCommand(new FollowTrajectoryCommand(drivetrain, parkRight),
-                                        // Park Center
-                                        new FollowTrajectoryCommand(drivetrain, parkCenter),
-                                        ()-> aprilTagDetector.getParkLocation() == AprilTagSubsystem.Detection.RIGHT),
-                                ()-> aprilTagDetector.getParkLocation() == AprilTagSubsystem.Detection.LEFT
-                        )
-                ),
-
-                new PrintCommand(("Parked: " + aprilTagDetector.getParkLocation().toString())),
+//                new ConditionalCommand(new FollowTrajectoryCommand(drivetrain, parkLeft),
+//                        // Park Right
+//                        new ConditionalCommand(new FollowTrajectoryCommand(drivetrain, parkRight),
+//                                // Park Center
+//                                new FollowTrajectoryCommand(drivetrain, parkCenter),
+//                                ()-> aprilTagDetector.getParkLocation() == AprilTagSubsystem.Detection.RIGHT),
+//                        ()-> aprilTagDetector.getParkLocation() == AprilTagSubsystem.Detection.LEFT
+//                ),
+//                new PrintCommand(("Parked: " + aprilTagDetector.getParkLocation().toString())),
                 displayTime
         );
-    }
-    private Command getHighToStack() {
-        Command highToStack = new SequentialCommandGroup(
-                new WaitCommand(500),
-                new IntakeCommand(intake, IntakeSubsystem.Direction.UNFEED).perpetually().withTimeout(1000),
-                new ParallelDeadlineGroup(
-                        new FollowTrajectoryCommand(drivetrain, highToStackTrajectory).withTimeout(5000),
-                        new TurretPositionCommand(turret, lift::getCurrentHeight, false),
-                        new SequentialCommandGroup(
-                                new WaitCommand(500),
-                                new LiftCommand(lift, stackHeight + 3.0)
-                        ),
-                        new IntakeCommand(intake, IntakeSubsystem.Direction.FEED).perpetually()
-                ),
-                new LiftCommand(lift, stackHeight)
-
-        );
-        stackHeight -= stackIncrement;
-        return highToStack;
     }
 }
