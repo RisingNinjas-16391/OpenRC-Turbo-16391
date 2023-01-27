@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.drive.commands.AutoCommand1;
+import org.firstinspires.ftc.teamcode.drive.commands.AutoCommandOneCone;
 import org.firstinspires.ftc.teamcode.drive.commands.AutoCommandPark;
 import org.firstinspires.ftc.teamcode.drive.commands.DrivetrainCommand;
 import org.firstinspires.ftc.teamcode.drive.commands.FieldCentricDrivetrainCommand;
@@ -23,11 +24,13 @@ import org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.Drivetrain
 import org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftSubsystem;
 import org.firstinspires.ftc.teamcode.drive.subsystems.turretSubsystem.TurretSubsystem;
 
-public class RobotContainer {
+public class
+
+RobotContainer {
     private final DrivetrainSubsystem drivetrain;
     private final LiftSubsystem lift;
     private final IntakeSubsystem intake;
-    private final TurretSubsystem turret;
+//    private final TurretSubsystem turret;
     private final AprilTagSubsystem aprilTagDetector;
 
     private final GamepadEx driverController;
@@ -37,12 +40,13 @@ public class RobotContainer {
     private final GamepadButton down;
     private final GamepadButton slowMode;
     private final GamepadButton turboMode;
-    private final GamepadButton lockRotation;
+    private final GamepadButton threeAbove;
+//    private final GamepadButton lockRotation;
 
     private final GamepadButton dropConeD;
     private final GamepadButton dropConeO;
     private final GamepadButton feedCone;
-    private final GamepadButton turretToggle;
+//    private final GamepadButton turretToggle;
     private final GamepadButton scoringHeight;
     private final GamepadButton resetPose;
 
@@ -53,22 +57,24 @@ public class RobotContainer {
         drivetrain = new DrivetrainSubsystem(hwMap, telemetry);
         lift = new LiftSubsystem(hwMap, telemetry);
         intake = new IntakeSubsystem(hwMap);
-        turret = new TurretSubsystem(hwMap, telemetry);
+//        turret = new TurretSubsystem(hwMap, telemetry);
         aprilTagDetector = new AprilTagSubsystem(hwMap, telemetry);
 
         driverController = new GamepadEx(gamepad1);
         operatorController = new GamepadEx(gamepad2);
 
+
         // Driver Controls
         slowMode = new GamepadButton(driverController, GamepadKeys.Button.RIGHT_BUMPER);
         turboMode = new GamepadButton(driverController, GamepadKeys.Button.LEFT_BUMPER);
-        lockRotation = new GamepadButton(driverController, GamepadKeys.Button.RIGHT_STICK_BUTTON);
+//        lockRotation = new GamepadButton(driverController, GamepadKeys.Button.RIGHT_STICK_BUTTON);
         dropConeD = new GamepadButton(driverController, GamepadKeys.Button.A);
+        threeAbove = new GamepadButton(operatorController, GamepadKeys.Button.X);
 
         // Operator Controls
         dropConeO = new GamepadButton(operatorController, GamepadKeys.Button.LEFT_BUMPER);
         feedCone = new GamepadButton(operatorController, GamepadKeys.Button.RIGHT_BUMPER);
-        turretToggle = new GamepadButton(operatorController, GamepadKeys.Button.DPAD_LEFT);
+//        turretToggle = new GamepadButton(operatorController, GamepadKeys.Button.DPAD_LEFT);
         up = new GamepadButton(operatorController, GamepadKeys.Button.DPAD_UP);
         down = new GamepadButton(operatorController, GamepadKeys.Button.DPAD_DOWN);
         scoringHeight = new GamepadButton(operatorController, GamepadKeys.Button.DPAD_RIGHT);
@@ -86,7 +92,7 @@ public class RobotContainer {
         drivetrain = new DrivetrainSubsystem(hwMap, telemetry);
         lift = new LiftSubsystem(hwMap, telemetry);
         intake = new IntakeSubsystem(hwMap);
-        turret = new TurretSubsystem(hwMap, telemetry);
+//        turret = new TurretSubsystem(hwMap, telemetry);
         aprilTagDetector = new AprilTagSubsystem(hwMap, telemetry);
 
         driverController = null;
@@ -94,14 +100,15 @@ public class RobotContainer {
 
         slowMode = null;
         turboMode = null;
-        lockRotation = null;
+        threeAbove = null;
+//        lockRotation = null;
 
         up = null;
         down = null;
         dropConeD = null;
         dropConeO = null;
         feedCone = null;
-        turretToggle = null;
+//        turretToggle = null;
         scoringHeight = null;
         resetPose = null;
 
@@ -114,16 +121,17 @@ public class RobotContainer {
         slowMode.whileHeld(() -> drivetrain.setSpeedMultiplier(0.5));
         turboMode.whileHeld(() -> drivetrain.setSpeedMultiplier(1));
         slowMode.negate().and(turboMode.negate()).whenActive(() -> drivetrain.setSpeedMultiplier(0.7));
-        lockRotation.toggleWhenPressed(new LockedHeadingDrivetrainCommand(drivetrain, lift::getDriveMultiplier, driverController::getLeftY, driverController::getLeftX, drivetrain.getPoseEstimate().getHeading()));
+//        lockRotation.toggleWhenPressed(new LockedHeadingDrivetrainCommand(drivetrain, lift::getDriveMultiplier, driverController::getLeftY, driverController::getLeftX, drivetrain.getPoseEstimate().getHeading()));
         dropConeD.whileHeld(new IntakeCommand(intake, IntakeSubsystem.Direction.UNFEED).perpetually());
 
         // Operator bindings
         dropConeO.whileHeld(new IntakeCommand(intake, IntakeSubsystem.Direction.UNFEED).perpetually());
         feedCone.whileHeld(new IntakeCommand(intake, IntakeSubsystem.Direction.FEED).perpetually());
-        turretToggle.whenPressed(new TurretToggleCommand(turret, lift::getCurrentHeight));
+//        turretToggle.whenPressed(new TurretToggleCommand(turret, lift::getCurrentHeight));
         up.whenPressed(lift::incrementHeight);
         down.whenPressed(lift::decrementHeight);
         scoringHeight.whenPressed(lift::scoreHeight);
+        threeAbove.whenPressed(lift::beaconHeight);
         resetPose.whenPressed((() -> drivetrain.setPoseEstimate(new Pose2d(0, 0, Math.toRadians(0)))));
     }
 
@@ -133,12 +141,13 @@ public class RobotContainer {
                 driverController::getRightX));
 
         intake.setDefaultCommand(new IntakeCommand(intake, IntakeSubsystem.Direction.FEED).perpetually());
-        turret.setDefaultCommand(new TurretLockCommand(turret));
+//        turret.setDefaultCommand(new TurretLockCommand(turret));
     }
 
     private void setAutoCommands(int chooser, Telemetry telemetry) {
-        Command Auto1 = new AutoCommand1(drivetrain, lift, intake, turret, aprilTagDetector, telemetry);
-        Command Park = new AutoCommandPark(drivetrain, lift, intake, turret, aprilTagDetector, telemetry);
+        Command Auto1 = new AutoCommand1(drivetrain, lift, intake, aprilTagDetector, telemetry);
+        Command Park = new AutoCommandPark(drivetrain, lift, intake, aprilTagDetector, telemetry);
+        Command Auto2 = new AutoCommandOneCone(drivetrain, lift, intake, aprilTagDetector, telemetry);
 
         switch (chooser) {
             case 0:
@@ -146,6 +155,9 @@ public class RobotContainer {
                 break;
             case 1:
                 Park.schedule();
+                break;
+            case 2:
+                Auto2.schedule();
                 break;
         }
 

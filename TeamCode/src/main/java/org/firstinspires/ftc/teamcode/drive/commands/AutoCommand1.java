@@ -24,7 +24,7 @@ import java.util.Locale;
 
 public class AutoCommand1 extends SequentialCommandGroup {
     ElapsedTime timer = new ElapsedTime();
-    public AutoCommand1(DrivetrainSubsystem drivetrain, LiftSubsystem lift, IntakeSubsystem intake, TurretSubsystem turret, AprilTagSubsystem aprilTagDetector, Telemetry telemetry) {
+    public AutoCommand1(DrivetrainSubsystem drivetrain, LiftSubsystem lift, IntakeSubsystem intake, AprilTagSubsystem aprilTagDetector, Telemetry telemetry) {
 
         TrajectorySequenceSupplier initToHighTrajectory = () -> drivetrain.trajectorySequenceBuilder(new Pose2d(-62, 35, Math.toRadians(90)))
                 .splineToSplineHeading(new Pose2d(-71, 92, Math.toRadians(130)), Math.toRadians(120))
@@ -98,39 +98,39 @@ public class AutoCommand1 extends SequentialCommandGroup {
                 // Preload
                 initToHigh,
                 highToStack,
-//                new PrintCommand("Preload Stack"),
-//                displayTime,
-//                // 1
+                new PrintCommand("Preload Stack"),
+                displayTime,
+                // 1
                 stackToHigh,
-//                highToStack,
-//                new PrintCommand("First Stack"),
-//                displayTime,
-//                // 2
-//                stackToHigh,
-//                highToStack,
-//                new PrintCommand("Second Stack"),
-//                displayTime,
-//                // 3
-//                stackToHigh,
-//                highToStack,
-//                new PrintCommand("Third Stack"),
-//                displayTime,
-//                // 5
-//                stackToHigh,
-//
-//                new PrintCommand("Fourth Stack"),
-//                displayTime,
-//                new LiftCommand(lift, 0).withTimeout(1),
+                highToStack,
+                new PrintCommand("First Stack"),
+                displayTime,
+                // 2
+                stackToHigh,
+                highToStack,
+                new PrintCommand("Second Stack"),
+                displayTime,
+                // 3
+                stackToHigh,
+                highToStack,
+                new PrintCommand("Third Stack"),
+                displayTime,
+                // 5
+                stackToHigh,
+
+                new PrintCommand("Fourth Stack"),
+                displayTime,
+                new LiftCommand(lift, 0).withTimeout(1),
                 // Park Left
-//                new ConditionalCommand(new FollowTrajectoryCommand(drivetrain, parkLeft),
-//                        // Park Right
-//                        new ConditionalCommand(new FollowTrajectoryCommand(drivetrain, parkRight),
-//                                // Park Center
-//                                new FollowTrajectoryCommand(drivetrain, parkCenter),
-//                                ()-> aprilTagDetector.getParkLocation() == AprilTagSubsystem.Detection.RIGHT),
-//                        ()-> aprilTagDetector.getParkLocation() == AprilTagSubsystem.Detection.LEFT
-//                ),
-//                new PrintCommand(("Parked: " + aprilTagDetector.getParkLocation().toString())),
+                new ConditionalCommand(new FollowTrajectoryCommand(drivetrain, parkLeft),
+                        // Park Right
+                        new ConditionalCommand(new FollowTrajectoryCommand(drivetrain, parkRight),
+                                // Park Center
+                                new FollowTrajectoryCommand(drivetrain, parkCenter),
+                                ()-> aprilTagDetector.getParkLocation() == AprilTagSubsystem.Detection.RIGHT),
+                        ()-> aprilTagDetector.getParkLocation() == AprilTagSubsystem.Detection.LEFT
+                ),
+                new PrintCommand(("Parked: " + aprilTagDetector.getParkLocation().toString())),
                 displayTime
         );
     }

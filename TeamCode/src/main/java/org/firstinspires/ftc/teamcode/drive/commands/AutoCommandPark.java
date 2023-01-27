@@ -22,9 +22,9 @@ import org.firstinspires.ftc.teamcode.helpers.TrajectorySequenceSupplier;
 
 public class AutoCommandPark extends SequentialCommandGroup {
     ElapsedTime timer = new ElapsedTime();
-    final double parkY = -40;
+    final double parkY = -41;
 
-    public AutoCommandPark(DrivetrainSubsystem drivetrain, LiftSubsystem lift, IntakeSubsystem intake, TurretSubsystem turret, AprilTagSubsystem aprilTagDetector, Telemetry telemetry) {
+    public AutoCommandPark(DrivetrainSubsystem drivetrain, LiftSubsystem lift, IntakeSubsystem intake, AprilTagSubsystem aprilTagDetector, Telemetry telemetry) {
 
         TrajectorySequenceSupplier parkLeft = () -> drivetrain.trajectorySequenceBuilder(drivetrain.getPoseEstimate())
                 .splineToSplineHeading(new Pose2d(-37, parkY, Math.toRadians(90)), Math.toRadians(270)).setTangent(Math.toRadians(180))

@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
+
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -13,12 +15,13 @@ public class DrivetrainSubsystem extends SubsystemBase {
     private final MecanumDriveR drivetrain;
 
     private double speedMultiplier = 1;
+    private Telemetry telemetry;
 
     public DrivetrainSubsystem(HardwareMap hwMap, Telemetry telemetry) {
         super();
         this.drivetrain = new MecanumDriveR(hwMap);
         drivetrain.loadCurrentPose();
-
+        this.telemetry=telemetry;
     }
 
     public Pose2d getPoseEstimate() {
@@ -52,6 +55,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
     public void periodic() {
         drivetrain.update();
         drivetrain.saveCurrentPose();
+//        telemetry.addData("Motorvelo", drivetrain.getWheelVelocities());
+//        telemetry.update();
     }
 
     public void setSpeedMultiplier(double speedMultiplier) {

@@ -48,6 +48,7 @@ public class LiftSubsystem extends SubsystemBase {
 
         controller = new PIDFController(kPID);
         mode = DcMotor.RunMode.RUN_TO_POSITION;
+        motor.setPower(0);
 
         // Create a new ElevatorFeedforward with gains kS, kG, kV, and kA
 
@@ -137,7 +138,9 @@ public class LiftSubsystem extends SubsystemBase {
         heightIndex--;
         indexToHeight();
     }
-
+    public void beaconHeight() {
+        setHeight(Inches_above);
+    }
     public void scoreHeight() {
         if (heightIndex > 1) {
             setHeight(targetHeight - SCORE_ADJ);

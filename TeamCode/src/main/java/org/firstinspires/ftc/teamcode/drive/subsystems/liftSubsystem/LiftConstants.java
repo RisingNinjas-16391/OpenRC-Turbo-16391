@@ -20,13 +20,14 @@ public final class LiftConstants {
     /**
      * Inches for lift presets
      */
+    public static double idk = 1.5;
     public static double BOTTOM_POS = 0;
-    public static double FEED_POS = 8;
-    public static double LOW_POS = 15;
-    public static double MID_POS = 25;
-    public static double HIGH_POS = 32;
-    public static double EX_HIGH_POS = 40;
-
+    public static double FEED_POS = 8 +idk;
+    public static double LOW_POS = 15 +idk;
+    public static double MID_POS = 25 +idk;
+    public static double HIGH_POS = 32 + idk;
+    public static double EX_HIGH_POS = 41 +idk ;
+    public static double Inches_above = 3;
     public static double SCORE_ADJ = 7;
 
 
