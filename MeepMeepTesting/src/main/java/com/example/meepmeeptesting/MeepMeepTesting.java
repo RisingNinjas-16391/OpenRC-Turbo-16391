@@ -17,18 +17,18 @@ public class MeepMeepTesting {
 //                        // Right Path One Cone
                         new Pose2d(35, -62, Math.toRadians(90)))
                         // Init->Cone
-                        .strafeTo(new Vector2d(35, -30))
-                        .splineToSplineHeading(new Pose2d(60, -12, Math.toRadians(0)), Math.toRadians(10)).setTangent(Math.toRadians(60)).setTangent(Math.toRadians(0))
+                        .strafeTo(new Vector2d(35, -25))
+                        .splineToSplineHeading(new Pose2d(60, -12, Math.toRadians(0)), Math.toRadians(5)).setTangent(Math.toRadians(60)).setTangent(Math.toRadians(0))
                         // Cone -> High
                         .strafeTo(new Vector2d(43, -12))
-                        .splineToSplineHeading(new Pose2d(28, -5, Math.toRadians(135)), Math.toRadians(140)).setTangent(Math.toRadians(135))
+                        .splineToSplineHeading(new Pose2d(28, -5, Math.toRadians(135)), Math.toRadians(140)).setTangent(Math.toRadians(315))
                         // High -> Cone
                         .splineToSplineHeading(new Pose2d(43, -12, Math.toRadians(0)), Math.toRadians(0))
                             //.setTangent(Math.toRadians(300)).setTangent(Math.toRadians(0))
                         .strafeTo(new Vector2d(60, -12))
                         // Cone -> High
                         .strafeTo(new Vector2d(43, -12))
-                        .splineToSplineHeading(new Pose2d(28, -5, Math.toRadians(135)), Math.toRadians(140)).setTangent(Math.toRadians(140))
+                        .splineToSplineHeading(new Pose2d(28, -5, Math.toRadians(135)), Math.toRadians(140)).setTangent(Math.toRadians(315))
                          // High -> Cone
                         .splineToSplineHeading(new Pose2d(43, -12, Math.toRadians(0)), Math.toRadians(0))
                             //.setTangent(Math.toRadians(300)).setTangent(Math.toRadians(0))

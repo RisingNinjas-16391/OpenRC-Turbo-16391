@@ -26,17 +26,17 @@ public class AutoCommandMultiConeRight extends SequentialCommandGroup {
     public AutoCommandMultiConeRight(DrivetrainSubsystem drivetrain, LiftSubsystem lift, IntakeSubsystem intake, AprilTagSubsystem aprilTagDetector, Telemetry telemetry) {
 
         TrajectorySequenceSupplier initToCone = () -> drivetrain.trajectorySequenceBuilder(drivetrain.getPoseEstimate()).setTangent(90)
-                .strafeTo(new Vector2d(-35, -30))
-                .splineToSplineHeading(new Pose2d(-60, -12, Math.toRadians(180)), Math.toRadians(190)).setTangent(Math.toRadians(300)).setTangent(Math.toRadians(0))
+                .strafeTo(new Vector2d(35, -25))
+                .splineToSplineHeading(new Pose2d(60, -12, Math.toRadians(0)), Math.toRadians(5)).setTangent(Math.toRadians(60)).setTangent(Math.toRadians(0))
 
                 .build();
 
         TrajectorySequenceSupplier coneToHigh = () -> drivetrain.trajectorySequenceBuilder(drivetrain.getPoseEstimate()).setTangent(90)
                 .strafeTo(new Vector2d(43, -12))
-                .splineToSplineHeading(new Pose2d(28, -5, Math.toRadians(135)), Math.toRadians(140)).setTangent(Math.toRadians(135))
+                .splineToSplineHeading(new Pose2d(28, -5, Math.toRadians(135)), Math.toRadians(140)).setTangent(Math.toRadians(315))
                 .build();
-        TrajectorySequenceSupplier highToCone = () -> drivetrain.trajectorySequenceBuilder(drivetrain.getPoseEstimate()).setTangent(Math.toRadians(230))
-                .splineToSplineHeading(new Pose2d(-43, -12, Math.toRadians(180)), Math.toRadians(180))
+        TrajectorySequenceSupplier highToCone = () -> drivetrain.trajectorySequenceBuilder(drivetrain.getPoseEstimate()).setTangent(Math.toRadians(315))
+                .splineToSplineHeading(new Pose2d(-43, -12, Math.toRadians(0)), Math.toRadians(0))
                 //.setTangent(Math.toRadians(300)).setTangent(Math.toRadians(0)).strafeTo(new Vector2d(-60, -12))
                 .strafeTo(new Vector2d(60, -12))
                 .build();
