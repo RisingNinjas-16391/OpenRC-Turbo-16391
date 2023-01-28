@@ -75,7 +75,7 @@ public class LiftSubsystem extends SubsystemBase {
 
             if (isBusy()) {
 
-                if (simpleMode) {
+                if (simpleMode || profile == null) {
                     power = currentHeight < targetHeight ? 1:-1;   // Bang Bang control
                 } else {  // following a profile
                     double time = clock.seconds() - profileStartTime;
@@ -113,7 +113,7 @@ public class LiftSubsystem extends SubsystemBase {
         targetHeight = Math.min(Math.max(0, height), MAX_HEIGHT);
         if (!simpleMode) {
             double time = clock.seconds() - profileStartTime;
-            MotionState start = isBusy() ? profile.get(time) : new MotionState(getCurrentHeight(), 0, 0, 0);
+            MotionState start = isBusy() && profile != null ? profile.get(time) : new MotionState(getCurrentHeight(), 0, 0, 0);
             MotionState goal = new MotionState(targetHeight, 0, 0, 0);
             profile = MotionProfileGenerator.generateSimpleMotionProfile(
                     start, goal, MAX_VEL, MAX_ACCEL, MAX_JERK

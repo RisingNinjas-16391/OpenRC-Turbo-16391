@@ -34,7 +34,7 @@ public final class LiftConstants {
     public static final MotorConfigurationType MOTOR_CONFIG =
             MotorConfigurationType.getMotorType(GoBILDA5202Series.class);
     public static double heightThreshold = 0.5;
-    public static boolean simpleMode = true;
+    public static boolean simpleMode = false;
     public static final String name = "slide";
     public static double minHeightTurret = 5;
     public static final double SPOOL_RADIUS = 0.75; // in
@@ -44,7 +44,7 @@ public final class LiftConstants {
     public static double MAX_VEL = 600; // in/s
     public static double MAX_ACCEL = 600; // in/s^2
     public static double MAX_JERK = 400; // in/s^3
-    public static PIDCoefficients kPID = new PIDCoefficients(2.35, 0.1, 0);
+    public static PIDCoefficients kPID = new PIDCoefficients(2.35, 0, 0);
     public static double kV = 0.01;
     public static double kA = 0.001;
     public static double kG = 0.001;

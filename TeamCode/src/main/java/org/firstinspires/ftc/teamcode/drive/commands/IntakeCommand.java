@@ -11,7 +11,6 @@ public class IntakeCommand extends CommandBase {
     public IntakeCommand(IntakeSubsystem intake, IntakeSubsystem.Direction direction) {
         this.intake = intake;
         this.direction = direction;
-
         addRequirements(intake);
     }
 

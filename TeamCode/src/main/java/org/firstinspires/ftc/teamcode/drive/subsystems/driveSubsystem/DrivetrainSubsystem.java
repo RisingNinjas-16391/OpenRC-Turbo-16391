@@ -53,10 +53,15 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        drivetrain.update();
-        drivetrain.saveCurrentPose();
-//        telemetry.addData("Motorvelo", drivetrain.getWheelVelocities());
-//        telemetry.update();
+        if (drivetrain != null) {
+            drivetrain.update();
+            drivetrain.saveCurrentPose();
+            if (telemetry != null) {
+                telemetry.addData("Motorvelo", drivetrain.getWheelVelocities());
+                telemetry.update();
+            }
+
+        }
     }
 
     public void setSpeedMultiplier(double speedMultiplier) {

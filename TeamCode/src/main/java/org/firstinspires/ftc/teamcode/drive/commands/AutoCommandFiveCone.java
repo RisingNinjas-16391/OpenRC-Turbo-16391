@@ -16,15 +16,12 @@ import org.firstinspires.ftc.teamcode.drive.subsystems.aprilTagSubsystem.aprilTa
 import org.firstinspires.ftc.teamcode.drive.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DrivetrainSubsystem;
 import org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftSubsystem;
-import org.firstinspires.ftc.teamcode.drive.subsystems.turretSubsystem.TurretSubsystem;
 import org.firstinspires.ftc.teamcode.helpers.TrajectorySequenceSupplier;
 
-import java.util.Locale;
 
-
-public class AutoCommand1 extends SequentialCommandGroup {
+public class AutoCommandFiveCone extends SequentialCommandGroup {
     ElapsedTime timer = new ElapsedTime();
-    public AutoCommand1(DrivetrainSubsystem drivetrain, LiftSubsystem lift, IntakeSubsystem intake, AprilTagSubsystem aprilTagDetector, Telemetry telemetry) {
+    public AutoCommandFiveCone(DrivetrainSubsystem drivetrain, LiftSubsystem lift, IntakeSubsystem intake, AprilTagSubsystem aprilTagDetector, Telemetry telemetry) {
 
         TrajectorySequenceSupplier initToHighTrajectory = () -> drivetrain.trajectorySequenceBuilder(new Pose2d(-62, 35, Math.toRadians(90)))
                 .splineToSplineHeading(new Pose2d(-71, 92, Math.toRadians(130)), Math.toRadians(120))
