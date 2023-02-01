@@ -6,7 +6,6 @@ import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.ConditionalCommand;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
-import com.arcrobotics.ftclib.command.ParallelDeadlineGroup;
 import com.arcrobotics.ftclib.command.PrintCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
@@ -16,15 +15,14 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.drive.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.drive.subsystems.aprilTagSubsystem.aprilTagDetector.AprilTagSubsystem;
 import org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DrivetrainSubsystem;
-import org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants;
 import org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftSubsystem;
 import org.firstinspires.ftc.teamcode.helpers.TrajectorySequenceSupplier;
 
 
-public class AutoCommandOneCone extends SequentialCommandGroup {
+public class AutoCommandOneConeRight extends SequentialCommandGroup {
     ElapsedTime timer = new ElapsedTime();
 
-    public AutoCommandOneCone(DrivetrainSubsystem drivetrain, LiftSubsystem lift, IntakeSubsystem intake, AprilTagSubsystem aprilTagDetector, Telemetry telemetry) {
+    public AutoCommandOneConeRight(DrivetrainSubsystem drivetrain, LiftSubsystem lift, IntakeSubsystem intake, AprilTagSubsystem aprilTagDetector, Telemetry telemetry) {
 
         TrajectorySequenceSupplier initToStackTrajectory = () -> drivetrain.trajectorySequenceBuilder(new Pose2d(35, -62, Math.toRadians(90)))
                 .strafeTo(new Vector2d(35, -24))
@@ -36,37 +34,50 @@ public class AutoCommandOneCone extends SequentialCommandGroup {
                 .splineToSplineHeading(new Pose2d(28, -5, Math.toRadians(135)), Math.toRadians(140)).setTangent(Math.toRadians(315))
                 .build();
 
-        TrajectorySequenceSupplier initToHighTrajectory = () -> drivetrain.trajectorySequenceBuilder(new Pose2d(35, -62, Math.toRadians(90)))
-                .strafeTo(new Vector2d(35, -24))
-                .splineToSplineHeading(new Pose2d(28, -5, Math.toRadians(135)), Math.toRadians(140)).setTangent(Math.toRadians(315))
+        TrajectorySequenceSupplier highToParkTrajectory = () -> drivetrain.trajectorySequenceBuilder(new Pose2d(28, -5, Math.toRadians(300)))
+                .splineToSplineHeading(new Pose2d(35, -35, Math.toRadians(90)), Math.toRadians(270))
                 .build();
 
-        TrajectorySequenceSupplier parkLeft = () -> drivetrain.trajectorySequenceBuilder(new Pose2d(-71, 92, Math.toRadians(45)))
-                .splineToSplineHeading(new Pose2d(-37, -30, Math.toRadians(90)), Math.toRadians(270)).setTangent(Math.toRadians(180))
-                .splineToSplineHeading(new Pose2d(-60, -30, Math.toRadians(90)), Math.toRadians(180))
+
+        TrajectorySequenceSupplier parkLeft = () -> drivetrain.trajectorySequenceBuilder(new Pose2d(35, -35, Math.toRadians(45)))
+                .strafeTo(new Vector2d(16, -35))
                 .build();
 
-        TrajectorySequenceSupplier parkCenter = () -> drivetrain.trajectorySequenceBuilder(new Pose2d(-71, 92, Math.toRadians(45)))
-                .splineToSplineHeading(new Pose2d(-34, -30, Math.toRadians(90)), Math.toRadians(270))
+
+        TrajectorySequenceSupplier parkRight = () -> drivetrain.trajectorySequenceBuilder(new Pose2d(35, -35, Math.toRadians(45)))
+                .strafeTo(new Vector2d(60, -35))
                 .build();
 
-        TrajectorySequenceSupplier parkRight = () -> drivetrain.trajectorySequenceBuilder(new Pose2d(-71, 92, Math.toRadians(45)))
-                .splineToSplineHeading(new Pose2d(-30, -30, Math.toRadians(90)), Math.toRadians(-45)).setTangent(Math.toRadians(0))
-                .splineToSplineHeading(new Pose2d(-10, -30, Math.toRadians(90)), Math.toRadians(0))
+        TrajectorySequenceSupplier parkCenter = () -> drivetrain.trajectorySequenceBuilder(new Pose2d(35, -35, Math.toRadians(45)))
+                .strafeTo(new Vector2d(35, -34))
                 .build();
 
         SequentialCommandGroup initToStack = new SequentialCommandGroup(
                 new ParallelCommandGroup(
-                        new FollowTrajectoryCommand(drivetrain, initToStackTrajectory).withTimeout(5000)
-//                        new LiftCommand(lift, 2),
-//                        new IntakeCommand(intake, IntakeSubsystem.Direction.FEED)
-                )
+                        //new LiftCommand(lift, 2),
+                        new FollowTrajectoryCommand(drivetrain, initToStackTrajectory).withTimeout(5000),
+                        new LiftCommand(lift, 1)
+                        ),
+                new WaitCommand(500),
+                new LiftCommand(lift, 2),
+                new IntakeCommand(intake, IntakeSubsystem.Direction.FEED),
+                new LiftCommand(lift, 1)
         );
 
         SequentialCommandGroup stackToHigh = new SequentialCommandGroup(
                 new ParallelCommandGroup(
-//                        new LiftCommand(lift, 4),
-                        new FollowTrajectoryCommand(drivetrain, stackToHighTrajectory).withTimeout(5000)
+                        //new LiftCommand(lift, 4),
+                        new FollowTrajectoryCommand(drivetrain, stackToHighTrajectory).withTimeout(5000),
+                        //new IntakeCommand(intake, IntakeSubsystem.Direction.UNFEED),
+                        new WaitCommand(2000)
+                )
+        );
+
+        SequentialCommandGroup highToPark = new SequentialCommandGroup(
+                new ParallelCommandGroup(
+                        //new LiftCommand(lift, 0),
+                        new FollowTrajectoryCommand(drivetrain, highToParkTrajectory).withTimeout(5000)
+//                        new LiftCommand(lift, 4)
 //                        new IntakeCommand(intake, IntakeSubsystem.Direction.UNFEED)
                 )
         );
@@ -83,17 +94,18 @@ public class AutoCommandOneCone extends SequentialCommandGroup {
                 initToStack,
 //                new LiftCommand(lift, 0),
                 stackToHigh,
-//                new PrintCommand("One Cone"),
-//                displayTime,
+                highToPark,
 
-//                new ConditionalCommand(new FollowTrajectoryCommand(drivetrain, parkLeft),
-//                        // Park Right
-//                        new ConditionalCommand(new FollowTrajectoryCommand(drivetrain, parkRight),
-//                                // Park Center
-//                                new FollowTrajectoryCommand(drivetrain, parkCenter),
-//                                ()-> aprilTagDetector.getParkLocation() == AprilTagSubsystem.Detection.RIGHT),
-//                        ()-> aprilTagDetector.getParkLocation() == AprilTagSubsystem.Detection.LEFT
-//                ),
+                new ParallelCommandGroup(
+                        new ConditionalCommand(new FollowTrajectoryCommand(drivetrain, parkLeft),
+                                // Park Right
+                                new ConditionalCommand(new FollowTrajectoryCommand(drivetrain, parkRight),
+                                        // Park Center
+                                        new FollowTrajectoryCommand(drivetrain, parkCenter),
+                                        ()-> aprilTagDetector.getParkLocation() == AprilTagSubsystem.Detection.RIGHT),
+                                ()-> aprilTagDetector.getParkLocation() == AprilTagSubsystem.Detection.LEFT
+                        )
+                ),
 
                 new PrintCommand(("Parked: " + aprilTagDetector.getParkLocation().toString())),
                 displayTime

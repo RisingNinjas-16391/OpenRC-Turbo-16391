@@ -115,9 +115,13 @@ public class LiftSubsystem extends SubsystemBase {
             double time = clock.seconds() - profileStartTime;
             MotionState start = isBusy() && profile != null ? profile.get(time) : new MotionState(getCurrentHeight(), 0, 0, 0);
             MotionState goal = new MotionState(targetHeight, 0, 0, 0);
-            profile = MotionProfileGenerator.generateSimpleMotionProfile(
-                    start, goal, MAX_VEL, MAX_ACCEL, MAX_JERK
-            );
+            try {
+                profile = MotionProfileGenerator.generateSimpleMotionProfile(
+                        start, goal, MAX_VEL, MAX_ACCEL, MAX_JERK
+                );
+            } catch(Exception e) {
+                System.out.println(e);
+            }
             profileStartTime = clock.seconds();
         } else {
             seeking = true;

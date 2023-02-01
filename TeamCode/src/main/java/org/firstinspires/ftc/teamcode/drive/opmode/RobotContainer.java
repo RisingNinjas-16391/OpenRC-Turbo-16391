@@ -10,7 +10,11 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.drive.commands.AutoCommandFiveCone;
-import org.firstinspires.ftc.teamcode.drive.commands.AutoCommandOneCone;
+import org.firstinspires.ftc.teamcode.drive.commands.AutoCommandOneConeRight;
+import org.firstinspires.ftc.teamcode.drive.commands.AutoCommandOneConeLeft;
+import org.firstinspires.ftc.teamcode.drive.commands.AutoCommandMultiConeLeft;
+import org.firstinspires.ftc.teamcode.drive.commands.AutoCommandMultiConeRight;
+import org.firstinspires.ftc.teamcode.drive.commands.AutoCommandOneConeRight;
 import org.firstinspires.ftc.teamcode.drive.commands.AutoCommandPark;
 import org.firstinspires.ftc.teamcode.drive.commands.DrivetrainCommand;
 import org.firstinspires.ftc.teamcode.drive.commands.FieldCentricDrivetrainCommand;
@@ -146,14 +150,25 @@ RobotContainer {
 
     private void setAutoCommands(int chooser, Telemetry telemetry) {
         Command AutoPark = new AutoCommandPark(drivetrain, lift, intake, aprilTagDetector, telemetry);
-        Command AutoOneCone = new AutoCommandOneCone(drivetrain, lift, intake, aprilTagDetector, telemetry);
+        Command AutoOneConeRight = new AutoCommandOneConeRight(drivetrain, lift, intake, aprilTagDetector, telemetry);
+        Command AutoOneConeLeft = new AutoCommandOneConeLeft(drivetrain, lift, intake, aprilTagDetector, telemetry);
+        Command AutoMultiConeLeft = new AutoCommandMultiConeLeft(drivetrain, lift, intake, aprilTagDetector, telemetry);
+        Command AutoMultiConeRight= new AutoCommandMultiConeRight(drivetrain, lift, intake, aprilTagDetector, telemetry);
 
         switch (chooser) {
             case 0:
                 AutoPark.schedule();
                 break;
             case 1:
-                AutoOneCone.schedule();
+                AutoOneConeLeft.schedule();
+            case 2:
+                AutoOneConeRight.schedule();
+                break;
+            case 3:
+                AutoMultiConeLeft.schedule();
+                break;
+            case 4:
+                AutoMultiConeRight.schedule();
                 break;
         }
 

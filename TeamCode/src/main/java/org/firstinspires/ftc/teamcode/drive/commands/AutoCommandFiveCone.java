@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.drive.commands;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.ConditionalCommand;
 import com.arcrobotics.ftclib.command.InstantCommand;
@@ -23,17 +24,21 @@ public class AutoCommandFiveCone extends SequentialCommandGroup {
     ElapsedTime timer = new ElapsedTime();
     public AutoCommandFiveCone(DrivetrainSubsystem drivetrain, LiftSubsystem lift, IntakeSubsystem intake, AprilTagSubsystem aprilTagDetector, Telemetry telemetry) {
 
-        TrajectorySequenceSupplier initToHighTrajectory = () -> drivetrain.trajectorySequenceBuilder(new Pose2d(-62, 35, Math.toRadians(90)))
-                .splineToSplineHeading(new Pose2d(-71, 92, Math.toRadians(130)), Math.toRadians(120))
+        TrajectorySequenceSupplier initToStackTrajectory = () -> drivetrain.trajectorySequenceBuilder(new Pose2d(35, -62, Math.toRadians(90)))
+                .strafeTo(new Vector2d(35, -24))
+                .splineToSplineHeading(new Pose2d(60, -11, Math.toRadians(0)), Math.toRadians(5)).setTangent(Math.toRadians(60)).setTangent(Math.toRadians(0))
                 .build();
 
-        TrajectorySequenceSupplier highToStackTrajectory = () -> drivetrain.trajectorySequenceBuilder(new Pose2d(-71, 92, Math.toRadians(130))).setTangent(0)
-                .splineToSplineHeading(new Pose2d(-38, 89, Math.toRadians(0)), Math.toRadians(-5))
+        TrajectorySequenceSupplier stackToHighTrajectory = () -> drivetrain.trajectorySequenceBuilder(new Pose2d(60, -12, Math.toRadians(0)))
+                .strafeTo(new Vector2d(42, -12))
+                .splineToSplineHeading(new Pose2d(28, -5, Math.toRadians(135)), Math.toRadians(140)).setTangent(Math.toRadians(315))
                 .build();
 
-        TrajectorySequenceSupplier stackToHighTrajectory = () -> drivetrain.trajectorySequenceBuilder(new Pose2d(-38, 89,  Math.toRadians(0))).setTangent(0)
-                .splineToSplineHeading(new Pose2d(-71, 92, Math.toRadians(130)), Math.toRadians(-5))
+        TrajectorySequenceSupplier initToHighTrajectory = () -> drivetrain.trajectorySequenceBuilder(new Pose2d(35, -62, Math.toRadians(90)))
+                .strafeTo(new Vector2d(35, -24))
+                .splineToSplineHeading(new Pose2d(28, -5, Math.toRadians(135)), Math.toRadians(140)).setTangent(Math.toRadians(315))
                 .build();
+
 
         TrajectorySequenceSupplier parkLeft = () -> drivetrain.trajectorySequenceBuilder(new Pose2d(-28, -5, Math.toRadians(45)))
                 .splineToSplineHeading(new Pose2d(-37, -30, Math.toRadians(90)), Math.toRadians(270)).setTangent(Math.toRadians(180))
@@ -65,7 +70,7 @@ public class AutoCommandFiveCone extends SequentialCommandGroup {
                 new IntakeCommand(intake, IntakeSubsystem.Direction.UNFEED),
                 new WaitCommand(1000),
                 new ParallelDeadlineGroup(
-                    new FollowTrajectoryCommand(drivetrain, highToStackTrajectory).withTimeout(5000),
+                    new FollowTrajectoryCommand(drivetrain, initToHighTrajectory).withTimeout(5000),
                     new WaitCommand(1000),
 //                    new TurretPositionCommand(turret, lift::getCurrentHeight, false),
 //                    new LiftCommand(lift, 1),

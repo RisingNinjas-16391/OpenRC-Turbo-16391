@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.drive.commands;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.ConditionalCommand;
 import com.arcrobotics.ftclib.command.InstantCommand;
@@ -27,17 +28,17 @@ public class AutoCommandPark extends SequentialCommandGroup {
     public AutoCommandPark(DrivetrainSubsystem drivetrain, LiftSubsystem lift, IntakeSubsystem intake, AprilTagSubsystem aprilTagDetector, Telemetry telemetry) {
 
         TrajectorySequenceSupplier parkLeft = () -> drivetrain.trajectorySequenceBuilder(drivetrain.getPoseEstimate())
-                .splineToSplineHeading(new Pose2d(-37, parkY, Math.toRadians(90)), Math.toRadians(270)).setTangent(Math.toRadians(180))
-                .splineToSplineHeading(new Pose2d(-62, parkY, Math.toRadians(90)), Math.toRadians(180))
+                .strafeTo(new Vector2d(-35, -32))
+                .strafeTo(new Vector2d(-55, -32))
                 .build();
 
         TrajectorySequenceSupplier parkCenter = () -> drivetrain.trajectorySequenceBuilder(drivetrain.getPoseEstimate())
-                .splineToSplineHeading(new Pose2d(-34, parkY, Math.toRadians(90)), Math.toRadians(270))
+                .strafeTo(new Vector2d(-35, -32))
                 .build();
 
         TrajectorySequenceSupplier parkRight = () -> drivetrain.trajectorySequenceBuilder(drivetrain.getPoseEstimate())
-                .splineToSplineHeading(new Pose2d(-30, parkY, Math.toRadians(90)), Math.toRadians(-45)).setTangent(Math.toRadians(0))
-                .splineToSplineHeading(new Pose2d(-10, parkY, Math.toRadians(90)), Math.toRadians(0))
+                .strafeTo(new Vector2d(-35, -32))
+                .strafeTo(new Vector2d(-12, -32))
                 .build();
 
 
