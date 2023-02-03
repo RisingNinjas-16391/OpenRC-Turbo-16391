@@ -8,6 +8,7 @@ public class IntakeCommand extends CommandBase {
 
     private final IntakeSubsystem intake;
     private final IntakeSubsystem.Direction direction;
+
     public IntakeCommand(IntakeSubsystem intake, IntakeSubsystem.Direction direction) {
         this.intake = intake;
         this.direction = direction;

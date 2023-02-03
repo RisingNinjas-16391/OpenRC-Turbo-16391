@@ -1,6 +1,17 @@
 package org.firstinspires.ftc.teamcode.drive.subsystems.turretSubsystem;
 
-import static org.firstinspires.ftc.teamcode.drive.subsystems.turretSubsystem.TurretConstants.*;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.turretSubsystem.TurretConstants.DIRECTION;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.turretSubsystem.TurretConstants.MAX_ACCEL;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.turretSubsystem.TurretConstants.MAX_JERK;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.turretSubsystem.TurretConstants.MAX_VEL;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.turretSubsystem.TurretConstants.homePos;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.turretSubsystem.TurretConstants.kA;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.turretSubsystem.TurretConstants.kPID;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.turretSubsystem.TurretConstants.kStatic;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.turretSubsystem.TurretConstants.kV;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.turretSubsystem.TurretConstants.name;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.turretSubsystem.TurretConstants.otherSidePos;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.turretSubsystem.TurretConstants.tickMargin;
 
 import com.acmerobotics.roadrunner.control.PIDFController;
 import com.acmerobotics.roadrunner.profile.MotionProfile;
@@ -17,16 +28,16 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class TurretSubsystem extends SubsystemBase {
 
-    public DcMotorEx motor;
     private static int savedPosition = 0;
-    private int offset;
+    private final PIDFController controller;
+    private final SimpleMotorFeedforward feedforward;
+    private final NanoClock clock = NanoClock.system();
+    public DcMotorEx motor;
+    private final int offset;
     private boolean toggle = true;
     private MotionProfile profile;
     private double profileStartTime = 0;
     private int targetPosition = 0;
-    private final PIDFController controller;
-    private final SimpleMotorFeedforward feedforward;
-    private final NanoClock clock = NanoClock.system();
 
 
     public TurretSubsystem(HardwareMap hwMap, Telemetry telemetry) {
@@ -71,6 +82,7 @@ public class TurretSubsystem extends SubsystemBase {
     public boolean isBusy() {
         return profile != null && (clock.seconds() - profileStartTime) <= profile.duration();
     }
+
     public void setPosition(int position) {
         double time = clock.seconds() - profileStartTime;
         MotionState start = new MotionState(motor.getCurrentPosition(), motor.getVelocity(), 0, 0);
@@ -91,7 +103,7 @@ public class TurretSubsystem extends SubsystemBase {
 
     public void togglePosition(boolean toggle) {
         this.toggle = toggle;
-        setPosition(toggle ? homePos:otherSidePos);
+        setPosition(toggle ? homePos : otherSidePos);
     }
 
     public void togglePosition() {

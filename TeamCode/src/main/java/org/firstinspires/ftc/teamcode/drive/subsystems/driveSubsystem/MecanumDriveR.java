@@ -1,6 +1,22 @@
 package org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem;
 
-import static org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DriveConstants.*;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DriveConstants.ACCEL_CONSTRAINT;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DriveConstants.HEADING_PID;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DriveConstants.LATERAL_MULTIPLIER;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DriveConstants.MAX_ANG_ACCEL;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DriveConstants.MAX_ANG_VEL;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DriveConstants.MOTOR_VELO_PID;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DriveConstants.OMEGA_WEIGHT;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DriveConstants.RUN_USING_ENCODER;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DriveConstants.TRACK_WIDTH;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DriveConstants.TRANSLATIONAL_PID;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DriveConstants.VEL_CONSTRAINT;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DriveConstants.VX_WEIGHT;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DriveConstants.VY_WEIGHT;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DriveConstants.encoderTicksToInches;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DriveConstants.kA;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DriveConstants.kStatic;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DriveConstants.kV;
 
 import androidx.annotation.NonNull;
 
@@ -119,7 +135,9 @@ public class MecanumDriveR extends com.acmerobotics.roadrunner.drive.MecanumDriv
         return new ProfileAccelerationConstraint(maxAccel);
     }
 
-
+    public static void saveCurrentPose(Pose2d pose) {
+        currentPose = pose;
+    }
 
     public TrajectoryBuilder trajectoryBuilder(@NonNull Pose2d startPose) {
         return new TrajectoryBuilder(startPose, VEL_CONSTRAINT, ACCEL_CONSTRAINT);
@@ -274,10 +292,6 @@ public class MecanumDriveR extends com.acmerobotics.roadrunner.drive.MecanumDriv
     @Override
     public Double getExternalHeadingVelocity() {
         return (double) -imu.getAngularVelocity().zRotationRate;
-    }
-
-    public static void saveCurrentPose(Pose2d pose) {
-        currentPose = pose;
     }
 
     public void loadCurrentPose() {

@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
-
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -15,13 +13,13 @@ public class DrivetrainSubsystem extends SubsystemBase {
     private final MecanumDriveR drivetrain;
 
     private double speedMultiplier = 1;
-    private Telemetry telemetry;
+    private final Telemetry telemetry;
 
     public DrivetrainSubsystem(HardwareMap hwMap, Telemetry telemetry) {
         super();
         this.drivetrain = new MecanumDriveR(hwMap);
         drivetrain.loadCurrentPose();
-        this.telemetry=telemetry;
+        this.telemetry = telemetry;
     }
 
     public Pose2d getPoseEstimate() {
@@ -47,6 +45,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     public TrajectorySequenceBuilder trajectorySequenceBuilder(Pose2d startPose) {
         return drivetrain.trajectorySequenceBuilder(startPose);
     }
+
     public boolean isBusy() {
         return drivetrain.isBusy();
     }

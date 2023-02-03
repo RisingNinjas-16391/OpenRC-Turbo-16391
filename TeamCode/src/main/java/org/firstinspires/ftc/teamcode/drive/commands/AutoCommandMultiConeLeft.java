@@ -108,8 +108,8 @@ public class AutoCommandMultiConeLeft extends SequentialCommandGroup {
                                 new ConditionalCommand(new FollowTrajectoryCommand(drivetrain, parkRight),
                                         // Park Center
                                         new FollowTrajectoryCommand(drivetrain, parkCenter),
-                                        ()-> aprilTagDetector.getParkLocation() == AprilTagSubsystem.Detection.RIGHT),
-                                ()-> aprilTagDetector.getParkLocation() == AprilTagSubsystem.Detection.LEFT
+                                        () -> aprilTagDetector.getParkLocation() == AprilTagSubsystem.Detection.RIGHT),
+                                () -> aprilTagDetector.getParkLocation() == AprilTagSubsystem.Detection.LEFT
                         )
                 ),
 

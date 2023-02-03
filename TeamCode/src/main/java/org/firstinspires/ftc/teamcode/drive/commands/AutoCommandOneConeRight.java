@@ -57,7 +57,7 @@ public class AutoCommandOneConeRight extends SequentialCommandGroup {
                         //new LiftCommand(lift, 2),
                         new FollowTrajectoryCommand(drivetrain, initToStackTrajectory).withTimeout(5000),
                         new LiftCommand(lift, 1)
-                        ),
+                ),
                 new WaitCommand(500),
                 new LiftCommand(lift, 2),
                 new IntakeCommand(intake, IntakeSubsystem.Direction.FEED),
@@ -102,8 +102,8 @@ public class AutoCommandOneConeRight extends SequentialCommandGroup {
                                 new ConditionalCommand(new FollowTrajectoryCommand(drivetrain, parkRight),
                                         // Park Center
                                         new FollowTrajectoryCommand(drivetrain, parkCenter),
-                                        ()-> aprilTagDetector.getParkLocation() == AprilTagSubsystem.Detection.RIGHT),
-                                ()-> aprilTagDetector.getParkLocation() == AprilTagSubsystem.Detection.LEFT
+                                        () -> aprilTagDetector.getParkLocation() == AprilTagSubsystem.Detection.RIGHT),
+                                () -> aprilTagDetector.getParkLocation() == AprilTagSubsystem.Detection.LEFT
                         )
                 ),
 
