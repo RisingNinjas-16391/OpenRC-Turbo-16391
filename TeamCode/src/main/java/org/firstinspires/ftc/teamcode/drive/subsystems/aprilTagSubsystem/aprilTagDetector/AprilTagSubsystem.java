@@ -12,18 +12,14 @@ import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.drive.subsystems.aprilTagSubsystem.aprilTagDetector.AprilTagDetector;
 import org.openftc.apriltag.AprilTagDetection;
 
 import java.util.ArrayList;
 
 public class AprilTagSubsystem extends SubsystemBase {
-    private AprilTagDetector aprilTagDetector;
-    private Telemetry telemetry;
+    private final AprilTagDetector aprilTagDetector;
+    private final Telemetry telemetry;
     private Detection savedDetection = Detection.NONE;
-    public enum Detection {
-        LEFT, CENTER, RIGHT, NONE
-    }
 
     public AprilTagSubsystem(HardwareMap hwMap, Telemetry telemetry) {
         super();
@@ -33,7 +29,7 @@ public class AprilTagSubsystem extends SubsystemBase {
     }
 
     public void detect() {
-        ArrayList<AprilTagDetection> detections =  aprilTagDetector.detect(timeout, threshold);
+        ArrayList<AprilTagDetection> detections = aprilTagDetector.detect(timeout, threshold);
         if (detections.size() > 0) {
             switch (detections.get(0).id) {
                 case TAG_ID_LEFT:
@@ -63,10 +59,14 @@ public class AprilTagSubsystem extends SubsystemBase {
         }
 
     }
+
     public Detection getParkLocation() {
         return savedDetection;
     }
 
+    public enum Detection {
+        LEFT, CENTER, RIGHT, NONE
+    }
 
 
 }

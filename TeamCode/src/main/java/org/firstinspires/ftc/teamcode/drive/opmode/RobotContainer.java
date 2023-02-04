@@ -9,24 +9,17 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.drive.commands.AutoCommandFiveCone;
-import org.firstinspires.ftc.teamcode.drive.commands.AutoCommandOneConeRight;
-import org.firstinspires.ftc.teamcode.drive.commands.AutoCommandOneConeLeft;
 import org.firstinspires.ftc.teamcode.drive.commands.AutoCommandMultiConeLeft;
 import org.firstinspires.ftc.teamcode.drive.commands.AutoCommandMultiConeRight;
+import org.firstinspires.ftc.teamcode.drive.commands.AutoCommandOneConeLeft;
 import org.firstinspires.ftc.teamcode.drive.commands.AutoCommandOneConeRight;
 import org.firstinspires.ftc.teamcode.drive.commands.AutoCommandPark;
 import org.firstinspires.ftc.teamcode.drive.commands.DrivetrainCommand;
-import org.firstinspires.ftc.teamcode.drive.commands.FieldCentricDrivetrainCommand;
 import org.firstinspires.ftc.teamcode.drive.commands.IntakeCommand;
-import org.firstinspires.ftc.teamcode.drive.commands.LockedHeadingDrivetrainCommand;
-import org.firstinspires.ftc.teamcode.drive.commands.TurretLockCommand;
-import org.firstinspires.ftc.teamcode.drive.commands.TurretToggleCommand;
-import org.firstinspires.ftc.teamcode.drive.subsystems.aprilTagSubsystem.aprilTagDetector.AprilTagSubsystem;
 import org.firstinspires.ftc.teamcode.drive.subsystems.IntakeSubsystem;
+import org.firstinspires.ftc.teamcode.drive.subsystems.aprilTagSubsystem.aprilTagDetector.AprilTagSubsystem;
 import org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DrivetrainSubsystem;
 import org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftSubsystem;
-import org.firstinspires.ftc.teamcode.drive.subsystems.turretSubsystem.TurretSubsystem;
 
 public class
 
@@ -34,7 +27,7 @@ RobotContainer {
     private final DrivetrainSubsystem drivetrain;
     private final LiftSubsystem lift;
     private final IntakeSubsystem intake;
-//    private final TurretSubsystem turret;
+    //    private final TurretSubsystem turret;
     private final AprilTagSubsystem aprilTagDetector;
 
     private final GamepadEx driverController;
@@ -50,7 +43,7 @@ RobotContainer {
     private final GamepadButton dropConeD;
     private final GamepadButton dropConeO;
     private final GamepadButton feedCone;
-//    private final GamepadButton turretToggle;
+    //    private final GamepadButton turretToggle;
     private final GamepadButton scoringHeight;
     private final GamepadButton resetPose;
 
@@ -153,7 +146,7 @@ RobotContainer {
         Command AutoOneConeRight = new AutoCommandOneConeRight(drivetrain, lift, intake, aprilTagDetector, telemetry);
         Command AutoOneConeLeft = new AutoCommandOneConeLeft(drivetrain, lift, intake, aprilTagDetector, telemetry);
         Command AutoMultiConeLeft = new AutoCommandMultiConeLeft(drivetrain, lift, intake, aprilTagDetector, telemetry);
-        Command AutoMultiConeRight= new AutoCommandMultiConeRight(drivetrain, lift, intake, aprilTagDetector, telemetry);
+        Command AutoMultiConeRight = new AutoCommandMultiConeRight(drivetrain, lift, intake, aprilTagDetector, telemetry);
 
         switch (chooser) {
             case 0:

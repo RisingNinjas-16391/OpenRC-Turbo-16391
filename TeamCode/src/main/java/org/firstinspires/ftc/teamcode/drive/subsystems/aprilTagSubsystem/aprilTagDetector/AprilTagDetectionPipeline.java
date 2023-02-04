@@ -9,31 +9,25 @@ import org.openftc.easyopencv.OpenCvPipeline;
 
 import java.util.ArrayList;
 
-public class AprilTagDetectionPipeline extends OpenCvPipeline
-{
-    private long nativeApriltagPtr;
-    private Mat grey = new Mat();
-    private ArrayList<AprilTagDetection> detections = new ArrayList<>();
-
-    private ArrayList<AprilTagDetection> detectionsUpdate = new ArrayList<>();
+public class AprilTagDetectionPipeline extends OpenCvPipeline {
     private final Object detectionsUpdateSync = new Object();
-
+    private final Object decimationSync = new Object();
     double fx;
     double fy;
     double cx;
     double cy;
-
     // UNITS ARE METERS
     double tagSize;
     double tagSizeX;
     double tagSizeY;
-
+    private long nativeApriltagPtr;
+    private final Mat grey = new Mat();
+    private ArrayList<AprilTagDetection> detections = new ArrayList<>();
+    private ArrayList<AprilTagDetection> detectionsUpdate = new ArrayList<>();
     private float decimation;
     private boolean needToSetDecimation;
-    private final Object decimationSync = new Object();
 
-    public AprilTagDetectionPipeline(double tagSize, double fx, double fy, double cx, double cy)
-    {
+    public AprilTagDetectionPipeline(double tagSize, double fx, double fy, double cx, double cy) {
         this.tagSize = tagSize;
         this.tagSizeX = tagSize;
         this.tagSizeY = tagSize;
@@ -47,31 +41,24 @@ public class AprilTagDetectionPipeline extends OpenCvPipeline
     }
 
     @Override
-    protected void finalize()
-    {
+    protected void finalize() {
         // Might be null if createApriltagDetector() threw an exception
-        if(nativeApriltagPtr != 0)
-        {
+        if (nativeApriltagPtr != 0) {
             // Delete the native context we created in the constructor
             AprilTagDetectorJNI.releaseApriltagDetector(nativeApriltagPtr);
             nativeApriltagPtr = 0;
-        }
-        else
-        {
+        } else {
             System.out.println("AprilTagDetectionPipeline.finalize(): nativeApriltagPtr was NULL");
         }
     }
 
     @Override
-    public Mat processFrame(Mat input)
-    {
+    public Mat processFrame(Mat input) {
         // Convert to greyscale
         Imgproc.cvtColor(input, grey, Imgproc.COLOR_RGBA2GRAY);
 
-        synchronized (decimationSync)
-        {
-            if(needToSetDecimation)
-            {
+        synchronized (decimationSync) {
+            if (needToSetDecimation) {
                 AprilTagDetectorJNI.setApriltagDetectorDecimation(nativeApriltagPtr, decimation);
                 needToSetDecimation = false;
             }
@@ -80,27 +67,22 @@ public class AprilTagDetectionPipeline extends OpenCvPipeline
         // Run AprilTag
         detections = AprilTagDetectorJNI.runAprilTagDetectorSimple(nativeApriltagPtr, grey, tagSize, fx, fy, cx, cy);
 
-        synchronized (detectionsUpdateSync)
-        {
+        synchronized (detectionsUpdateSync) {
             detectionsUpdate = detections;
         }
 
         return input;
     }
 
-    public void setDecimation(float decimation)
-    {
-        synchronized (decimationSync)
-        {
+    public void setDecimation(float decimation) {
+        synchronized (decimationSync) {
             this.decimation = decimation;
             needToSetDecimation = true;
         }
     }
 
-    public ArrayList<AprilTagDetection> getDetectionsUpdate()
-    {
-        synchronized (detectionsUpdateSync)
-        {
+    public ArrayList<AprilTagDetection> getDetectionsUpdate() {
+        synchronized (detectionsUpdateSync) {
             ArrayList<AprilTagDetection> ret = detectionsUpdate;
             detectionsUpdate = null;
             return ret;

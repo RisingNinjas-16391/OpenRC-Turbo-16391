@@ -6,10 +6,8 @@ import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.ConditionalCommand;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
-import com.arcrobotics.ftclib.command.ParallelDeadlineGroup;
 import com.arcrobotics.ftclib.command.PrintCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
-import com.arcrobotics.ftclib.command.WaitCommand;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -17,13 +15,12 @@ import org.firstinspires.ftc.teamcode.drive.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.drive.subsystems.aprilTagSubsystem.aprilTagDetector.AprilTagSubsystem;
 import org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DrivetrainSubsystem;
 import org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftSubsystem;
-import org.firstinspires.ftc.teamcode.drive.subsystems.turretSubsystem.TurretSubsystem;
 import org.firstinspires.ftc.teamcode.helpers.TrajectorySequenceSupplier;
 
 
 public class AutoCommandPark extends SequentialCommandGroup {
-    ElapsedTime timer = new ElapsedTime();
     final double parkY = -41;
+    ElapsedTime timer = new ElapsedTime();
 
     public AutoCommandPark(DrivetrainSubsystem drivetrain, LiftSubsystem lift, IntakeSubsystem intake, AprilTagSubsystem aprilTagDetector, Telemetry telemetry) {
 
@@ -56,8 +53,8 @@ public class AutoCommandPark extends SequentialCommandGroup {
                                 new ConditionalCommand(new FollowTrajectoryCommand(drivetrain, parkRight),
                                         // Park Center
                                         new FollowTrajectoryCommand(drivetrain, parkCenter),
-                                        ()-> aprilTagDetector.getParkLocation() == AprilTagSubsystem.Detection.RIGHT),
-                                ()-> aprilTagDetector.getParkLocation() == AprilTagSubsystem.Detection.LEFT
+                                        () -> aprilTagDetector.getParkLocation() == AprilTagSubsystem.Detection.RIGHT),
+                                () -> aprilTagDetector.getParkLocation() == AprilTagSubsystem.Detection.LEFT
                         )
                 ),
 

@@ -44,8 +44,7 @@ public class AprilTagDetector {
     public ArrayList<AprilTagDetection> detect(double timeout, int threshold) {
         ArrayList<AprilTagDetection> detections = aprilTagDetectionPipeline.getDetectionsUpdate();
         timer.reset();
-        while (detections.size() < threshold && timer.time() < timeout)
-        {
+        while (detections.size() < threshold && timer.time() < timeout) {
             detections = aprilTagDetectionPipeline.getDetectionsUpdate();
             Log.i("Robot Detection FPS", String.format("%f", camera.getFps()));
             Log.i("Robot Detection Overhead ms", String.format("%d", camera.getOverheadTimeMs()));
@@ -56,13 +55,11 @@ public class AprilTagDetector {
 
             // If we haven't seen a tag for a few frames, lower the decimation
             // so we can hopefully pick one up if we're e.g. far back
-            if(numFramesWithoutDetection >= AprilTagDetectorConstants.THRESHOLD_NUM_FRAMES_NO_DETECTION_BEFORE_LOW_DECIMATION)
-            {
+            if (numFramesWithoutDetection >= AprilTagDetectorConstants.THRESHOLD_NUM_FRAMES_NO_DETECTION_BEFORE_LOW_DECIMATION) {
                 aprilTagDetectionPipeline.setDecimation(AprilTagDetectorConstants.DECIMATION_LOW);
             }
             // We do see tags!
-            else
-            {
+            else {
                 numFramesWithoutDetection = 0;
 
                 if (detections == null) {
@@ -71,8 +68,7 @@ public class AprilTagDetector {
 
                 // If the target is within 1 meter, turn on high decimation to
                 // increase the frame rate
-                if(detections.get(0).pose.z < AprilTagDetectorConstants.THRESHOLD_HIGH_DECIMATION_RANGE_METERS)
-                {
+                if (detections.get(0).pose.z < AprilTagDetectorConstants.THRESHOLD_HIGH_DECIMATION_RANGE_METERS) {
                     aprilTagDetectionPipeline.setDecimation(AprilTagDetectorConstants.DECIMATION_HIGH);
                 }
             }

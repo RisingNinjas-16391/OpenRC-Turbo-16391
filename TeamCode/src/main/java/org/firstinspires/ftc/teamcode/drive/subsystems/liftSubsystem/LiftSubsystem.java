@@ -1,8 +1,30 @@
 package org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem;
 
-import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.*;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.BOTTOM_POS;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.DIRECTION;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.EX_HIGH_POS;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.FEED_POS;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.GEAR_RATIO;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.HIGH_POS;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.Inches_above;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.LOW_POS;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.MAX_ACCEL;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.MAX_HEIGHT;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.MAX_JERK;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.MAX_VEL;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.MID_POS;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.MOTOR_CONFIG;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.SCORE_ADJ;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.SPOOL_RADIUS;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.heightThreshold;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.kA;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.kG;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.kPID;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.kStatic;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.kV;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.name;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftConstants.simpleMode;
 
-import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.control.PIDFController;
 import com.acmerobotics.roadrunner.profile.MotionProfile;
 import com.acmerobotics.roadrunner.profile.MotionProfileGenerator;
@@ -21,15 +43,15 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
  */
 public class LiftSubsystem extends SubsystemBase {
 
+    private static int savedPosition = 0;
     private final DcMotorEx motor;
     private final PIDFController controller;
     private final Telemetry telemetry;
     private final NanoClock clock = NanoClock.system();
-    private static int savedPosition = 0;
-    private int offset;
     ElevatorFeedforward feedforward = new ElevatorFeedforward(
             kStatic, kG, kV, kA
     );
+    private final int offset;
     private MotionProfile profile;
     private double profileStartTime = 0;
     private double targetHeight = 0;
@@ -76,7 +98,7 @@ public class LiftSubsystem extends SubsystemBase {
             if (isBusy()) {
 
                 if (simpleMode || profile == null) {
-                    power = currentHeight < targetHeight ? 1:-1;   // Bang Bang control
+                    power = currentHeight < targetHeight ? 1 : -1;   // Bang Bang control
                 } else {  // following a profile
                     double time = clock.seconds() - profileStartTime;
                     MotionState state = profile.get(time);
@@ -103,7 +125,7 @@ public class LiftSubsystem extends SubsystemBase {
     public boolean isBusy() {
         if (!simpleMode)
             return profile != null && (clock.seconds() - profileStartTime) <= profile.duration();
-        else{
+        else {
             seeking = seeking || Math.abs(getCurrentHeight() - targetHeight) > heightThreshold;
             return seeking;
         }
@@ -119,7 +141,7 @@ public class LiftSubsystem extends SubsystemBase {
                 profile = MotionProfileGenerator.generateSimpleMotionProfile(
                         start, goal, MAX_VEL, MAX_ACCEL, MAX_JERK
                 );
-            } catch(Exception e) {
+            } catch (Exception e) {
                 System.out.println(e);
             }
             profileStartTime = clock.seconds();
@@ -142,9 +164,11 @@ public class LiftSubsystem extends SubsystemBase {
         heightIndex--;
         indexToHeight();
     }
+
     public void beaconHeight() {
         setHeight(Inches_above);
     }
+
     public void scoreHeight() {
         if (heightIndex > 1) {
             setHeight(targetHeight - SCORE_ADJ);

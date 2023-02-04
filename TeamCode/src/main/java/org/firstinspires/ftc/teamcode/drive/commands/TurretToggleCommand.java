@@ -26,7 +26,7 @@ public class TurretToggleCommand extends CommandBase {
             turret.togglePosition();
         }
     }
-    
+
     @Override
     public boolean isFinished() {
         return !turret.isBusy();

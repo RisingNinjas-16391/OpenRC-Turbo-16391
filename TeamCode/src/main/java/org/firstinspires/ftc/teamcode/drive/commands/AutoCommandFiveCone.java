@@ -12,9 +12,8 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.drive.subsystems.aprilTagSubsystem.aprilTagDetector.AprilTagSubsystem;
 import org.firstinspires.ftc.teamcode.drive.subsystems.IntakeSubsystem;
+import org.firstinspires.ftc.teamcode.drive.subsystems.aprilTagSubsystem.aprilTagDetector.AprilTagSubsystem;
 import org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DrivetrainSubsystem;
 import org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftSubsystem;
 import org.firstinspires.ftc.teamcode.helpers.TrajectorySequenceSupplier;
@@ -22,20 +21,16 @@ import org.firstinspires.ftc.teamcode.helpers.TrajectorySequenceSupplier;
 
 public class AutoCommandFiveCone extends SequentialCommandGroup {
     ElapsedTime timer = new ElapsedTime();
-    public AutoCommandFiveCone(DrivetrainSubsystem drivetrain, LiftSubsystem lift, IntakeSubsystem intake, AprilTagSubsystem aprilTagDetector, Telemetry telemetry) {
 
-        TrajectorySequenceSupplier initToStackTrajectory = () -> drivetrain.trajectorySequenceBuilder(new Pose2d(35, -62, Math.toRadians(90)))
+    public AutoCommandFiveCone(DrivetrainSubsystem drivetrain, LiftSubsystem lift, IntakeSubsystem intake, AprilTagSubsystem aprilTagDetector) {
+
+        TrajectorySequenceSupplier initToHighTrajectory = () -> drivetrain.trajectorySequenceBuilder(new Pose2d(35, -62, Math.toRadians(90)))
                 .strafeTo(new Vector2d(35, -24))
-                .splineToSplineHeading(new Pose2d(60, -11, Math.toRadians(0)), Math.toRadians(5)).setTangent(Math.toRadians(60)).setTangent(Math.toRadians(0))
+                .splineToSplineHeading(new Pose2d(28, -5, Math.toRadians(135)), Math.toRadians(140)).setTangent(Math.toRadians(315))
                 .build();
 
         TrajectorySequenceSupplier stackToHighTrajectory = () -> drivetrain.trajectorySequenceBuilder(new Pose2d(60, -12, Math.toRadians(0)))
                 .strafeTo(new Vector2d(42, -12))
-                .splineToSplineHeading(new Pose2d(28, -5, Math.toRadians(135)), Math.toRadians(140)).setTangent(Math.toRadians(315))
-                .build();
-
-        TrajectorySequenceSupplier initToHighTrajectory = () -> drivetrain.trajectorySequenceBuilder(new Pose2d(35, -62, Math.toRadians(90)))
-                .strafeTo(new Vector2d(35, -24))
                 .splineToSplineHeading(new Pose2d(28, -5, Math.toRadians(135)), Math.toRadians(140)).setTangent(Math.toRadians(315))
                 .build();
 
@@ -54,31 +49,27 @@ public class AutoCommandFiveCone extends SequentialCommandGroup {
                 .splineToSplineHeading(new Pose2d(-10, -30, Math.toRadians(90)), Math.toRadians(0))
                 .build();
 
-        TrajectorySequenceSupplier parkTrajectory = () -> drivetrain.trajectorySequenceBuilder(drivetrain.getPoseEstimate())
-                .lineToLinearHeading(new Pose2d(-15, -12, Math.toRadians(5)))
-                .build();
-
         SequentialCommandGroup initToHigh = new SequentialCommandGroup(
                 new ParallelCommandGroup(
-                    new FollowTrajectoryCommand(drivetrain, initToHighTrajectory).withTimeout(5000),
+                        new FollowTrajectoryCommand(drivetrain, initToHighTrajectory).withTimeout(5000),
 //                    new LiftCommand(lift, 4),
-                    new IntakeCommand(intake, IntakeSubsystem.Direction.FEED)
+                        new IntakeCommand(intake, IntakeSubsystem.Direction.FEED)
                 )
-            );
+        );
 
         SequentialCommandGroup highToStack = new SequentialCommandGroup(
                 new IntakeCommand(intake, IntakeSubsystem.Direction.UNFEED),
                 new WaitCommand(1000),
                 new ParallelDeadlineGroup(
-                    new FollowTrajectoryCommand(drivetrain, initToHighTrajectory).withTimeout(5000),
-                    new WaitCommand(1000),
+                        new FollowTrajectoryCommand(drivetrain, initToHighTrajectory).withTimeout(5000),
+                        new WaitCommand(1000),
 //                    new TurretPositionCommand(turret, lift::getCurrentHeight, false),
 //                    new LiftCommand(lift, 1),
-                    new IntakeCommand(intake, IntakeSubsystem.Direction.FEED)
+                        new IntakeCommand(intake, IntakeSubsystem.Direction.FEED)
                 )
 //                new LiftCommand(lift, 0).withTimeout(500)
 
-            );
+        );
 
         SequentialCommandGroup stackToHigh = new SequentialCommandGroup(
 //                new LiftCommand(lift, 4).withTimeout(250),
@@ -89,7 +80,7 @@ public class AutoCommandFiveCone extends SequentialCommandGroup {
                 )
         );
 
-        Command displayTime = new InstantCommand(() -> System.out.println(String.format("Time Left: %f.2", 30 - timer.time())));
+        Command displayTime = new InstantCommand(() -> System.out.printf("Time Left: %f.2%n", 30 - timer.time()));
         addCommands(
                 new PrintCommand("Start Auto"),
                 new InstantCommand(() -> {
@@ -129,8 +120,8 @@ public class AutoCommandFiveCone extends SequentialCommandGroup {
                         new ConditionalCommand(new FollowTrajectoryCommand(drivetrain, parkRight),
                                 // Park Center
                                 new FollowTrajectoryCommand(drivetrain, parkCenter),
-                                ()-> aprilTagDetector.getParkLocation() == AprilTagSubsystem.Detection.RIGHT),
-                        ()-> aprilTagDetector.getParkLocation() == AprilTagSubsystem.Detection.LEFT
+                                () -> aprilTagDetector.getParkLocation() == AprilTagSubsystem.Detection.RIGHT),
+                        () -> aprilTagDetector.getParkLocation() == AprilTagSubsystem.Detection.LEFT
                 ),
                 new PrintCommand(("Parked: " + aprilTagDetector.getParkLocation().toString())),
                 displayTime

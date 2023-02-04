@@ -2,8 +2,8 @@ package org.firstinspires.ftc.teamcode.drive.opmode.opmodes;
 
 import static org.firstinspires.ftc.teamcode.drive.opmode.opmodes.AutoConstants.threshold;
 import static org.firstinspires.ftc.teamcode.drive.opmode.opmodes.AutoConstants.timeout;
-import static org.firstinspires.ftc.teamcode.drive.subsystems.aprilTagSubsystem.aprilTagDetector.AprilTagDetectorConstants.TAG_ID_LEFT;
 import static org.firstinspires.ftc.teamcode.drive.subsystems.aprilTagSubsystem.aprilTagDetector.AprilTagDetectorConstants.TAG_ID_CENTER;
+import static org.firstinspires.ftc.teamcode.drive.subsystems.aprilTagSubsystem.aprilTagDetector.AprilTagDetectorConstants.TAG_ID_LEFT;
 import static org.firstinspires.ftc.teamcode.drive.subsystems.aprilTagSubsystem.aprilTagDetector.AprilTagDetectorConstants.TAG_ID_RIGHT;
 
 import android.util.Log;
@@ -28,7 +28,7 @@ public abstract class AutonomousTemplate extends LinearOpMode {
         Log.i("Robot", "standby");
         waitForStart();
         if (opModeIsActive()) {
-            ArrayList<AprilTagDetection> detections =  aprilTagdetector.detect(timeout, threshold);
+            ArrayList<AprilTagDetection> detections = aprilTagdetector.detect(timeout, threshold);
 //            Map.Entry<Integer, Integer> maxDetection = null;
 //            if (detections.size() > 0) {
 //                Map<Integer, Integer> detectionsCount = new HashMap<>();
@@ -67,19 +67,19 @@ public abstract class AutonomousTemplate extends LinearOpMode {
                     Log.i("Robot", "auto b");
                     telemetry.addLine("auto b");
                     telemetry.update();
-                break;
+                    break;
 
                 case TAG_ID_RIGHT:
                     parkRight();
                     Log.i("Robot", "auto c");
                     telemetry.addLine("auto c");
                     telemetry.update();
-                break;
+                    break;
 
                 default:
                     telemetry.addLine("No park auto");
                     telemetry.update();
-                break;
+                    break;
             }
 
 

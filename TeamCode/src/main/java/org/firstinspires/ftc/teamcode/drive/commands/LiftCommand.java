@@ -2,12 +2,7 @@ package org.firstinspires.ftc.teamcode.drive.commands;
 
 import com.arcrobotics.ftclib.command.CommandBase;
 
-import org.firstinspires.ftc.teamcode.drive.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftSubsystem;
-
-import java.util.function.BooleanSupplier;
-import java.util.function.DoubleSupplier;
-import java.util.function.IntSupplier;
 
 public class LiftCommand extends CommandBase {
     private final LiftSubsystem lift;
@@ -31,7 +26,7 @@ public class LiftCommand extends CommandBase {
 
     @Override
     public void initialize() {
-        if (heightIndex ==-1) {
+        if (heightIndex == -1) {
             lift.setHeight(height);
         } else {
             lift.indexToHeight(heightIndex);

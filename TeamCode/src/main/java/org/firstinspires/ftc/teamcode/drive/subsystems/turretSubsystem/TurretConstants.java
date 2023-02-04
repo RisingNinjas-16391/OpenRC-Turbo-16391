@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.drive.subsystems.turretSubsystem;
 
-import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.control.PIDCoefficients;
 import com.qualcomm.hardware.motors.RevRoboticsCoreHexMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -24,14 +23,12 @@ public final class TurretConstants {
     public static final int homePos = 0;
     public static final int otherSidePos = 125; // 288 ticks for full revolution
     public static final String name = "turret";
-    public static PIDCoefficients kPID = new PIDCoefficients(0.075, 0, 0);
-
-    public static double MAX_VEL = 3000;
-    public static double MAX_ACCEL = 3000;
-    public static double MAX_JERK = 1500;
-
     public static final double kV = 0.02;
     public static final double kA = 0.0025;
     public static final double kStatic = 0.12;
+    public static PIDCoefficients kPID = new PIDCoefficients(0.075, 0, 0);
+    public static double MAX_VEL = 3000;
+    public static double MAX_ACCEL = 3000;
+    public static double MAX_JERK = 1500;
 
 }

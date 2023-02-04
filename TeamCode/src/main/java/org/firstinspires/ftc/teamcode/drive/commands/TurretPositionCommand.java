@@ -12,8 +12,8 @@ public class TurretPositionCommand extends CommandBase {
     @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
     private final TurretSubsystem turret;
     private final DoubleSupplier liftHeight;
-    private boolean toggled = false;
     private final boolean position;
+    private boolean toggled = false;
 
     public TurretPositionCommand(final TurretSubsystem turret, final DoubleSupplier liftHeight, final boolean position) {
         this.turret = turret;
@@ -34,7 +34,7 @@ public class TurretPositionCommand extends CommandBase {
             toggled = true;
         }
     }
-    
+
     @Override
     public boolean isFinished() {
         return !turret.isBusy() && toggled;
