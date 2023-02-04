@@ -9,6 +9,6 @@ import org.firstinspires.ftc.teamcode.drive.opmode.RobotContainer;
 public class CommandAutoPark extends CommandOpMode {
     @Override
     public void initialize() {
-        new RobotContainer(hardwareMap, 0, telemetry);
+        new RobotContainer(hardwareMap, 0, true, telemetry);
     }
 }

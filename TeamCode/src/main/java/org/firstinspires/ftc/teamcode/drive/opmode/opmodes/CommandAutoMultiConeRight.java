@@ -9,6 +9,6 @@ import org.firstinspires.ftc.teamcode.drive.opmode.RobotContainer;
 public class CommandAutoMultiConeRight extends CommandOpMode {
     @Override
     public void initialize() {
-        new RobotContainer(hardwareMap, 4, telemetry);
+        new RobotContainer(hardwareMap, 2, true, telemetry);
     }
 }

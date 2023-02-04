@@ -48,10 +48,10 @@ public class LiftSubsystem extends SubsystemBase {
     private final PIDFController controller;
     private final Telemetry telemetry;
     private final NanoClock clock = NanoClock.system();
+    private final int offset;
     ElevatorFeedforward feedforward = new ElevatorFeedforward(
             kStatic, kG, kV, kA
     );
-    private final int offset;
     private MotionProfile profile;
     private double profileStartTime = 0;
     private double targetHeight = 0;

@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.drive.opmode;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
@@ -9,11 +8,9 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.drive.commands.AutoCommandMultiConeLeft;
-import org.firstinspires.ftc.teamcode.drive.commands.AutoCommandMultiConeRight;
-import org.firstinspires.ftc.teamcode.drive.commands.AutoCommandOneConeLeft;
-import org.firstinspires.ftc.teamcode.drive.commands.AutoCommandOneConeRight;
-import org.firstinspires.ftc.teamcode.drive.commands.AutoCommandPark;
+import org.firstinspires.ftc.teamcode.drive.commands.Autos.AutoCommandMultiCone;
+import org.firstinspires.ftc.teamcode.drive.commands.Autos.AutoCommandOneCone;
+import org.firstinspires.ftc.teamcode.drive.commands.Autos.AutoCommandPark;
 import org.firstinspires.ftc.teamcode.drive.commands.DrivetrainCommand;
 import org.firstinspires.ftc.teamcode.drive.commands.IntakeCommand;
 import org.firstinspires.ftc.teamcode.drive.subsystems.IntakeSubsystem;
@@ -85,7 +82,7 @@ RobotContainer {
     /**
      * Autonomous Constructor
      */
-    public RobotContainer(HardwareMap hwMap, int autoNum, Telemetry telemetry) {
+    public RobotContainer(HardwareMap hwMap, int autoNum, boolean right, Telemetry telemetry) {
         drivetrain = new DrivetrainSubsystem(hwMap, telemetry);
         lift = new LiftSubsystem(hwMap, telemetry);
         intake = new IntakeSubsystem(hwMap);
@@ -109,7 +106,8 @@ RobotContainer {
         scoringHeight = null;
         resetPose = null;
 
-        setAutoCommands(autoNum, telemetry);
+
+        setAutoCommands(autoNum, right);
     }
 
     private void configureButtonBindings() {
@@ -141,27 +139,16 @@ RobotContainer {
 //        turret.setDefaultCommand(new TurretLockCommand(turret));
     }
 
-    private void setAutoCommands(int chooser, Telemetry telemetry) {
-        Command AutoPark = new AutoCommandPark(drivetrain, lift, intake, aprilTagDetector, telemetry);
-        Command AutoOneConeRight = new AutoCommandOneConeRight(drivetrain, lift, intake, aprilTagDetector, telemetry);
-        Command AutoOneConeLeft = new AutoCommandOneConeLeft(drivetrain, lift, intake, aprilTagDetector, telemetry);
-        Command AutoMultiConeLeft = new AutoCommandMultiConeLeft(drivetrain, lift, intake, aprilTagDetector, telemetry);
-        Command AutoMultiConeRight = new AutoCommandMultiConeRight(drivetrain, lift, intake, aprilTagDetector, telemetry);
-
+    private void setAutoCommands(int chooser, boolean right) {
         switch (chooser) {
             case 0:
-                AutoPark.schedule();
+                new AutoCommandPark(drivetrain, aprilTagDetector).schedule();
                 break;
             case 1:
-                AutoOneConeLeft.schedule();
+                new AutoCommandOneCone(drivetrain, lift, intake, aprilTagDetector, right).schedule();
+                break;
             case 2:
-                AutoOneConeRight.schedule();
-                break;
-            case 3:
-                AutoMultiConeLeft.schedule();
-                break;
-            case 4:
-                AutoMultiConeRight.schedule();
+                new AutoCommandMultiCone(drivetrain, lift, intake, aprilTagDetector, right).schedule();
                 break;
         }
 

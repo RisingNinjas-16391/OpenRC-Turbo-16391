@@ -32,8 +32,8 @@ public class TurretSubsystem extends SubsystemBase {
     private final PIDFController controller;
     private final SimpleMotorFeedforward feedforward;
     private final NanoClock clock = NanoClock.system();
-    public DcMotorEx motor;
     private final int offset;
+    public DcMotorEx motor;
     private boolean toggle = true;
     private MotionProfile profile;
     private double profileStartTime = 0;

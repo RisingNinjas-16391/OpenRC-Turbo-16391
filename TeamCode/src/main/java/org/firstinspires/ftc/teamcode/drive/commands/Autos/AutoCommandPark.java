@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.drive.commands;
+package org.firstinspires.ftc.teamcode.drive.commands.Autos;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
@@ -10,11 +10,9 @@ import com.arcrobotics.ftclib.command.PrintCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.drive.subsystems.IntakeSubsystem;
+import org.firstinspires.ftc.teamcode.drive.commands.FollowTrajectoryCommand;
 import org.firstinspires.ftc.teamcode.drive.subsystems.aprilTagSubsystem.aprilTagDetector.AprilTagSubsystem;
 import org.firstinspires.ftc.teamcode.drive.subsystems.driveSubsystem.DrivetrainSubsystem;
-import org.firstinspires.ftc.teamcode.drive.subsystems.liftSubsystem.LiftSubsystem;
 import org.firstinspires.ftc.teamcode.helpers.TrajectorySequenceSupplier;
 
 
@@ -22,7 +20,7 @@ public class AutoCommandPark extends SequentialCommandGroup {
     final double parkY = -41;
     ElapsedTime timer = new ElapsedTime();
 
-    public AutoCommandPark(DrivetrainSubsystem drivetrain, LiftSubsystem lift, IntakeSubsystem intake, AprilTagSubsystem aprilTagDetector, Telemetry telemetry) {
+    public AutoCommandPark(DrivetrainSubsystem drivetrain, AprilTagSubsystem aprilTagDetector) {
 
         TrajectorySequenceSupplier parkLeft = () -> drivetrain.trajectorySequenceBuilder(drivetrain.getPoseEstimate())
                 .strafeTo(new Vector2d(-35, -32))

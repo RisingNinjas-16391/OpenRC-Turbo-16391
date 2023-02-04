@@ -12,6 +12,7 @@ import java.util.ArrayList;
 public class AprilTagDetectionPipeline extends OpenCvPipeline {
     private final Object detectionsUpdateSync = new Object();
     private final Object decimationSync = new Object();
+    private final Mat grey = new Mat();
     double fx;
     double fy;
     double cx;
@@ -21,7 +22,6 @@ public class AprilTagDetectionPipeline extends OpenCvPipeline {
     double tagSizeX;
     double tagSizeY;
     private long nativeApriltagPtr;
-    private final Mat grey = new Mat();
     private ArrayList<AprilTagDetection> detections = new ArrayList<>();
     private ArrayList<AprilTagDetection> detectionsUpdate = new ArrayList<>();
     private float decimation;
