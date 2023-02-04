@@ -42,9 +42,9 @@ public final class LiftConstants {
     // the operating range of the elevator is restricted to [0, MAX_HEIGHT]n
     public static final double MAX_HEIGHT = 37; // inches
     public static double MAX_VEL = 600; // in/s
-    public static double MAX_ACCEL = 600; // in/s^2
+    public static double MAX_ACCEL = 500; // in/s^2
     public static double MAX_JERK = 400; // in/s^3
-    public static PIDCoefficients kPID = new PIDCoefficients(2.35, 0, 0);
+    public static PIDCoefficients kPID = new PIDCoefficients(1.5, 0.0, 0.0);
     public static double kV = 0.01;
     public static double kA = 0.001;
     public static double kG = 0.001;

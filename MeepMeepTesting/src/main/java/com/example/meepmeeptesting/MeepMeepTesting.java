@@ -15,22 +15,9 @@ public class MeepMeepTesting {
                 .setDimensions(15.5, 16)
                 .followTrajectorySequence(drive -> drive.trajectorySequenceBuilder(
 //                        // Right Path One Cone
-                        new Pose2d(-35, -62, Math.toRadians(90)))
-                        // Init->Cone
-                        .strafeTo(new Vector2d(-35, -25))
-                        .splineToSplineHeading(new Pose2d(-60, -12, Math.toRadians(180)), Math.toRadians(190)).setTangent(Math.toRadians(60)).setTangent(Math.toRadians(0))
-                        // Cone -> High
-                        .strafeTo(new Vector2d(-43, -12))
-                        .splineToSplineHeading(new Pose2d(-28, -5, Math.toRadians(45)), Math.toRadians(40)).setTangent(Math.toRadians(225))
-                        // High -> Cone
-                        .splineToSplineHeading(new Pose2d(-43, -12, Math.toRadians(180)), Math.toRadians(180))
-                            //.setTangent(Math.toRadians(300)).setTangent(Math.toRadians(0))
-                        .strafeTo(new Vector2d(-60, -12))
-                        // Cone -> High
-                        .strafeTo(new Vector2d(-43, -12))
-                        .splineToSplineHeading(new Pose2d(-28, -5, Math.toRadians(45)), Math.toRadians(40)).setTangent(Math.toRadians(240))
-                          // High -> Park
-                        .splineToSplineHeading(new Pose2d(-35, -35, Math.toRadians(90)), Math.toRadians(270))
+                                new Pose2d(35, -62, Math.toRadians(90)))
+                        .strafeTo(new Vector2d(35, -24))
+                        .splineToSplineHeading(new Pose2d(61, -11, Math.toRadians(0)), Math.toRadians(5))
                         //.splineToSplineHeading()
 //                        // Left Path One Cone
 //                        new Pose2d(35, -62, Math.toRadians(90)))

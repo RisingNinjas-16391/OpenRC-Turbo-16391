@@ -101,7 +101,7 @@ public class LiftSubsystem extends SubsystemBase {
     }
 
     public boolean isBusy() {
-        if (simpleMode)
+        if (!simpleMode)
             return profile != null && (clock.seconds() - profileStartTime) <= profile.duration();
         else{
             seeking = seeking || Math.abs(getCurrentHeight() - targetHeight) > heightThreshold;
